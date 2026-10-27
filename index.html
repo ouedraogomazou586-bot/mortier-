@@ -138,6 +138,7 @@ details summary{cursor:pointer;color:var(--acc);font-weight:700;font-size:14px}
 #chudb .ccur{color:#fff;text-shadow:0 1px 3px #000;margin:0;font-size:12px}
 .rowb{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 nav button{font-size:10px}
+.tile .sub{font-size:15px;font-weight:700;color:var(--mut);margin-top:2px}
 </style>
 </head>
 <body>
@@ -204,8 +205,8 @@ nav button{font-size:10px}
 <div id="vide" class="empty">Saisissez la pièce et l'objectif, puis appuyez sur « Calculer le tir ».</div>
 <div id="resultat" hidden>
 <div class="tiles">
-<div class="tile main"><div class="k">Azimut de tir</div><div class="v"><span id="rAz">–</span></div></div>
-<div class="tile main"><div class="k">Hausse</div><div class="v"><span id="rHa">–</span></div></div>
+<div class="tile main"><div class="k">Azimut de tir</div><div class="v"><span id="rAz">–</span></div><div class="sub" id="rAzD"></div></div>
+<div class="tile main"><div class="k">Hausse</div><div class="v"><span id="rHa">–</span></div><div class="sub" id="rHs"></div></div>
 <div class="tile"><div class="k">Charge</div><div class="v" id="rCh">–</div></div>
 <div class="tile"><div class="k">Distance</div><div class="v"><span id="rDi">–</span><span class="u">m</span></div></div>
 </div>
@@ -623,10 +624,11 @@ var face = wv * Math.cos(rel), droite = wv * Math.sin(rel);
 var dEff = dist, azC = az;
 azTir = azC;
 var c = choixCharge(dEff);
-var zs = zone + (sud ? "S" : "N");
+var utmTxt = function (u) { var l = utmToLl(u.e, u.n, zone, sud); return zone + bandeLat(l.lat) + "  " + fmt(u.e) + "  " + fmt(u.n); };
+var utmFmt = function (u) { return utmTxt(u).replace(/ /g, "&nbsp;"); };
 var rows = [
-["Pièce UTM", "".concat(zs, " ").concat(fmt(pu.e), " / ").concat(fmt(pu.n))],
-["Objectif UTM", "".concat(zs, " ").concat(fmt(tu.e), " / ").concat(fmt(tu.n))],
+["Pièce UTM", utmFmt(pu)],
+["Objectif UTM", utmFmt(tu)],
 ["Azimut brut", azu(az) + " (" + (UNITE_AZ === "degres" ? ang(az) : fmt(az * 360 / MIL, 1) + "°") + ")"],
 ["Altitude pièce / objectif", fmt(P.alt) + " m / " + fmt(T.alt) + " m"],
 ["Dénivelé", (dh >= 0 ? "+" : "−") + fmt(Math.abs(dh)) + " m (" + (dh >= 0 ? "objectif plus haut" : dh < 0 ? "objectif plus bas" : "") + ")"],
@@ -658,12 +660,14 @@ msg += "Distance hors des portées de la table saisie.";
 $("tab").innerHTML = rows.map(function (r) { return r[0] === "sep" ? "<tr class=\"sep\"><td colspan=\"2\">".concat(r[1], "</td></tr>") : "<tr><td>".concat(r[0], "</td><td>").concat(r[1], "</td></tr>"); }).join("");
 $("rAz").textContent = azu(azC);
 $("rHa").textContent = c ? ang(hs) : "–";
+$("rAzD").textContent = fmt(azC * 360 / MIL, 1) + "°";
+$("rHs").textContent = c ? "sans site " + ang(hausse) : "";
 $("rCh").textContent = c ? c.charge : "–";
 $("rDi").textContent = fmt(dist);
 $("msg").textContent = msg;
 $("vide").hidden = true;
 $("resultat").hidden = false;
-fiche = "FICHE DE TIR\nPi\u00E8ce : ".concat(zs, " ").concat(fmt(pu.e), " / ").concat(fmt(pu.n), " alt ").concat(fmt(P.alt), " m\nObjectif : ").concat(zs, " ").concat(fmt(tu.e), " / ").concat(fmt(tu.n), " alt ").concat(fmt(T.alt), " m\nDistance : ").concat(fmt(dist), " m\nAzimut : ").concat(azu(azC), "\nCharge : ").concat(c ? c.charge : "–", "\nHausse : ").concat(c ? ang(hs) : "–");
+fiche = "FICHE DE TIR\nPi\u00E8ce : ".concat(utmTxt(pu), " alt ").concat(fmt(P.alt), " m\nObjectif : ").concat(utmTxt(tu), " alt ").concat(fmt(T.alt), " m\nDistance : ").concat(fmt(dist), " m\nAzimut : ").concat(azu(azC), "\nCharge : ").concat(c ? c.charge : "–", "\nHausse : ").concat(c ? ang(hs) : "–");
 derniereDist = dist;
 hausseFinale = c ? hs : null;
 majBoussole();
