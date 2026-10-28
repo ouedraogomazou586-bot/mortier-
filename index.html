@@ -243,9 +243,10 @@ nav button{font-size:10px}
 <div class="card">
 <div class="hd"><h2>Conditions</h2></div>
 <p class="note" style="margin:0 0 4px">Informations seulement : la météo est affichée dans le détail du tir, mais n'est appliquée ni à la hausse ni à l'azimut.</p>
+<label>Vitesse du vent (m/s)<input id="wv" type="number" inputmode="decimal" value="0"></label>
+<label style="margin-top:8px">Direction du vent : vient de <span class="uaz">(millièmes)</span><input id="wd" type="number" inputmode="decimal" value="0"></label>
+<p id="wdinfo" class="note" style="margin:4px 0 10px;font-weight:700"></p>
 <div class="g2">
-<label>Vent (m/s)<input id="wv" type="number" inputmode="decimal" value="0"></label>
-<label>Vent venant de <span class="uaz">(millièmes)</span><input id="wd" type="number" inputmode="decimal" value="0"></label>
 <label>Écart temp. (°C)<input id="dt" type="number" inputmode="decimal" value="0"></label>
 <label>Écart pression (hPa)<input id="dp" type="number" inputmode="decimal" value="0"></label>
 </div>
@@ -865,7 +866,7 @@ idb("readwrite", function (st) { return st.clear(); }).then(function () { for (v
 delete tuiles[k]; listeHgt(""); });
 }
 listeHgt("");
-$("p-carte").innerHTML = "<div class=\"card\">\n<div class=\"seg\" style=\"margin-bottom:8px\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div>\n<select id=\"cliste\" onchange=\"carteChoisir(this.value)\" style=\"margin:0 0 8px;display:none\"></select>\n<div id=\"carte\"><div id=\"cworld\"><div id=\"cpane\"></div><img id=\"cimage\" alt=\"\"><svg id=\"csvg\"></svg></div>\n<svg id=\"caig\" viewBox=\"-44 -44 88 88\"></svg>\n<div id=\"cleg\" onclick=\"carteLegende()\"><b>L\u00E9gende (touchez pour fermer)</b>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,-12 -10,8 10,8\" fill=\"#2ecc40\" stroke=\"#000\" stroke-width=\"1.5\"/></svg>Pi\u00E8ce</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff3b30\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff3b30\" stroke-width=\"2\"/></svg>Objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,12 -8,-6 8,-6\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"7\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"2.5\" fill=\"#fff\"/></svg>Ma position (GPS)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff8c00\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff8c00\" stroke-width=\"2\"/></svg>Curseur (coordonn\u00E9es du point)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"10\" fill=\"rgba(176,75,255,.35)\" stroke=\"#b04bff\" stroke-width=\"3\"/></svg>Balise num\u00E9rot\u00E9e (parcours)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#ffd400\" stroke-width=\"3\" stroke-dasharray=\"6 4\"/></svg>Ligne pi\u00E8ce \u2192 objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#00e5ff\" stroke-width=\"3\"/></svg>Direction vers la cible depuis moi</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"11\" fill=\"rgba(10,132,255,.15)\" stroke=\"#0a84ff\"/></svg>Pr\u00E9cision du GPS</div>\n<div style=\"margin-top:4px;color:#bbb\">Noms : villes, villages et fronti\u00E8res (bouton Noms, satellite).</div></div>\n<div id=\"hp\"><div id=\"hp1\" class=\"hpan\"></div><div id=\"hp2\" class=\"hpan\"></div><div id=\"hp3\" class=\"hpan\"></div></div>\n<button id=\"hx\" onclick=\"cartePlein(false)\">\u2715</button>\n<div id=\"hpop\"></div>\n<div id=\"hctx\"></div>\n<div id=\"htb\"><button onclick=\"hudMenu('menu')\" title=\"Menu\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 18 9 7l4 7 3-4 5 8z\"/></svg></button><button onclick=\"hudMenu('fond')\" title=\"Cartes\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z\"/><path d=\"M9 4v14M15 6v14\"/></svg></button><button onclick=\"hudMenu('pts')\" title=\"Points\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 21V4M5 4h13l-3 4 3 4H5\"/></svg></button><button data-hsuivre onclick=\"carteSuivre()\" title=\"Suivre ma position\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"7\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\"/><path d=\"M12 1v4M12 19v4M1 12h4M19 12h4\"/></svg></button><button data-hcap onclick=\"carteCapMode()\" title=\"Orientation\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m15.5 8.5-2 5-5 2 2-5z\"/></svg></button></div>\n<div id=\"czoom\"><button onclick=\"carteZoom(1)\">+</button><button onclick=\"carteZoom(-1)\">\u2212</button></div>\n<div id=\"chudt\"><div class=\"seg\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div><button class=\"mini\" onclick=\"cartePlein(false)\">\u2715 Fermer</button></div>\n<div id=\"chudb\">\n<div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div><div id=\"ccur2\" class=\"ccur\"></div><div id=\"cinfo2\"></div>\n<div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"curVers('p')\">\u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">\u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">\u2192 Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"posManuelle()\">Moi = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">\u2715 Objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">\u2715 Pi\u00E8ce</button></div>\n<div class=\"row\"><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button><button class=\"mini\" onclick=\"baliseSuivante()\">Balise \u25B8</button></div></div></div>\n<p id=\"cinfo\" class=\"note\" style=\"font-size:14px;color:var(--fg)\"></p>\n<div style=\"margin-top:8px\"><div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div></div><div id=\"ccur\" class=\"ccur\"></div>\n<div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Placer la pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Placer l'objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Placer une balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"gpsVers('p')\">Ma position GPS \u2192 Pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"curVers('p')\">Curseur \u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">Curseur \u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">Curseur \u2192 Balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"cartePlein(true)\">Plein \u00E9cran</button><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre ma position</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail satellite +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail satellite \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"posManuelle()\">Ma position = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">Retirer l'objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">Retirer la pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"baliseSuivante()\">Balise suivante</button><button class=\"mini\" onclick=\"effacerBalises()\">Effacer les balises</button></div>\n<button class=\"btn\" onclick=\"calcul(true)\">Calculer le tir</button>\n<p id=\"cattr\" class=\"note\"></p></div>\n<div class=\"card\"><div class=\"hd\"><h2>Carte import\u00E9e</h2></div>\n<p class=\"note\" style=\"margin-top:0\">Importez vos cartes depuis le t\u00E9l\u00E9phone (PDF \u00E0 plusieurs pages, photos, scans ou captures) : chaque page devient une carte de la liste. Calibrez chaque carte avec 2 points dont vous connaissez les coordonn\u00E9es UTM (par exemple deux croisements du quadrillage). Pour un PDF, la premi\u00E8re lecture demande internet. La carte est convertie en image, enregistr\u00E9e dans l'application, et fonctionne ensuite sans r\u00E9seau.</p>\n<input id=\"cfile\" type=\"file\" multiple onchange=\"carteImporter(this)\">\n<p id=\"cnb\" class=\"note\"></p>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"carteRenommer()\">Renommer la carte</button><button class=\"mini\" onclick=\"carteSupprimer()\">Supprimer la carte</button></div>\n<button class=\"btn alt\" onclick=\"calibrer()\">Calibrer (2 points)</button></div>";
+$("p-carte").innerHTML = "<div class=\"card\">\n<div class=\"seg\" style=\"margin-bottom:8px\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div>\n<select id=\"cliste\" onchange=\"carteChoisir(this.value)\" style=\"margin:0 0 8px;display:none\"></select>\n<div id=\"carte\"><div id=\"cworld\"><div id=\"cpane\"></div><img id=\"cimage\" alt=\"\"><svg id=\"csvg\"></svg></div>\n<svg id=\"caig\" viewBox=\"-44 -44 88 88\"></svg>\n<div id=\"cleg\" onclick=\"carteLegende()\"><b>L\u00E9gende (touchez pour fermer)</b>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,-12 -10,8 10,8\" fill=\"#2ecc40\" stroke=\"#000\" stroke-width=\"1.5\"/></svg>Pi\u00E8ce</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff3b30\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff3b30\" stroke-width=\"2\"/></svg>Objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,12 -8,-6 8,-6\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"7\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"2.5\" fill=\"#fff\"/></svg>Ma position (GPS)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff8c00\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff8c00\" stroke-width=\"2\"/></svg>Curseur (coordonn\u00E9es du point)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"10\" fill=\"rgba(176,75,255,.35)\" stroke=\"#b04bff\" stroke-width=\"3\"/></svg>Balise num\u00E9rot\u00E9e (parcours)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#ffd400\" stroke-width=\"3\" stroke-dasharray=\"6 4\"/></svg>Ligne pi\u00E8ce \u2192 objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#00e5ff\" stroke-width=\"3\"/></svg>Direction vers la cible depuis moi</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"11\" fill=\"rgba(10,132,255,.15)\" stroke=\"#0a84ff\"/></svg>Pr\u00E9cision du GPS</div>\n<div style=\"margin-top:4px;color:#bbb\">Hybride : noms des localit\u00E9s, fronti\u00E8res et routes sur le satellite (bouton Noms).</div></div>\n<div id=\"hp\"><div id=\"hp1\" class=\"hpan\"></div><div id=\"hp2\" class=\"hpan\"></div><div id=\"hp3\" class=\"hpan\"></div></div>\n<button id=\"hx\" onclick=\"cartePlein(false)\">\u2715</button>\n<div id=\"hpop\"></div>\n<div id=\"hctx\"></div>\n<div id=\"htb\"><button onclick=\"hudMenu('menu')\" title=\"Menu\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 18 9 7l4 7 3-4 5 8z\"/></svg></button><button onclick=\"hudMenu('fond')\" title=\"Cartes\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z\"/><path d=\"M9 4v14M15 6v14\"/></svg></button><button onclick=\"hudMenu('pts')\" title=\"Points\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 21V4M5 4h13l-3 4 3 4H5\"/></svg></button><button data-hsuivre onclick=\"carteSuivre()\" title=\"Suivre ma position\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"7\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\"/><path d=\"M12 1v4M12 19v4M1 12h4M19 12h4\"/></svg></button><button data-hcap onclick=\"carteCapMode()\" title=\"Orientation\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m15.5 8.5-2 5-5 2 2-5z\"/></svg></button></div>\n<div id=\"czoom\"><button onclick=\"carteZoom(1)\">+</button><button onclick=\"carteZoom(-1)\">\u2212</button></div>\n<div id=\"chudt\"><div class=\"seg\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div><button class=\"mini\" onclick=\"cartePlein(false)\">\u2715 Fermer</button></div>\n<div id=\"chudb\">\n<div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div><div id=\"ccur2\" class=\"ccur\"></div><div id=\"cinfo2\"></div>\n<div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"curVers('p')\">\u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">\u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">\u2192 Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"posManuelle()\">Moi = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">\u2715 Objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">\u2715 Pi\u00E8ce</button></div>\n<div class=\"row\"><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button><button class=\"mini\" onclick=\"baliseSuivante()\">Balise \u25B8</button></div></div></div>\n<p id=\"cinfo\" class=\"note\" style=\"font-size:14px;color:var(--fg)\"></p>\n<div style=\"margin-top:8px\"><div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div></div><div id=\"ccur\" class=\"ccur\"></div>\n<div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Placer la pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Placer l'objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Placer une balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"gpsVers('p')\">Ma position GPS \u2192 Pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"curVers('p')\">Curseur \u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">Curseur \u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">Curseur \u2192 Balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"cartePlein(true)\">Plein \u00E9cran</button><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre ma position</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail satellite +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail satellite \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"posManuelle()\">Ma position = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">Retirer l'objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">Retirer la pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"baliseSuivante()\">Balise suivante</button><button class=\"mini\" onclick=\"effacerBalises()\">Effacer les balises</button></div>\n<button class=\"btn\" onclick=\"calcul(true)\">Calculer le tir</button>\n<p id=\"cattr\" class=\"note\"></p></div>\n<div class=\"card\"><div class=\"hd\"><h2>Carte import\u00E9e</h2></div>\n<p class=\"note\" style=\"margin-top:0\">Importez vos cartes depuis le t\u00E9l\u00E9phone (PDF \u00E0 plusieurs pages, photos, scans ou captures) : chaque page devient une carte de la liste. Calibrez chaque carte avec 2 points dont vous connaissez les coordonn\u00E9es UTM (par exemple deux croisements du quadrillage). Pour un PDF, la premi\u00E8re lecture demande internet. La carte est convertie en image, enregistr\u00E9e dans l'application, et fonctionne ensuite sans r\u00E9seau.</p>\n<input id=\"cfile\" type=\"file\" multiple onchange=\"carteImporter(this)\">\n<p id=\"cnb\" class=\"note\"></p>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"carteRenommer()\">Renommer la carte</button><button class=\"mini\" onclick=\"carteSupprimer()\">Supprimer la carte</button></div>\n<button class=\"btn alt\" onclick=\"calibrer()\">Calibrer (2 points)</button></div>";
 var SRC = {
 sat: { url: function (z, x, y) { return "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/" + z + "/" + y + "/" + x; }, max: 18, attr: "Imagerie satellite © Esri, Maxar, Earthstar Geographics. Connexion internet nécessaire." },
 topo: { url: function (z, x, y) { return "https://a.tile.opentopomap.org/" + z + "/" + x + "/" + y + ".png"; }, max: 17, attr: "Carte topographique © OpenTopoMap (CC-BY-SA), données © contributeurs OpenStreetMap. Connexion internet nécessaire (ou zone téléchargée)." },
@@ -1085,6 +1086,11 @@ carteRendre();
 }
 function cartePlein(on) {
 $("carte").classList.toggle("plein", on);
+{
+var bt = $("bandeTable");
+if (bt)
+bt.style.display = on ? "none" : "";
+}
 document.body.style.overflow = on ? "hidden" : "";
 if (on)
 veille();
@@ -1129,12 +1135,12 @@ m.GlobalWorkerOptions.workerSrc = PDFCDN + "pdf.worker.min.mjs";
 window.pdfjsLib = m;
 });
 }
+
 function pdfPret() {
 if (window.pdfjsLib)
 return Promise.resolve();
 return pdfLocal().catch(function () { return pdfEnLigne(); });
 }
-
 function pdfPage(doc, n) {
 return doc.getPage(n).then(function (page) {
 var v1 = page.getViewport({ scale: 1 }), sc = Math.min(6, 4096 / Math.max(v1.width, v1.height)), vp = page.getViewport({ scale: sc });
@@ -1403,7 +1409,7 @@ var c = C.cur;
 if (!c)
 return "Touchez la carte pour placer le curseur, puis déplacez-le au doigt.";
 var z = Math.floor((c.lon + 180) / 6) + 1, sud = c.lat < 0, u = llToUtm(c.lat, c.lon, z, sud);
-var t = "UTM " + z + (sud ? "S" : "N") + "  E " + fmt(u.e) + "  N " + fmt(u.n) + "\n" + dmsT(c.lat, "N", "S") + "  " + dmsT(c.lon, "E", "O");
+var t = z + bandeLat(c.lat) + "  " + fmt(u.e) + "  " + fmt(u.n) + "\n" + dmsT(c.lat, "N", "S") + "  " + dmsT(c.lon, "E", "O");
 t += "\nAltitude : " + (C.curAlt === undefined ? "…" : C.curAlt === null ? "indisponible" : fmt(C.curAlt) + " m (" + C.curSrc + ")");
 var P = pointLl("p");
 if (P) {
@@ -1504,29 +1510,35 @@ im.style.top = Math.round(ty * T - oy) + "px";
 }
 }
 for (var k in C.tuiles)
-if (!need[k] && k.charAt(0) !== "N") {
+if (!need[k] && !/^[NR]\//.test(k)) {
 C.tuiles[k].remove();
 delete C.tuiles[k];
 }
 rendreNoms(W, H, ox, oy);
 }
+var OVL = [
+{ k: "R", z: 1, cap: 15, url: function (zz, y, x) { return "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/" + zz + "/" + y + "/" + x; } },
+{ k: "N", z: 2, cap: 13, url: function (zz, y, x) { return "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/" + zz + "/" + y + "/" + x; } }
+];
 function rendreNoms(W, H, ox, oy) {
-var pane = $("cpane"), z = C.z, on = C.noms && C.mode === "sat", zz = Math.min(z, 13), f = Math.pow(2, z - zz), T = 256 * f, need = {};
-if (on) {
-var n = Math.pow(2, zz);
+var pane = $("cpane"), z = C.z, on = C.noms && C.mode === "sat", need = {};
+if (on)
+OVL.forEach(function (o) {
+var zz = Math.min(z, o.cap), f = Math.pow(2, z - zz), T = 256 * f, n = Math.pow(2, zz);
 for (var ty = Math.floor(oy / T); ty <= Math.floor((oy + H) / T); ty++) {
 if (ty < 0 || ty >= n)
 continue;
 for (var tx = Math.floor(ox / T); tx <= Math.floor((ox + W) / T); tx++) {
-var k = "N/" + z + "/" + tx + "/" + ty;
+var k = o.k + "/" + z + "/" + tx + "/" + ty;
 need[k] = 1;
 var im = C.tuiles[k];
 if (!im) {
 im = document.createElement("img");
 im.className = "tile tn";
 im.alt = "";
+im.style.zIndex = o.z;
 im.onerror = function () { this.style.display = "none"; };
-im.src = "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/" + zz + "/" + ty + "/" + (((tx % n) + n) % n);
+im.src = o.url(zz, ty, ((tx % n) + n) % n);
 pane.appendChild(im);
 C.tuiles[k] = im;
 }
@@ -1536,9 +1548,9 @@ im.style.left = Math.round(tx * T - ox) + "px";
 im.style.top = Math.round(ty * T - oy) + "px";
 }
 }
-}
+});
 for (var k in C.tuiles)
-if (k.charAt(0) === "N" && !need[k]) {
+if (/^[NR]\//.test(k) && !need[k]) {
 C.tuiles[k].remove();
 delete C.tuiles[k];
 }
@@ -1554,29 +1566,39 @@ carteRendre();
 }
 function ctuilesZone(zmax, lim) {
 var m = C.mode, out = [], W = C.lw || 400, H = C.lh || 600;
-for (var z = C.z; z <= zmax; z++) {
+var _loop_1 = function (z) {
 var k = Math.pow(2, z - C.z), cx = C.cx * k, cy = C.cy * k, n = Math.pow(2, z);
 var zn = m === "sat" ? Math.min(z, C.satMax) : z, f = Math.pow(2, z - zn), T = 256 * f, nn = Math.pow(2, zn);
 var seen = {};
-for (var ty = Math.floor((cy - H / 2) / T); ty <= Math.floor((cy + H / 2) / T); ty++) {
+var _loop_2 = function (ty) {
 if (ty < 0 || ty >= nn)
-continue;
-for (var tx = Math.floor((cx - W / 2) / T); tx <= Math.floor((cx + W / 2) / T); tx++) {
+return "continue";
+var _loop_3 = function (tx) {
 var u = SRC[m].url(zn, ((tx % nn) + nn) % nn, ty);
 if (!seen[u]) {
 seen[u] = 1;
 out.push(u);
 }
-if (m === "sat" && C.noms) {
-var zz = Math.min(z, 13), ff = Math.pow(2, z - zz), TT = 256 * ff, nz = Math.pow(2, zz), x2 = Math.floor(tx * T / TT), y2 = Math.floor(ty * T / TT);
-var u2 = "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/" + zz + "/" + y2 + "/" + (((x2 % nz) + nz) % nz);
+if (m === "sat" && C.noms)
+OVL.forEach(function (o) {
+var zz = Math.min(z, o.cap), ff = Math.pow(2, z - zz), TT = 256 * ff, nz = Math.pow(2, zz), x2 = Math.floor(tx * T / TT), y2 = Math.floor(ty * T / TT);
+var u2 = o.url(zz, y2, ((x2 % nz) + nz) % nz);
 if (!seen[u2]) {
 seen[u2] = 1;
 out.push(u2);
 }
+});
+};
+for (var tx = Math.floor((cx - W / 2) / T); tx <= Math.floor((cx + W / 2) / T); tx++) {
+_loop_3(tx);
 }
+};
+for (var ty = Math.floor((cy - H / 2) / T); ty <= Math.floor((cy + H / 2) / T); ty++) {
+_loop_2(ty);
 }
-}
+};
+for (var z = C.z; z <= zmax; z++) {
+_loop_1(z);
 }
 return out.slice(0, lim);
 }
@@ -2067,7 +2089,7 @@ return null;
 if (C.coord === "geo")
 return [dmsT(ll.lat, "N", "S"), dmsT(ll.lon, "E", "O")];
 var P = lire("p"), zp = P ? zonePiece(P) : null, z = zp ? zp.zone : Math.floor((ll.lon + 180) / 6) + 1, sud = zp ? zp.sud : ll.lat < 0, u = llToUtm(ll.lat, ll.lon, z, sud);
-return [z + (sud ? "S" : "N") + " E " + fmt(u.e), "N " + fmt(u.n)];
+return [z + bandeLat(ll.lat) + "  " + fmt(u.e) + "  " + fmt(u.n)];
 }
 function ech(S, x) { var k = C.sym; return k === 1 ? x : '<g transform="translate(' + S.x + ' ' + S.y + ') scale(' + k + ') translate(' + (-S.x) + ' ' + (-S.y) + ')">' + x + '</g>'; }
 function carteSym(k) { C.sym = k; sto.set("carteSym", String(k)); majBoutons(); carteRendre(); }
@@ -2075,7 +2097,7 @@ function lab(ll, pre, col) {
 var S = enEcran(ll), t = etiq(ll);
 if (!S || !t)
 return "";
-var el = $("carte"), vx = S.x - (cD() - el.clientWidth) / 2, gauche = C.rot === 0 && vx > el.clientWidth - 120, fs = Math.round(11 + 4 * (C.sym - 1) / 0.8), x = gauche ? S.x - 16 * C.sym : S.x + 16 * C.sym, y = S.y - 8 * C.sym, ls = [pre].concat(t);
+var el = $("carte"), vx = S.x - (cD() - el.clientWidth) / 2, gauche = C.rot === 0 && vx > el.clientWidth - 120, fs = Math.round(11 + 4 * (C.sym - 1) / 0.8), x = gauche ? S.x - 16 * C.sym : S.x + 16 * C.sym, y = S.y - 8 * C.sym, ls = (pre ? [pre] : []).concat(t);
 var o = '<g transform="rotate(' + (-C.rot) + ' ' + S.x + ' ' + S.y + ')" font-family="ui-monospace,Menlo,monospace" font-size="' + fs + '" font-weight="700" stroke="#000" stroke-width="4" paint-order="stroke" stroke-linejoin="round" text-anchor="' + (gauche ? "end" : "start") + '" fill="' + col + '">';
 ls.forEach(function (l, i) { o += '<text x="' + x + '" y="' + (y + i * (fs + 2)) + '">' + l + '</text>'; });
 return o + '</g>';
@@ -2091,8 +2113,8 @@ C.bal.forEach(function (q, i) { h += lab(q, "Balise " + (i + 1), "#e0b0ff"); });
 var pl = $("carte").classList.contains("plein");
 if (C.gps && !pl)
 h += lab(C.gps, "Moi", "#8ccaff");
-if (C.cur && !pl)
-h += lab(C.cur, "Curseur", "#ffc266");
+if (C.cur)
+h += lab(C.cur, pl ? "" : "Curseur", "#ffc266");
 return h;
 }
 function rendreMarques() {
@@ -2133,7 +2155,7 @@ if (G) {
 var ra = C.acc ? Math.min(pxMetres(C.gps, C.acc), 300) : 0;
 if (ra > 8)
 h += '<circle cx="' + G.x + '" cy="' + G.y + '" r="' + ra + '" fill="rgba(10,132,255,.2)" stroke="#0a84ff" stroke-width="1.5"/>';
-var hd = capCourant(), v = hd !== null ? vecteurCap(C.gps, hd) : null;
+var hd = C.gpsCap, enMarche = !C.manuel && C.gpsV !== null && C.gpsV > 0.7 && Date.now() - C.gpsT < 8000 && hd !== null && hd !== undefined, v = enMarche ? vecteurCap(C.gps, hd) : null;
 if (v) {
 var ang_1 = Math.atan2(v[0], -v[1]) * 180 / Math.PI;
 h += ech(G, '<g transform="translate(' + G.x + ' ' + G.y + ') rotate(' + ang_1.toFixed(1) + ')"><polygon points="0,-19 12,14 0,7 -12,14" fill="#1a73e8" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></g>');
@@ -2153,7 +2175,7 @@ h += ech(TS, '<circle cx="' + TS.x + '" cy="' + TS.y + '" r="7" fill="#fff" stro
 if (C.cur) {
 var K = enEcran(C.cur);
 if (K)
-h += ech(K, '<circle cx="' + K.x + '" cy="' + K.y + '" r="9" fill="#fff" stroke="#4a4a4a" stroke-width="3.5"/><circle cx="' + K.x + '" cy="' + K.y + '" r="2.5" fill="#4a4a4a"/>');
+h += ech(K, '<circle cx="' + K.x + '" cy="' + K.y + '" r="7" fill="#fff" stroke="#333" stroke-width="2.5"/>');
 }
 if (C.calib && C.mode === "img")
 C.calib.pts.forEach(function (q, i) { var x = C.vx + q.u * C.vs, y = C.vy + q.v * C.vs; h += '<circle cx="' + x + '" cy="' + y + '" r="8" fill="none" stroke="#ffd400" stroke-width="3"/><text x="' + (x + 12) + '" y="' + (y - 8) + '" fill="#ffd400" font-size="16" font-weight="700">' + (i + 1) + '</text>'; });
@@ -2204,7 +2226,7 @@ if (C.calib)
 t = "Calibrage : touchez le point " + (C.calib.pts.length + 1) + " sur la carte.";
 var nav = texteMarche();
 var hh = C.gpsT ? new Date(C.gpsT) : null, g = C.gps && hh ? " · GPS ±" + fmt(C.acc || 0) + " m à " + ("0" + hh.getHours()).slice(-2) + ":" + ("0" + hh.getMinutes()).slice(-2) + ":" + ("0" + hh.getSeconds()).slice(-2) : "";
-$("cinfo").textContent = (nav ? nav + " · " + t : t) + g + (C.manuel ? " · position saisie à la main" : "") + (C.gpsMsg ? "\n" + C.gpsMsg : "") + (C.cible && !C.gps ? "\nCible définie : la ligne apparaîtra dès que votre position est connue (GPS ou « Ma position = curseur »)." : "") + "\n(carte v18 · détail satellite niveau " + C.satMax + ")";
+$("cinfo").textContent = (nav ? nav + " · " + t : t) + g + (C.manuel ? " · position saisie à la main" : "") + (C.gpsMsg ? "\n" + C.gpsMsg : "") + (C.cible && !C.gps ? "\nCible définie : la ligne apparaîtra dès que votre position est connue (GPS ou « Ma position = curseur »)." : "") + "\n(carte v19 · détail satellite niveau " + C.satMax + ")";
 $("cinfo2").textContent = nav || t;
 }
 function carteZoom(dz, sx, sy) {
@@ -2285,8 +2307,8 @@ C.gpsAlt = (c.altitude !== null && !isNaN(c.altitude)) ? c.altitude : null;
 if (c.speed !== null && !isNaN(c.speed))
 C.gpsV = c.speed;
 else if (pr && tp && !C.manuel) {
-var dt = (C.gpsT - tp) / 1000;
-C.gpsV = dt > 0 && dt < 15 ? azDist(pr, C.gps).d / dt : 0;
+var dt = (C.gpsT - tp) / 1000, dd = azDist(pr, C.gps).d;
+C.gpsV = dt > 0 && dt < 15 && dd >= Math.max(6, (c.accuracy || 0) * 1.5) ? dd / dt : 0;
 }
 if (C.traceOn) {
 var l = C.trace[C.trace.length - 1];
@@ -2298,6 +2320,13 @@ C.trace.shift();
 }
 if (c.heading !== null && !isNaN(c.heading) && c.speed > 0.8)
 C.gpsCap = c.heading;
+else if (pr && !C.manuel) {
+var mm = azDist(pr, C.gps);
+if (mm.d >= Math.max(6, (c.accuracy || 0) * 1.5))
+C.gpsCap = mm.az * 360 / MIL;
+}
+clearTimeout(C.mvT);
+C.mvT = setTimeout(function () { carteRendre(); }, 8500);
 if (C.bal.length && C.balI < C.bal.length - 1 && azDist(C.gps, C.bal[C.balI]).d < 25) {
 C.balI++;
 sauverBal();
@@ -2888,33 +2917,178 @@ $("cpe").textContent = Math.abs(d) <= 5 ? "OK" : (d > 0 ? "→ " : "← ") + azu
 $("cpe").classList.toggle("ok", Math.abs(d) <= 5);
 }
 (function () {
+var C16 = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSO", "SO", "OSO", "O", "ONO", "NO", "NNO"];
+function maj() {
+var el = document.getElementById("wdinfo");
+if (!el)
+return;
+var v = azIn("wd"), vit = parseFloat(document.getElementById("wv").value) || 0;
+if (isNaN(v)) {
+el.textContent = "";
+return;
+}
+var deg = ((v * 360 / MIL) % 360 + 360) % 360, vers = (deg + 180) % 360;
+var nom = function (d) { return C16[Math.round(d / 22.5) % 16]; };
+el.textContent = "Vient de : " + nom(deg) + " (" + deg.toFixed(0) + "°, " + ang(((v % MIL) + MIL) % MIL) + ")" + (vit > 0 ? " · souffle vers : " + nom(vers) + " (" + vers.toFixed(0) + "°)" : "");
+}
+document.addEventListener("input", function (e) { if (e.target.id === "wd" || e.target.id === "wv")
+maj(); });
+document.addEventListener("change", function (e) { if (e.target.id === "wd" || e.target.id === "wv")
+maj(); });
+setInterval(maj, 700);
+maj();
+})();
+function lireCoord(txt) {
+var T0 = String(txt == null ? "" : txt).toUpperCase().replace(/[  ]/g, " ");
+var lignes = [T0].concat(T0.split(/\n+/).filter(function (l) { return /\d/.test(l); }));
+for (var li = 0; li < lignes.length; li++) {
+var r = lireCoord1(lignes[li]);
+if (r)
+return r;
+}
+return null;
+}
+function lireCoord1(T) {
+var m = T.match(/^\s*(?:UTM\s*:?\s*)?(\d{1,2})\s*([C-HJ-NP-X])[\s,;:\/]*(?:E\s*)?(\d+(?:[.,]\d+)?)\s*(?:M?E)?[\s,;:\/]*(?:N\s*)?(\d+(?:[.,]\d+)?)\s*(?:M?N)?\s*$/);
+if (m && +m[1] >= 1 && +m[1] <= 60)
+return { t: "utm", zone: +m[1], band: m[2], e: parseFloat(m[3].replace(",", ".")), n: parseFloat(m[4].replace(",", ".")) };
+var s = T.replace(/[°º˚′’‘`´'″”“"]/g, " ").replace(/\b(LATITUDE|LAT|LONGITUDE|LON|LNG|LONG)\b/g, " ").replace(/[;|\/]/g, " ");
+if (/\d,\d/.test(s) && !/\./.test(s))
+s = s.replace(/(\d),(\d)/g, "$1.$2");
+s = s.replace(/,/g, " ");
+if (/[A-Z]{2,}/.test(s))
+return null;
+var nums = [], lets = [];
+var r, re = /([NSEWO])|([-+]?\d+(?:\.\d+)?)/g;
+while ((r = re.exec(s))) {
+if (r[1])
+lets.push({ c: r[1], p: r.index });
+else
+nums.push({ v: parseFloat(r[2]), p: r.index, q: r.index + r[2].length - 1, neg: r[2].charAt(0) === "-" });
+}
+if (![2, 4, 6].includes(nums.length))
+return null;
+var k = nums.length / 2, G = [nums.slice(0, k), nums.slice(k)], L = [null, null];
+lets.forEach(function (l) {
+var d = G.map(function (g) { return Math.min.apply(null, g.map(function (x) { return Math.max(0, x.p - l.p, l.p - x.q); })); });
+var gi = d[0] <= d[1] ? 0 : 1;
+if (!L[gi])
+L[gi] = l.c;
+});
+function val(g, l) {
+var c = g.map(function (x) { return Math.abs(x.v); });
+if (k >= 2 && c[1] >= 60)
+return NaN;
+if (k === 3 && c[2] >= 60)
+return NaN;
+var v = c[0] + (k >= 2 ? c[1] / 60 : 0) + (k === 3 ? c[2] / 3600 : 0);
+var neg = l ? (l === "S" || l === "W" || l === "O") : g[0].neg;
+return neg ? -v : v;
+}
+var a = val(G[0], L[0]), b = val(G[1], L[1]);
+if (isNaN(a) || isNaN(b))
+return null;
+var lonL = function (l) { return l === "E" || l === "W" || l === "O"; }, latL = function (l) { return l === "N" || l === "S"; };
+var lat = a, lon = b;
+if (lonL(L[0]) || latL(L[1]))
+lat = b, lon = a;
+else if (!L[0] && !L[1] && Math.abs(a) > 90 && Math.abs(b) <= 90)
+lat = b, lon = a;
+if (Math.abs(lat) > 90 || Math.abs(lon) > 180)
+return null;
+return { t: "ll", lat: lat, lon: lon };
+}
+function coordAppliquer(id, txt) {
+var msg = $(id + "u1m"), inp = $(id + "u1"), c = lireCoord(txt);
+if (!c) {
+inp.dataset.bad = "1";
+msg.textContent = "Coordonnées non reconnues. Exemples : 30P  729374  1573259 · 14.2219, -0.8743 · 14°13'18.9\"N 0°52'27.4\"W";
+msg.style.color = "var(--err)";
+return false;
+}
+inp.dataset.bad = "";
+msg.style.color = "";
+if (c.t === "utm") {
+$(id + "z").value = c.zone;
+$(id + "h").value = c.band >= "N" ? "N" : "S";
+$(id + "e").value = c.e;
+$(id + "n").value = c.n;
+$(id + "e").dispatchEvent(new Event("change", { bubbles: true }));
+}
+else {
+affecterPoint(id, { lat: c.lat, lon: c.lon });
+}
+msg.textContent = "Coordonnées prises en compte.";
+inp.value = "";
+inp.dataset.bad = "";
+return true;
+}
+function coordTexte(id, fmtc) {
+var z = parseInt($(id + "z").value), e = parseFloat($(id + "e").value), n = parseFloat($(id + "n").value);
+if (!z || isNaN(e) || isNaN(n))
+return null;
+var sud = $(id + "h").value === "S", l = utmToLl(e, n, z, sud);
+if (fmtc === "utm")
+return z + bandeLat(l.lat) + "  " + Math.round(e) + "  " + Math.round(n);
+if (fmtc === "ll")
+return l.lat.toFixed(6) + ", " + l.lon.toFixed(6);
+return dmsT(l.lat, "N", "S") + " " + dmsT(l.lon, "E", "O");
+}
+function coordCopier(id, fmtc) {
+var msg = $(id + "u1m"), t = coordTexte(id, fmtc);
+if (!t) {
+msg.style.color = "var(--err)";
+msg.textContent = "Rien à copier : saisissez d'abord les coordonnées.";
+return;
+}
+var fin = function () { msg.style.color = ""; msg.textContent = "Copié : " + t; };
+var repli = function () {
+try {
+var ta = document.createElement("textarea");
+ta.value = t;
+ta.style.position = "fixed";
+ta.style.opacity = "0";
+document.body.appendChild(ta);
+ta.select();
+var ok = document.execCommand("copy");
+document.body.removeChild(ta);
+if (ok) {
+fin();
+return;
+}
+}
+catch (e) { }
+prompt("Copiez :", t);
+};
+if (navigator.clipboard && navigator.clipboard.writeText)
+navigator.clipboard.writeText(t).then(fin, repli);
+else
+repli();
+}
+function coordColler(id) {
+var msg = $(id + "u1m");
+var manuel = function () { msg.style.color = "var(--err)"; msg.textContent = "Collage automatique refusé : appuyez longuement dans la case « Coordonnées » puis choisissez Coller."; };
+if (navigator.clipboard && navigator.clipboard.readText)
+navigator.clipboard.readText().then(function (t) { coordAppliquer(id, t); }, manuel);
+else
+manuel();
+}
+(function () {
 function creer(id) {
 var bloc = $(id + "u"), g2 = bloc.querySelector(".g2");
 if (!bloc || !g2)
 return;
 var lab = document.createElement("label");
-lab.innerHTML = 'Coordonnées UTM (zone + lettre, Est, Nord)<input id="' + id + 'u1" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="30P  729374  1573259" style="font-weight:700;letter-spacing:.5px"><span id="' + id + 'u1m" class="note" style="display:block;margin:4px 0 0"></span>';
+lab.innerHTML = 'Coordonnées UTM (zone + lettre, Est, Nord)<input id="' + id + 'u1" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="30P  729374  1573259" style="font-weight:700;letter-spacing:.5px">';
 bloc.insertBefore(lab, g2);
+var bt = document.createElement("div");
+bt.innerHTML = '<div class="rowb" style="margin:6px 0 0"><button type="button" class="mini" onclick="coordColler(\'' + id + '\')">📋 Coller</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'utm\')">Copier UTM</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'ll\')">Copier lat/lon</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'dms\')">Copier DMS</button></div><span id="' + id + 'u1m" class="note" style="display:block;margin:4px 0 0"></span>';
+bloc.insertBefore(bt, g2);
 g2.hidden = true;
 $(id + "e").parentNode.hidden = true;
 $(id + "n").parentNode.hidden = true;
-var inp = $(id + "u1"), msg = $(id + "u1m");
-inp.addEventListener("change", function () {
-var m = String(inp.value).toUpperCase().replace(/[,;/]/g, " ").match(/^\s*(\d{1,2})\s*([C-HJ-NP-X])\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*$/);
-if (!m || +m[1] < 1 || +m[1] > 60) {
-inp.dataset.bad = "1";
-msg.textContent = "Format attendu : 30P  729374  1573259 (zone, lettre, Est, Nord).";
-msg.style.color = "var(--err)";
-return;
-}
-inp.dataset.bad = "";
-msg.textContent = "";
-$(id + "z").value = +m[1];
-$(id + "h").value = m[2] >= "N" ? "N" : "S";
-$(id + "e").value = m[3];
-$(id + "n").value = m[4];
-$(id + "e").dispatchEvent(new Event("change", { bubbles: true }));
-});
+$(id + "u1").addEventListener("change", function () { var v = this.value; if (String(v).trim())
+coordAppliquer(id, v); });
 }
 function maj(id) {
 var inp = $(id + "u1");
