@@ -659,6 +659,8 @@ rows.push(["Hausse finale (avec site)", ang(hs)]);
 }
 else
 msg += "Distance hors des portées de la table saisie.";
+if (!altSure.p || !altSure.t)
+msg += (msg ? " " : "") + "⚠ Altitude non confirmée (" + (!altSure.p && !altSure.t ? "pièce et objectif" : !altSure.p ? "pièce" : "objectif") + ") : la correction de site peut être fausse. Saisissez l'altitude ou touchez Alt. auto.";
 $("tab").innerHTML = rows.map(function (r) { return r[0] === "sep" ? "<tr class=\"sep\"><td colspan=\"2\">".concat(r[1], "</td></tr>") : "<tr><td>".concat(r[0], "</td><td>").concat(r[1], "</td></tr>"); }).join("");
 $("rAz").textContent = azu(azC);
 $("rHa").textContent = c ? ang(hs) : "–";
@@ -733,7 +735,7 @@ if (hausseFinale !== null)
 rows.push(["Hausse : écart depuis l'initiale", sang(hausseFinale - href)]);
 t.innerHTML = rows.map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>"; }).join("");
 }
-var altManuel = { p: false, t: false }, seqAlt = { p: 0, t: 0 }, tuiles = {};
+var altManuel = { p: false, t: false }, altSure = { p: false, t: false }, seqAlt = { p: 0, t: 0 }, tuiles = {};
 var dbp = null;
 function ouvrirDb() {
 if (dbp)
@@ -781,6 +783,36 @@ return ok.length ? ok[0] : null;
 }
 return a * (1 - fx) * (1 - fy) + b * fx * (1 - fy) + c * (1 - fx) * fy + d * fx * fy;
 }
+function altCle(lat, lon) { return lat.toFixed(3) + "," + lon.toFixed(3); }
+function altCacheLire(lat, lon) { try {
+var o = JSON.parse(sto.get("altCache") || "{}");
+var v = o[altCle(lat, lon)];
+return typeof v === "number" ? v : null;
+}
+catch (e) {
+return null;
+} }
+function altCacheEcrire(lat, lon, v) { try {
+var o = JSON.parse(sto.get("altCache") || "{}");
+o[altCle(lat, lon)] = Math.round(v);
+var k = Object.keys(o);
+if (k.length > 300)
+delete o[k[0]];
+sto.set("altCache", JSON.stringify(o));
+}
+catch (e) { } }
+function jsonDelai(url, ms) {
+var ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
+return new Promise(function (ok, ko) {
+var t = setTimeout(function () { if (ctl)
+try {
+ctl.abort();
+}
+catch (e) { } ko(0); }, ms);
+fetch(url, ctl ? { signal: ctl.signal } : {}).then(function (r) { if (!r.ok)
+throw 0; return r.json(); }).then(function (j) { clearTimeout(t); ok(j); }, function () { clearTimeout(t); ko(0); });
+});
+}
 function altitudeMNT(lat, lon) {
 return chargerTuile(cleTuile(lat, lon)).then(function (dv) {
 if (dv) {
@@ -788,10 +820,23 @@ var v = lireTuile(dv, lat, lon);
 if (v !== null)
 return { alt: v, src: "hors ligne" };
 }
+var c = altCacheLire(lat, lon), mem = c !== null ? { alt: c, src: "mémorisée" } : null;
 if (navigator.onLine === false)
-return null;
-return fetch("https://api.open-meteo.com/v1/elevation?latitude=" + lat.toFixed(5) + "&longitude=" + lon.toFixed(5))
-.then(function (r) { return r.json(); }).then(function (j) { return (j && j.elevation && j.elevation.length) ? { alt: j.elevation[0], src: "en ligne" } : null; }).catch(function () { return null; });
+return mem;
+var la = lat.toFixed(5), lo = lon.toFixed(5);
+var sources = [
+function () { return jsonDelai("https://api.open-meteo.com/v1/elevation?latitude=" + la + "&longitude=" + lo, 6000).then(function (j) { return j.elevation[0]; }); },
+function () { return jsonDelai("https://api.opentopodata.org/v1/srtm30m?locations=" + la + "," + lo, 6000).then(function (j) { return j.results[0].elevation; }); },
+function () { return jsonDelai("https://api.open-elevation.com/api/v1/lookup?locations=" + la + "," + lo, 6000).then(function (j) { return j.results[0].elevation; }); }
+];
+var i = 0;
+function suite() {
+if (i >= sources.length)
+return mem;
+return sources[i++]().then(function (v) { if (typeof v !== "number" || isNaN(v))
+throw 0; altCacheEcrire(lat, lon, v); return { alt: v, src: "en ligne" }; }).catch(function () { return suite(); });
+}
+return suite();
 });
 }
 function majAlt(id) {
@@ -806,7 +851,8 @@ if (n !== seqAlt[id])
 return;
 var garde = altManuel[id] ? " Valeur saisie conservée." : "";
 if (!r) {
-note.textContent = "Altitude du terrain indisponible (importez une dalle .hgt dans Paramètres)." + garde;
+altSure[id] = !!altManuel[id];
+note.textContent = "Altitude indisponible : saisissez-la dans la case Alt., ou touchez Alt. auto quand le réseau revient." + garde;
 return;
 }
 var v = Math.round(r.alt);
@@ -815,6 +861,7 @@ if (!altManuel[id]) {
 $(id + "a").value = v;
 $(id + "da").value = v;
 }
+altSure[id] = true;
 });
 }
 function altAuto(id) { altManuel[id] = false; return majAlt(id); }
@@ -825,10 +872,14 @@ majAlt(id.charAt(0));
 });
 document.addEventListener("input", function (e) {
 var id = e.target.id || "";
-if (id === "pa" || id === "pda")
+if (id === "pa" || id === "pda") {
 altManuel.p = true;
-if (id === "ta" || id === "tda")
+altSure.p = true;
+}
+if (id === "ta" || id === "tda") {
 altManuel.t = true;
+altSure.t = true;
+}
 });
 function importHgt(inp) {
 var fs = Array.from(inp.files || []), ko = [];
@@ -1357,6 +1408,7 @@ $(id + "h").value = sud ? "S" : "N";
 $(id + "e").value = fmt(u.e, 1);
 $(id + "n").value = fmt(u.n, 1);
 altManuel[id] = false;
+altSure[id] = false;
 majAlt(id);
 carteRendre();
 }
@@ -2709,6 +2761,16 @@ majAlt("t").then(function () { calcul(false); rendreHisto(); });
 rendreHisto();
 if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) {
 window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () { }); });
+navigator.serviceWorker.addEventListener("message", function (ev) {
+if (!ev.data || !ev.data.maj || document.getElementById("bandeMaj"))
+return;
+var d = document.createElement("div");
+d.id = "bandeMaj";
+d.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:200;background:#1a73e8;color:#fff;padding:12px 14px;font-weight:700;font-size:15px;text-align:center";
+d.textContent = "Nouvelle version prête : touchez ici pour recharger";
+d.onclick = function () { location.reload(); };
+document.body.appendChild(d);
+});
 }
 var watchId = null, premierFix = true;
 function setChip(id, on) { $(id).classList.toggle("on", on); }
@@ -2765,6 +2827,7 @@ if (premierFix) {
 premierFix = false;
 if (alt !== null) {
 altManuel.p = true;
+altSure.p = true;
 $("pmnt").textContent = "Altitude fournie par le GPS.";
 }
 else {
@@ -3016,6 +3079,18 @@ if (Math.abs(lat) > 90 || Math.abs(lon) > 180)
 return null;
 return { t: "ll", lat: lat, lon: lon };
 }
+function remplirDms(id, ll) {
+var sp = function (v) { var a = Math.abs(v); var t = Math.round(a * 3600 * 100) / 100; var d = Math.floor(t / 3600); t -= d * 3600; var m = Math.floor(t / 60); return [d, m, Math.round((t - m * 60) * 100) / 100]; };
+var la = sp(ll.lat), lo = sp(ll.lon);
+$(id + "la").value = la[0];
+$(id + "lb").value = la[1];
+$(id + "lc").value = la[2];
+$(id + "ls").value = ll.lat < 0 ? "S" : "N";
+$(id + "oa").value = lo[0];
+$(id + "ob").value = lo[1];
+$(id + "oc").value = lo[2];
+$(id + "os").value = ll.lon < 0 ? "O" : "E";
+}
 function coordAppliquer(id, txt) {
 var msg = $(id + "u1m"), inp = $(id + "u1"), c = lireCoord(txt);
 if (!c) {
@@ -3026,7 +3101,14 @@ return false;
 }
 inp.dataset.bad = "";
 msg.style.color = "";
-if (c.t === "utm") {
+var ll = c.t === "utm" ? utmToLl(c.e, c.n, c.zone, c.band < "N") : { lat: c.lat, lon: c.lon };
+altManuel[id] = false;
+altSure[id] = false;
+if ($(id + "m").value === "dms") {
+remplirDms(id, ll);
+$(id + "la").dispatchEvent(new Event("change", { bubbles: true }));
+}
+else if (c.t === "utm") {
 $(id + "z").value = c.zone;
 $(id + "h").value = c.band >= "N" ? "N" : "S";
 $(id + "e").value = c.e;
@@ -3034,20 +3116,35 @@ $(id + "n").value = c.n;
 $(id + "e").dispatchEvent(new Event("change", { bubbles: true }));
 }
 else {
-affecterPoint(id, { lat: c.lat, lon: c.lon });
+affecterPoint(id, ll);
 }
 msg.textContent = "Coordonnées prises en compte.";
 inp.value = "";
-inp.dataset.bad = "";
+if ($(id + "d1"))
+$(id + "d1").value = "";
 return true;
 }
 function coordTexte(id, fmtc) {
-var z = parseInt($(id + "z").value), e = parseFloat($(id + "e").value), n = parseFloat($(id + "n").value);
-if (!z || isNaN(e) || isNaN(n))
+var P = lire(id);
+if (!P)
 return null;
-var sud = $(id + "h").value === "S", l = utmToLl(e, n, z, sud);
-if (fmtc === "utm")
+var l = P.ll ? P.ll : utmToLl(P.utm.e, P.utm.n, P.utm.zone, P.utm.sud);
+if (fmtc === "utm") {
+var z = void 0, e = void 0, n = void 0;
+if (P.utm) {
+z = P.utm.zone;
+e = P.utm.e;
+n = P.utm.n;
+}
+else {
+var pp = id === "t" ? lire("p") : null, zp = pp ? zonePiece(pp) : null;
+z = zp ? zp.zone : Math.floor((l.lon + 180) / 6) + 1;
+var u = llToUtm(l.lat, l.lon, z, zp ? zp.sud : l.lat < 0);
+e = u.e;
+n = u.n;
+}
 return z + bandeLat(l.lat) + "  " + Math.round(e) + "  " + Math.round(n);
+}
 if (fmtc === "ll")
 return l.lat.toFixed(6) + ", " + l.lon.toFixed(6);
 return dmsT(l.lat, "N", "S") + " " + dmsT(l.lon, "E", "O");
@@ -3100,8 +3197,16 @@ var lab = document.createElement("label");
 lab.innerHTML = 'Coordonnées UTM (zone + lettre, Est, Nord)<input id="' + id + 'u1" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="30P  729374  1573259" style="font-weight:700;letter-spacing:.5px">';
 bloc.insertBefore(lab, g2);
 var bt = document.createElement("div");
-bt.innerHTML = '<div class="rowb" style="margin:6px 0 0"><button type="button" class="mini" onclick="coordColler(\'' + id + '\')">📋 Coller</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'utm\')">Copier UTM</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'ll\')">Copier lat/lon</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'dms\')">Copier DMS</button></div><span id="' + id + 'u1m" class="note" style="display:block;margin:4px 0 0"></span>';
-bloc.insertBefore(bt, g2);
+bt.innerHTML = '<div class="rowb" style="margin:6px 0 0"><button type="button" class="mini" onclick="coordColler(\'' + id + '\')">📋 Coller</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'utm\')">Copier UTM</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'ll\')">Copier lat/lon</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'dms\')">Copier DMS</button></div><span id="' + id + 'u1m" class="note" style="display:block;margin:4px 0 6px"></span>';
+bloc.parentNode.insertBefore(bt, bloc);
+var dd = $(id + "d");
+if (dd) {
+var l2 = document.createElement("label");
+l2.innerHTML = 'Coordonnées (coller ici : UTM, décimal ou DMS)<input id="' + id + 'd1" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="14°13\'18.9&quot;N 0°52\'27.4&quot;O" style="font-weight:700">';
+dd.insertBefore(l2, dd.firstChild);
+$(id + "d1").addEventListener("change", function () { var v = this.value; if (String(v).trim())
+coordAppliquer(id, v); });
+}
 g2.hidden = true;
 $(id + "e").parentNode.hidden = true;
 $(id + "n").parentNode.hidden = true;
@@ -3110,7 +3215,7 @@ coordAppliquer(id, v); });
 }
 function maj(id) {
 var inp = $(id + "u1");
-if (!inp || document.activeElement === inp || inp.dataset.bad === "1")
+if (!inp || document.activeElement === inp || inp.dataset.bad === "1" || $(id + "m").value !== "utm")
 return;
 var z = $(id + "z").value, e = parseFloat($(id + "e").value), n = parseFloat($(id + "n").value);
 if (!z || isNaN(e) || isNaN(n)) {

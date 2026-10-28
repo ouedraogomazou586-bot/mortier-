@@ -1,12 +1,15 @@
-const VERSION="mortier-v1",TUILES="tuiles-v1";
+const VERSION="mortier-v2",TUILES="tuiles-v1";
 const COQUILLE=["./","index.html","manifest.webmanifest","ic192.png","ic512.png"];
 const HOTES=/(^|\.)(arcgisonline\.com|openstreetmap\.org|opentopomap\.org)$/;
 self.addEventListener("install",function(e){
- e.waitUntil(caches.open(VERSION).then(function(c){return c.addAll(COQUILLE)}).then(function(){return self.skipWaiting()}));
+ e.waitUntil(caches.open(VERSION).then(function(c){return Promise.all(COQUILLE.map(function(u){return c.add(new Request(u,{cache:"reload"})).catch(function(){})}))}).then(function(){return self.skipWaiting()}));
 });
 self.addEventListener("activate",function(e){
  e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==VERSION&&k!==TUILES}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}));
 });
+function prevenir(){
+ self.clients.matchAll({includeUncontrolled:true}).then(function(cl){cl.forEach(function(c){c.postMessage({maj:true})})});
+}
 self.addEventListener("fetch",function(e){
  const r=e.request;if(r.method!=="GET")return;
  const u=new URL(r.url);
@@ -23,9 +26,25 @@ self.addEventListener("fetch",function(e){
   return;
  }
  if(u.origin===location.origin){
-  e.respondWith(fetch(r).then(function(rep){
-   if(rep&&rep.ok){const cp=rep.clone();caches.open(VERSION).then(function(c){c.put(r,cp)})}
-   return rep;
-  }).catch(function(){return caches.match(r,{ignoreSearch:true}).then(function(m){return m||caches.match("index.html")})}));
+  // ouverture instantanée : on sert d'abord la copie enregistrée, et on la met à jour en arrière-plan
+  e.respondWith(caches.open(VERSION).then(function(c){
+   return c.match(r,{ignoreSearch:true}).then(function(hit0){
+    const hit=hit0||(r.mode==="navigate"?null:null);
+    const reseau=fetch(r).then(function(rep){
+     if(rep&&rep.ok){
+      const cp=rep.clone();
+      const ancien=hit?(hit.headers.get("etag")||hit.headers.get("last-modified")):null,nouveau=rep.headers.get("etag")||rep.headers.get("last-modified");
+      c.put(r,cp).then(function(){if(hit&&ancien&&nouveau&&ancien!==nouveau)prevenir()});
+     }
+     return rep;
+    }).catch(function(){return null});
+    e.waitUntil(reseau);
+    if(hit)return hit;
+    return reseau.then(function(rep){
+     if(rep)return rep;
+     return c.match("index.html").then(function(m){return m||c.match("./")}).then(function(m){return m||Response.error()});
+    });
+   });
+  }));
  }
 });
