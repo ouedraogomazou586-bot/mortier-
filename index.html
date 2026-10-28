@@ -2860,6 +2860,7 @@ majBoussole();
 if (typeof carteCapMaj === "function")
 carteCapMaj();
 }
+
 function majBoussole() {
 if (azTir !== null) {
 $("cpa").textContent = azu(azTir);
@@ -2886,6 +2887,52 @@ var d = ((azTir - grid + 1.5 * MIL) % MIL) - MIL / 2;
 $("cpe").textContent = Math.abs(d) <= 5 ? "OK" : (d > 0 ? "→ " : "← ") + azu(Math.abs(d));
 $("cpe").classList.toggle("ok", Math.abs(d) <= 5);
 }
+(function () {
+var armee = false;
+var installee = function () { try {
+return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+}
+catch (e) {
+return false;
+} };
+if (!installee())
+return;
+function armer() { if (armee)
+return; armee = true; try {
+history.pushState({ mq: 1 }, "");
+}
+catch (e) {
+armee = false;
+} }
+["pointerdown", "touchstart", "click", "keydown"].forEach(function (ev) { document.addEventListener(ev, armer, { passive: true }); });
+window.addEventListener("popstate", function () {
+if (!armee)
+return;
+var c = document.getElementById("carte");
+if (c && c.classList.contains("plein") && typeof cartePlein === "function") {
+cartePlein(false);
+try {
+history.pushState({ mq: 1 }, "");
+}
+catch (e) { }
+return;
+}
+if (confirm("Quitter l'application ?")) {
+armee = false;
+try {
+window.close();
+}
+catch (e) { }
+setTimeout(function () { alert("Appuyez encore une fois sur Retour pour quitter."); }, 400);
+}
+else {
+try {
+history.pushState({ mq: 1 }, "");
+}
+catch (e) { }
+}
+});
+})();
 
 
 </script>
