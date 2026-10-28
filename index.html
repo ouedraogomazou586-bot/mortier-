@@ -2888,6 +2888,54 @@ $("cpe").textContent = Math.abs(d) <= 5 ? "OK" : (d > 0 ? "→ " : "← ") + azu
 $("cpe").classList.toggle("ok", Math.abs(d) <= 5);
 }
 (function () {
+function creer(id) {
+var bloc = $(id + "u"), g2 = bloc.querySelector(".g2");
+if (!bloc || !g2)
+return;
+var lab = document.createElement("label");
+lab.innerHTML = 'Coordonnées UTM (zone + lettre, Est, Nord)<input id="' + id + 'u1" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="30P  729374  1573259" style="font-weight:700;letter-spacing:.5px"><span id="' + id + 'u1m" class="note" style="display:block;margin:4px 0 0"></span>';
+bloc.insertBefore(lab, g2);
+g2.hidden = true;
+$(id + "e").parentNode.hidden = true;
+$(id + "n").parentNode.hidden = true;
+var inp = $(id + "u1"), msg = $(id + "u1m");
+inp.addEventListener("change", function () {
+var m = String(inp.value).toUpperCase().replace(/[,;/]/g, " ").match(/^\s*(\d{1,2})\s*([C-HJ-NP-X])\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*$/);
+if (!m || +m[1] < 1 || +m[1] > 60) {
+inp.dataset.bad = "1";
+msg.textContent = "Format attendu : 30P  729374  1573259 (zone, lettre, Est, Nord).";
+msg.style.color = "var(--err)";
+return;
+}
+inp.dataset.bad = "";
+msg.textContent = "";
+$(id + "z").value = +m[1];
+$(id + "h").value = m[2] >= "N" ? "N" : "S";
+$(id + "e").value = m[3];
+$(id + "n").value = m[4];
+$(id + "e").dispatchEvent(new Event("change", { bubbles: true }));
+});
+}
+function maj(id) {
+var inp = $(id + "u1");
+if (!inp || document.activeElement === inp || inp.dataset.bad === "1")
+return;
+var z = $(id + "z").value, e = parseFloat($(id + "e").value), n = parseFloat($(id + "n").value);
+if (!z || isNaN(e) || isNaN(n)) {
+inp.value = "";
+return;
+}
+try {
+var l = utmToLl(e, n, +z, $(id + "h").value === "S");
+inp.value = z + bandeLat(l.lat) + "  " + Math.round(e) + "  " + Math.round(n);
+}
+catch (x) { }
+}
+creer("p");
+creer("t");
+setInterval(function () { maj("p"); maj("t"); }, 400);
+})();
+(function () {
 var armee = false;
 var installee = function () { try {
 return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
