@@ -173,7 +173,7 @@ nav button{font-size:10px}
 <div class="g3"><label>Alt. (m)<input id="pda" type="number" inputmode="decimal" value="0"></label></div>
 </div>
 <p class="note"><span id="pmnt"></span> <button class="mini" onclick="altAuto('p')">Alt. auto</button></p>
-<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 33</b></p>
+<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 34</b></p>
 </div>
 <div class="card"><div class="hd"><h2>Objectif</h2></div>
 <div class="seg" id="tseg"><button type="button" data-f="utm" class="on" onclick="setFmt('t','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('t','dms')">Degrés ° ' "</button></div>
@@ -3194,6 +3194,18 @@ else
 manuel();
 }
 (function () {
+function liste(el, id) {
+var go = function () { var v = el.value; if (String(v).trim())
+coordAppliquer(id, v); };
+el.addEventListener("paste", function () { setTimeout(go, 120); });
+el.addEventListener("input", function (e) { if (e.inputType === "insertFromPaste" || e.inputType === "insertFromDrop")
+setTimeout(go, 60); });
+el.addEventListener("keydown", function (e) { if (e.key === "Enter") {
+e.preventDefault();
+go();
+el.blur();
+} });
+}
 function creer(id) {
 var bloc = $(id + "u"), g2 = bloc.querySelector(".g2");
 if (!bloc || !g2)
@@ -3211,12 +3223,14 @@ l2.innerHTML = 'Coordonnées (coller ici : UTM, décimal ou DMS)<input id="' + i
 dd.insertBefore(l2, dd.firstChild);
 $(id + "d1").addEventListener("change", function () { var v = this.value; if (String(v).trim())
 coordAppliquer(id, v); });
+liste($(id + "d1"), id);
 }
 g2.hidden = true;
 $(id + "e").parentNode.hidden = true;
 $(id + "n").parentNode.hidden = true;
 $(id + "u1").addEventListener("change", function () { var v = this.value; if (String(v).trim())
 coordAppliquer(id, v); });
+liste($(id + "u1"), id);
 }
 function maj(id) {
 var inp = $(id + "u1");
