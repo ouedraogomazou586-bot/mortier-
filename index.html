@@ -169,11 +169,11 @@ nav button{font-size:10px}
 <div class="g4"><label>Lon °<input id="poa" type="number" inputmode="decimal"></label>
 <label>'<input id="pob" type="number" inputmode="decimal" value="0"></label>
 <label>"<input id="poc" type="number" inputmode="decimal" value="0"></label>
-<label>E/O<select id="pos"><option>E</option><option>O</option></select></label></div>
+<label>E/W<select id="pos"><option>E</option><option>W</option></select></label></div>
 <div class="g3"><label>Alt. (m)<input id="pda" type="number" inputmode="decimal" value="0"></label></div>
 </div>
 <p class="note"><span id="pmnt"></span> <button class="mini" onclick="altAuto('p')">Alt. auto</button></p>
-<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 34</b></p>
+<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 36</b></p>
 </div>
 <div class="card"><div class="hd"><h2>Objectif</h2></div>
 <div class="seg" id="tseg"><button type="button" data-f="utm" class="on" onclick="setFmt('t','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('t','dms')">Degrés ° ' "</button></div>
@@ -193,7 +193,7 @@ nav button{font-size:10px}
 <div class="g4"><label>Lon °<input id="toa" type="number" inputmode="decimal"></label>
 <label>'<input id="tob" type="number" inputmode="decimal" value="0"></label>
 <label>"<input id="toc" type="number" inputmode="decimal" value="0"></label>
-<label>E/O<select id="tos"><option>E</option><option>O</option></select></label></div>
+<label>E/W<select id="tos"><option>E</option><option>W</option></select></label></div>
 <div class="g3"><label>Alt. (m)<input id="tda" type="number" inputmode="decimal" value="0"></label></div>
 </div>
 <p class="note"><span id="tmnt"></span> <button class="mini" onclick="altAuto('t')">Alt. auto</button></p>
@@ -434,7 +434,7 @@ var la = $n(id + "la"), lo = $n(id + "oa");
 if ([la, lo].some(isNaN))
 return null;
 var lat = dms(la, $n(id + "lb") || 0, $n(id + "lc") || 0, $(id + "ls").value === "S");
-var lon = dms(lo, $n(id + "ob") || 0, $n(id + "oc") || 0, $(id + "os").value === "O");
+var lon = dms(lo, $n(id + "ob") || 0, $n(id + "oc") || 0, $(id + "os").value === "W");
 return { ll: { lat: lat, lon: lon }, alt: $n(id + "da") || 0 };
 }
 function versZone(pt, zone, sud) {
@@ -1464,7 +1464,7 @@ var c = C.cur;
 if (!c)
 return "Touchez la carte pour placer le curseur, puis déplacez-le au doigt.";
 var z = Math.floor((c.lon + 180) / 6) + 1, sud = c.lat < 0, u = llToUtm(c.lat, c.lon, z, sud);
-var t = z + bandeLat(c.lat) + "  " + fmt(u.e) + "  " + fmt(u.n) + "\n" + dmsT(c.lat, "N", "S") + "  " + dmsT(c.lon, "E", "O");
+var t = z + bandeLat(c.lat) + "  " + fmt(u.e) + "  " + fmt(u.n) + "\n" + dmsT(c.lat, "N", "S") + "  " + dmsT(c.lon, "E", "W");
 t += "\nAltitude : " + (C.curAlt === undefined ? "…" : C.curAlt === null ? "indisponible" : fmt(C.curAlt) + " m (" + C.curSrc + ")");
 var P = pointLl("p");
 if (P) {
@@ -1815,7 +1815,7 @@ carteRendre();
 inp.value = "";
 }
 function kmlCoord(p) {
-var ll = { lat: p.la, lon: p.lo }, t = C.coord === "geo" ? [dmsT(p.la, "N", "S"), dmsT(p.lo, "E", "O")] : etiq(ll) || [dmsT(p.la, "N", "S"), dmsT(p.lo, "E", "O")];
+var ll = { lat: p.la, lon: p.lo }, t = C.coord === "geo" ? [dmsT(p.la, "N", "S"), dmsT(p.lo, "E", "W")] : etiq(ll) || [dmsT(p.la, "N", "S"), dmsT(p.lo, "E", "W")];
 return t.join(" · ") + (p.a ? " · alt " + p.a + " m" : "");
 }
 function kmlRendre() {
@@ -2142,7 +2142,7 @@ function etiq(ll) {
 if (C.coord === "off")
 return null;
 if (C.coord === "geo")
-return [dmsT(ll.lat, "N", "S"), dmsT(ll.lon, "E", "O")];
+return [dmsT(ll.lat, "N", "S"), dmsT(ll.lon, "E", "W")];
 var P = lire("p"), zp = P ? zonePiece(P) : null, z = zp ? zp.zone : Math.floor((ll.lon + 180) / 6) + 1, sud = zp ? zp.sud : ll.lat < 0, u = llToUtm(ll.lat, ll.lon, z, sud);
 return [z + bandeLat(ll.lat) + "  " + fmt(u.e) + "  " + fmt(u.n)];
 }
@@ -2809,7 +2809,7 @@ $(pre + "c").value = ss.toFixed(1);
 sp(lat, "pl");
 $("pls").value = lat < 0 ? "S" : "N";
 sp(lon, "po");
-$("pos").value = lon < 0 ? "O" : "E";
+$("pos").value = lon < 0 ? "W" : "E";
 if (alt !== null)
 $("pda").value = alt;
 }
@@ -3094,7 +3094,7 @@ $(id + "ls").value = ll.lat < 0 ? "S" : "N";
 $(id + "oa").value = lo[0];
 $(id + "ob").value = lo[1];
 $(id + "oc").value = lo[2];
-$(id + "os").value = ll.lon < 0 ? "O" : "E";
+$(id + "os").value = ll.lon < 0 ? "W" : "E";
 }
 function coordAppliquer(id, txt) {
 var msg = $(id + "u1m"), inp = $(id + "u1"), c = lireCoord(txt);
@@ -3123,7 +3123,7 @@ $(id + "e").dispatchEvent(new Event("change", { bubbles: true }));
 else {
 affecterPoint(id, ll);
 }
-msg.textContent = "Prises en compte : " + Math.abs(ll.lat).toFixed(5) + "° " + (ll.lat < 0 ? "S" : "N") + ", " + Math.abs(ll.lon).toFixed(5) + "° " + (ll.lon < 0 ? "O" : "E") + " — vérifiez.";
+msg.textContent = "Prises en compte : " + Math.abs(ll.lat).toFixed(5) + "° " + (ll.lat < 0 ? "S" : "N") + ", " + Math.abs(ll.lon).toFixed(5) + "° " + (ll.lon < 0 ? "W" : "E") + " — vérifiez.";
 inp.value = "";
 if ($(id + "d1"))
 $(id + "d1").value = "";
@@ -3152,7 +3152,7 @@ return z + bandeLat(l.lat) + "  " + Math.round(e) + "  " + Math.round(n);
 }
 if (fmtc === "ll")
 return l.lat.toFixed(6) + ", " + l.lon.toFixed(6);
-return dmsT(l.lat, "N", "S") + " " + dmsT(l.lon, "E", "O");
+return dmsT(l.lat, "N", "S") + " " + dmsT(l.lon, "E", "W");
 }
 function coordCopier(id, fmtc) {
 var msg = $(id + "u1m"), t = coordTexte(id, fmtc);
@@ -3198,8 +3198,23 @@ function liste(el, id) {
 var go = function () { var v = el.value; if (String(v).trim())
 coordAppliquer(id, v); };
 el.addEventListener("paste", function () { setTimeout(go, 120); });
-el.addEventListener("input", function (e) { if (e.inputType === "insertFromPaste" || e.inputType === "insertFromDrop")
-setTimeout(go, 60); });
+var prev = 0, tm = 0;
+el.addEventListener("input", function (e) {
+var n = el.value.length, saut = n - prev;
+prev = n;
+clearTimeout(tm);
+if (saut > 4 || e.inputType === "insertFromPaste" || e.inputType === "insertFromDrop")
+tm = setTimeout(go, 150);
+else if (n >= 12 && lireCoord(el.value))
+tm = setTimeout(go, 1600);
+});
+var ok = document.createElement("button");
+ok.type = "button";
+ok.className = "mini";
+ok.textContent = "✔ Appliquer";
+ok.style.marginTop = "6px";
+ok.onclick = go;
+el.parentNode.parentNode.insertBefore(ok, el.parentNode.nextSibling);
 el.addEventListener("keydown", function (e) { if (e.key === "Enter") {
 e.preventDefault();
 go();
