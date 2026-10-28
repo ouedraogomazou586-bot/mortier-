@@ -173,7 +173,7 @@ nav button{font-size:10px}
 <div class="g3"><label>Alt. (m)<input id="pda" type="number" inputmode="decimal" value="0"></label></div>
 </div>
 <p class="note"><span id="pmnt"></span> <button class="mini" onclick="altAuto('p')">Alt. auto</button></p>
-<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 37</b></p>
+<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 38</b></p>
 </div>
 <div class="card"><div class="hd"><h2>Objectif</h2></div>
 <div class="seg" id="tseg"><button type="button" data-f="utm" class="on" onclick="setFmt('t','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('t','dms')">Degrés ° ' "</button></div>
@@ -2884,20 +2884,42 @@ $("mst").textContent = "Renseignez la position de la pièce (onglet Saisie) ou a
 return;
 }
 $("mst").textContent = "Récupération de la météo…";
-var url = "https://api.open-meteo.com/v1/forecast?latitude=" + ll.lat.toFixed(4) + "&longitude=" + ll.lon.toFixed(4) + "&current=temperature_2m,surface_pressure,wind_speed_10m,wind_direction_10m&wind_speed_unit=ms";
-fetch(url).then(function (r) { if (!r.ok)
-throw 0; return r.json(); }).then(function (j) {
+var P = lire("p"), alt = P && P.alt ? P.alt : 0;
+function jget(url) {
+var ct = new AbortController(), t = setTimeout(function () { ct.abort(); }, 12000);
+return fetch(url, { signal: ct.signal }).then(function (r) { clearTimeout(t); if (!r.ok)
+throw new Error("HTTP " + r.status); return r.json(); }, function (e) { clearTimeout(t); throw new Error(e && e.name === "AbortError" ? "délai dépassé" : "réseau"); });
+}
+function src1() {
+return jget("https://api.open-meteo.com/v1/forecast?latitude=" + ll.lat.toFixed(4) + "&longitude=" + ll.lon.toFixed(4) + "&current=temperature_2m,surface_pressure,wind_speed_10m,wind_direction_10m&wind_speed_unit=ms").then(function (j) {
 var c = j.current;
+if (!c || c.wind_speed_10m == null)
+throw new Error("réponse vide");
+return { t: c.temperature_2m, p: c.surface_pressure, v: c.wind_speed_10m, d: c.wind_direction_10m, h: c.time.replace("T", " "), src: "Open-Meteo" };
+});
+}
+function src2() {
+return jget("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=" + ll.lat.toFixed(4) + "&lon=" + ll.lon.toFixed(4)).then(function (j) {
+var e = j.properties.timeseries[0], d = e.data.instant.details;
+if (d.wind_speed == null)
+throw new Error("réponse vide");
+var ps = d.air_pressure_at_sea_level != null ? d.air_pressure_at_sea_level * Math.pow(1 - 2.25577e-5 * alt, 5.25588) : null;
+return { t: d.air_temperature, p: ps, v: d.wind_speed, d: d.wind_from_direction, h: String(e.time).replace("T", " ").slice(0, 16), src: "MET Norway" };
+});
+}
+src1().catch(function (e1) { return src2().catch(function (e2) { throw new Error("Open-Meteo : " + e1.message + " · MET Norway : " + e2.message); }); }).then(function (c) {
 var rt = parseFloat($("rt").value) || 15, rp = parseFloat($("rp").value) || 1013.25;
-$("wv").value = c.wind_speed_10m.toFixed(1);
-$("wd").value = azOut(c.wind_direction_10m * MIL / 360);
-$("dt").value = (c.temperature_2m - rt).toFixed(1);
-$("dp").value = (c.surface_pressure - rp).toFixed(1);
-$("mst").textContent = "Données " + c.time.replace("T", " ") + " : " + c.temperature_2m + " °C, " + c.surface_pressure + " hPa, vent " + c.wind_speed_10m.toFixed(1) + " m/s du " + Math.round(c.wind_direction_10m) + "°. Vent mesuré à 10 m du sol : à confirmer sur le terrain.";
+$("wv").value = c.v.toFixed(1);
+$("wd").value = azOut(c.d * MIL / 360);
+$("dt").value = (c.t - rt).toFixed(1);
+if (c.p != null)
+$("dp").value = (c.p - rp).toFixed(1);
+$("mst").textContent = "Données " + c.h + " (" + c.src + ") : " + c.t + " °C, " + (c.p != null ? c.p.toFixed(1) : "?") + " hPa, vent " + c.v.toFixed(1) + " m/s du " + Math.round(c.d) + "°. Vent mesuré à 10 m du sol : à confirmer sur le terrain.";
+$("wv").dispatchEvent(new Event("input", { bubbles: true }));
 setChip("cM", true);
 if (derniere)
 calcul(false);
-}).catch(function () { $("mst").textContent = "Météo indisponible (réseau). Saisie manuelle possible."; setChip("cM", false); });
+}).catch(function (e) { $("mst").textContent = "Météo indisponible (" + e.message + "). Vérifiez le réseau, ou saisissez les valeurs à la main."; setChip("cM", false); });
 }
 var timerMeteo = null;
 function toggleAuto() {
@@ -2908,6 +2930,7 @@ meteoAuto();
 timerMeteo = setInterval(meteoAuto, 600000);
 }
 }
+
 var capSin = 0, capCos = 0, capOk = false, cpActif = false;
 (function () {
 var d = sto.get("decl");
@@ -2984,7 +3007,6 @@ majBoussole();
 if (typeof carteCapMaj === "function")
 carteCapMaj();
 }
-
 function majBoussole() {
 if (azTir !== null) {
 $("cpa").textContent = azu(azTir);
