@@ -173,7 +173,7 @@ nav button{font-size:10px}
 <div class="g3"><label>Alt. (m)<input id="pda" type="number" inputmode="decimal" value="0"></label></div>
 </div>
 <p class="note"><span id="pmnt"></span> <button class="mini" onclick="altAuto('p')">Alt. auto</button></p>
-<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 36</b></p>
+<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 37</b></p>
 </div>
 <div class="card"><div class="hd"><h2>Objectif</h2></div>
 <div class="seg" id="tseg"><button type="button" data-f="utm" class="on" onclick="setFmt('t','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('t','dms')">Degrés ° ' "</button></div>
@@ -378,6 +378,8 @@ kmlRendre();
 repRendre();
 }
 }
+if (n === "meteo" && typeof meteoOuvrir === "function")
+meteoOuvrir();
 if (n === "carte")
 setTimeout(function () { carteOuvrir(); }, 30);
 else if (typeof carteLiveOff === "function")
@@ -2863,10 +2865,22 @@ if (!P)
 return null;
 return P.ll ? P.ll : utmToLl(P.utm.e, P.utm.n, P.utm.zone, P.utm.sud);
 }
-function meteoAuto() {
-var ll = pieceLl();
+function meteoOuvrir() {
+if (pieceLl()) {
+meteoAuto();
+return;
+}
+if (!navigator.geolocation) {
+meteoAuto();
+return;
+}
+$("mst").textContent = "Position de la pièce absente : recherche de votre position GPS…";
+navigator.geolocation.getCurrentPosition(function (p) { meteoAuto({ lat: p.coords.latitude, lon: p.coords.longitude }); }, function () { meteoAuto(); }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 120000 });
+}
+function meteoAuto(ll0) {
+var ll = (ll0 && typeof ll0.lat === "number") ? ll0 : pieceLl();
 if (!ll) {
-$("mst").textContent = "Renseignez d'abord la position de la pièce (ou activez « Ma position »).";
+$("mst").textContent = "Renseignez la position de la pièce (onglet Saisie) ou autorisez la position GPS.";
 return;
 }
 $("mst").textContent = "Récupération de la météo…";
