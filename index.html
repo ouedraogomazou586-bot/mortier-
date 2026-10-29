@@ -177,7 +177,7 @@ nav button{font-size:10px}
 <div class="g3"><label>Alt. (m)<input id="pda" type="number" inputmode="decimal" value="0"></label></div>
 </div>
 <p class="note"><span id="pmnt"></span> <button class="mini" onclick="altAuto('p')">Alt. auto</button></p>
-<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 50</b></p>
+<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS (aperçu Acode) : saisie manuelle ou onglet Carte. <b>Version 51</b></p>
 </div>
 <div class="card"><div class="hd"><h2>Objectif</h2></div>
 <div class="seg" id="tseg"><button type="button" data-f="utm" class="on" onclick="setFmt('t','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('t','dms')">Degrés ° ' "</button></div>
@@ -322,7 +322,7 @@ if(!Object.values){Object.values=function(o){return Object.keys(o).map(function(
 document.getElementById("jsfail").style.display = "none";
 var $ = function (id) { return document.getElementById(id); };
 var $n = function (id) { return parseFloat(String($(id).value).replace(",", ".")); };
-$("p-reglages").innerHTML = "\n<h1 class=\"ptitre\">Param\u00E8tres</h1>\n<details class=\"sect\" open><summary>Affichage et unit\u00E9s</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage</h2></div>\n  <label>Th\u00E8me\n   <select id=\"theme\" onchange=\"setTheme(this.value)\">\n    <option value=\"auto\">Automatique</option><option value=\"sombre\">Sombre</option>\n    <option value=\"rouge\">Nuit rouge</option><option value=\"soleil\">Plein soleil (fort contraste)</option>\n   </select></label>\n  <label style=\"margin-top:8px\">Unit\u00E9 de l'azimut\n   <select id=\"uniteaz\" onchange=\"setUniteAz(this.value)\">\n    <option value=\"mil\">Milli\u00E8mes</option><option value=\"degres\">Degr\u00E9s</option>\n   </select></label>\n  <label style=\"margin-top:8px\">\u00C9criture des milli\u00E8mes (6000 par tour)\n   <select id=\"fmtang\" onchange=\"setFormat(this.value)\">\n    <option value=\"pacte\">Pacte de Varsovie : 30-00</option><option value=\"nombre\">Nombre : 3000</option>\n   </select></label>\n </div>\n</details>\n<details class=\"sect\"><summary>Calcul du tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Calcul de la hausse</h2></div>\n  <label>M\u00E9thode<select id=\"methode\" onchange=\"setMethode(this.value)\">\n   <option value=\"table\">Table : ligne inf\u00E9rieure + variation par 10 m</option>\n   <option value=\"lineaire\">Interpolation lin\u00E9aire</option></select></label>\n  <p class=\"note\">Exemple, charge 0 \u00E0 270 m : 3-89 (ligne 250 m) + 2 \u00D7 5 = 3-99.</p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>\u00C9l\u00E9ments initiaux et d\u00E9rive</h2></div>\n    <div class=\"g2\">\n     <label>D\u00E9rive initiale<input id=\"dref\" type=\"number\" inputmode=\"decimal\" value=\"3000\" onchange=\"saveDer()\"></label>\n     <label>Hausse initiale<input id=\"href\" type=\"number\" inputmode=\"decimal\" value=\"700\" onchange=\"saveDer()\"></label>\n    </div>\n    <label style=\"margin-top:8px\">La lecture augmente en tournant<select id=\"dsens\" onchange=\"saveDer()\"><option value=\"1\">vers la droite</option><option value=\"-1\" selected>vers la gauche</option></select></label>\n    <p class=\"note\">\u00C9l\u00E9ments initiaux : d\u00E9rive 30-00 et hausse 7-00. D\u00E9rive = d\u00E9rive initiale + \u00E9cart entre l'azimut de tir et celui de la direction de r\u00E9f\u00E9rence (sens ci-dessus) : objectif \u00E0 droite de la direction de r\u00E9f\u00E9rence = d\u00E9rive plus petite que 30-00.</p>\n </div>\n</details>\n<details class=\"sect\"><summary>Table de tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Import CSV</h2><button class=\"mini\" onclick=\"exportCsv()\">Exporter</button></div>\n  <p class=\"note\" style=\"margin-top:0\">Colonnes : <b>charge, distance, hausse, variation</b> (variation = hausse par 10 m, lue dans la table). Optionnel : vent_face, vent_lat, temp, pression (une fois par charge). Collez le texte du fichier dans la zone ci-dessous, puis appuyez sur Importer (aucun fichier \u00E0 choisir). S\u00E9parateur virgule, point-virgule ou tabulation ; virgule d\u00E9cimale accept\u00E9e ; en-t\u00EAte facultatif.</p>\n  <textarea id=\"csv\" spellcheck=\"false\" style=\"height:150px;margin-top:0\" placeholder=\"Collez ici le contenu du fichier CSV\" oninput=\"document.getElementById('csvmsg').textContent=this.value.split('\n').filter(function(l){return l.trim()}).length+' ligne(s) coll\u00E9e(s). Appuyez sur Importer.'\"></textarea>\n  <label class=\"btn\" style=\"display:block;text-align:center;cursor:pointer\">\uD83D\uDCC2 Choisir le fichier CSV de la table<input type=\"file\" accept=\".csv,.txt,text/csv,text/plain,*/*\" style=\"display:none\" onchange=\"csvFichier(this)\"></label>\n  <button class=\"btn\" onclick=\"importCsv()\">Importer le texte coll\u00E9</button>\n  <p id=\"csvmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Table de tir</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">JSON \u00E0 remplir depuis la table r\u00E9glementaire : par charge, des points [distance m, hausse en milli\u00E8mes, variation par 10 m]. Les coefficients m\u00E9t\u00E9o \u00E9ventuels ne sont pas utilis\u00E9s.</p>\n  <textarea id=\"table\" spellcheck=\"false\"></textarea>\n  <button class=\"btn\" onclick=\"sauver()\">Enregistrer la table</button>\n  <button class=\"btn alt\" onclick=\"resetTable()\">Revenir \u00E0 l'exemple</button>\n </div>\n</details>\n<details class=\"sect\"><summary>Altitudes</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Altitudes hors ligne</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Importez des dalles SRTM (fichiers .hgt, par exemple N48E002.hgt : une dalle par carr\u00E9 de 1\u00B0 de latitude et de longitude). Elles restent enregistr\u00E9es dans l'application. Sans dalle, l'altitude est demand\u00E9e en ligne. Pr\u00E9cision : environ 90 m horizontalement et plusieurs m\u00E8tres en altitude. V\u00E9rifiez sur la carte.</p>\n  <input id=\"hgtfile\" type=\"file\" multiple onchange=\"importHgt(this)\">\n  <p id=\"hgtlist\" class=\"note\"></p>\n  <button class=\"btn alt\" onclick=\"effacerHgt()\">Effacer les dalles</button>\n </div>\n</details>\n<details class=\"sect\"><summary>Carte</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage de la carte</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Coordonn\u00E9es \u00E9crites \u00E0 c\u00F4t\u00E9 des points de la carte.</p>\n  <div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div>\n  <div class=\"rowb\" style=\"margin-top:10px\"><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende();go('carte')\">Voir la l\u00E9gende</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Taille des symboles et des noms</b></p>\n  <div class=\"seg\"><button data-sym=\"1\" onclick=\"carteSym(1)\">Normal</button><button data-sym=\"1.4\" onclick=\"carteSym(1.4)\">Grand</button><button data-sym=\"1.8\" onclick=\"carteSym(1.8)\">Tr\u00E8s grand</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>\u00C9cran de la carte</b></p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sto.set('carteAuto',sto.get('carteAuto')==='0'?'1':'0');this.classList.toggle('on',sto.get('carteAuto')!=='0')\" id=\"bauto\">Plein \u00E9cran \u00E0 l'ouverture</button><button class=\"mini\" onclick=\"carteTraceBasc()\">Trace de marche : afficher / masquer</button><button class=\"mini\" onclick=\"C.trace=[];carteRendre()\">Effacer la trace</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Carte hors ligne</b> : placez la carte sur la zone voulue (par exemple autour d'Arbinda), choisissez le fond (Satellite, Plan ou Topo), puis t\u00E9l\u00E9chargez. Marche dans l'application install\u00E9e.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteHorsLigne(2)\">T\u00E9l\u00E9charger la zone visible</button><button class=\"mini\" onclick=\"carteHorsLigne(4)\">Plus de d\u00E9tail</button><button class=\"mini\" onclick=\"carteViderCache()\">Vider</button></div>\n  <p id=\"cdl\" class=\"note\"></p>\n  <p class=\"note\">D\u00E9tail du satellite : niveau <b id=\"satniv\">13</b>. Si la carte affiche des cases beiges, diminuez ; si elle est trop floue, augmentez.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteDetail(-1);majBoutons()\">D\u00E9tail \u2212</button><button class=\"mini\" onclick=\"carteDetail(1);majBoutons()\">D\u00E9tail +</button></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Satellite hybride (MapTiler)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 MapTiler</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Fond satellite avec routes et noms de lieux, <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil. Compte gratuit : maptiler.com \u2192 Cl\u00E9s API.</p>\n  <label>Coller la cl\u00E9<input id=\"mtkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"mtEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"mtTester()\">Tester</button><button class=\"mini\" onclick=\"mtEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"mtetat\" class=\"note\"></p><p id=\"mtmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect\"><summary>Rep\u00E8res et cible</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mes rep\u00E8res</h2></div>\n  <div id=\"repbox\"></div>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gpxExport()\">Exporter GPX (rep\u00E8res + trace)</button><button class=\"mini\" onclick=\"cibleRetirer()\">Retirer la cible</button></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Fichiers KMZ / KML / GPX</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Lire des coordonn\u00E9es</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Choisissez un fichier <b>.kmz, .kml ou .gpx</b> de votre t\u00E9l\u00E9phone. Les points, lignes et zones s'affichent sur la carte, et leurs coordonn\u00E9es sont lisibles ci-dessous.</p>\n  <input id=\"kmlfile\" type=\"file\" multiple onchange=\"kmlImporter(this)\">\n  <p id=\"kmlmsg\" class=\"note\"></p>\n  <div id=\"kmlbox\"></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Sauvegarde et mises \u00E0 jour</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mise \u00E0 jour</h2></div>\n  <p class=\"note\">Version install\u00E9e : <b id=\"verApp\">50</b>. Si une nouvelle version est publi\u00E9e sur GitHub mais n'appara\u00EEt pas, touchez le bouton : l'application vide sa copie interne (vos donn\u00E9es restent) et se recharge.</p>\n  <button class=\"btn\" onclick=\"majMaintenant()\">Mettre \u00E0 jour maintenant</button>\n  <p id=\"majmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Sauvegarde de mes donn\u00E9es</h2></div>\n  <p class=\"note\">Table de tir, historique, rep\u00E8res, cartes import\u00E9es (r\u00E9glages), fichiers KML/GPX et pr\u00E9f\u00E9rences. \u00C0 faire avant de d\u00E9sinstaller ou changer de t\u00E9l\u00E9phone.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sauvTelecharger()\">T\u00E9l\u00E9charger la sauvegarde</button><button class=\"mini\" onclick=\"sauvCopier()\">Copier le texte</button></div>\n  <label>Restaurer depuis un fichier<input type=\"file\" id=\"sauvfic\" accept=\".json,application/json,text/plain\" onchange=\"sauvRestaurerFichier(this)\"></label>\n  <label>\u2026 ou coller le texte de sauvegarde<textarea id=\"sauvtxt\" style=\"height:90px\" placeholder=\"Collez ici le texte copi\u00E9\"></textarea></label>\n  <button class=\"mini\" onclick=\"sauvRestaurerTexte()\">Restaurer le texte coll\u00E9</button>\n  <p id=\"sauvmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect\"><summary>V\u00E9rification</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>V\u00E9rifier le calcul</h2></div>\n  <p class=\"note\">Calcule un exemple connu (pi\u00E8ce 14\u00B013'59.25\" N 0\u00B052'42.52\" O, objectif 14\u00B016'30.20\" N 0\u00B053'35.57\" O) avec le code de cet appareil et le compare \u00E0 la valeur de r\u00E9f\u00E9rence.</p>\n  <button class=\"btn\" onclick=\"autotest()\">Lancer la v\u00E9rification</button>\n  <p id=\"atres\" class=\"note\" style=\"white-space:pre-line;font-size:14px;color:var(--fg)\"></p>\n </div>\n</details>\n";
+$("p-reglages").innerHTML = "\n<h1 class=\"ptitre\">Param\u00E8tres</h1>\n<details class=\"sect\" open><summary>Affichage et unit\u00E9s</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage</h2></div>\n  <label>Th\u00E8me\n   <select id=\"theme\" onchange=\"setTheme(this.value)\">\n    <option value=\"auto\">Automatique</option><option value=\"sombre\">Sombre</option>\n    <option value=\"rouge\">Nuit rouge</option><option value=\"soleil\">Plein soleil (fort contraste)</option>\n   </select></label>\n  <label style=\"margin-top:8px\">Unit\u00E9 de l'azimut\n   <select id=\"uniteaz\" onchange=\"setUniteAz(this.value)\">\n    <option value=\"mil\">Milli\u00E8mes</option><option value=\"degres\">Degr\u00E9s</option>\n   </select></label>\n  <label style=\"margin-top:8px\">\u00C9criture des milli\u00E8mes (6000 par tour)\n   <select id=\"fmtang\" onchange=\"setFormat(this.value)\">\n    <option value=\"pacte\">Pacte de Varsovie : 30-00</option><option value=\"nombre\">Nombre : 3000</option>\n   </select></label>\n </div>\n</details>\n<details class=\"sect\"><summary>Calcul du tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Calcul de la hausse</h2></div>\n  <label>M\u00E9thode<select id=\"methode\" onchange=\"setMethode(this.value)\">\n   <option value=\"table\">Table : ligne inf\u00E9rieure + variation par 10 m</option>\n   <option value=\"lineaire\">Interpolation lin\u00E9aire</option></select></label>\n  <p class=\"note\">Exemple, charge 0 \u00E0 270 m : 3-89 (ligne 250 m) + 2 \u00D7 5 = 3-99.</p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>\u00C9l\u00E9ments initiaux et d\u00E9rive</h2></div>\n    <div class=\"g2\">\n     <label>D\u00E9rive initiale<input id=\"dref\" type=\"number\" inputmode=\"decimal\" value=\"3000\" onchange=\"saveDer()\"></label>\n     <label>Hausse initiale<input id=\"href\" type=\"number\" inputmode=\"decimal\" value=\"700\" onchange=\"saveDer()\"></label>\n    </div>\n    <label style=\"margin-top:8px\">La lecture augmente en tournant<select id=\"dsens\" onchange=\"saveDer()\"><option value=\"1\">vers la droite</option><option value=\"-1\" selected>vers la gauche</option></select></label>\n    <p class=\"note\">\u00C9l\u00E9ments initiaux : d\u00E9rive 30-00 et hausse 7-00. D\u00E9rive = d\u00E9rive initiale + \u00E9cart entre l'azimut de tir et celui de la direction de r\u00E9f\u00E9rence (sens ci-dessus) : objectif \u00E0 droite de la direction de r\u00E9f\u00E9rence = d\u00E9rive plus petite que 30-00.</p>\n </div>\n</details>\n<details class=\"sect\"><summary>Table de tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Import CSV</h2><button class=\"mini\" onclick=\"exportCsv()\">Exporter</button></div>\n  <p class=\"note\" style=\"margin-top:0\">Colonnes : <b>charge, distance, hausse, variation</b> (variation = hausse par 10 m, lue dans la table). Optionnel : vent_face, vent_lat, temp, pression (une fois par charge). Collez le texte du fichier dans la zone ci-dessous, puis appuyez sur Importer (aucun fichier \u00E0 choisir). S\u00E9parateur virgule, point-virgule ou tabulation ; virgule d\u00E9cimale accept\u00E9e ; en-t\u00EAte facultatif.</p>\n  <textarea id=\"csv\" spellcheck=\"false\" style=\"height:150px;margin-top:0\" placeholder=\"Collez ici le contenu du fichier CSV\" oninput=\"document.getElementById('csvmsg').textContent=this.value.split('\n').filter(function(l){return l.trim()}).length+' ligne(s) coll\u00E9e(s). Appuyez sur Importer.'\"></textarea>\n  <label class=\"btn\" style=\"display:block;text-align:center;cursor:pointer\">\uD83D\uDCC2 Choisir le fichier CSV de la table<input type=\"file\" accept=\".csv,.txt,text/csv,text/plain,*/*\" style=\"display:none\" onchange=\"csvFichier(this)\"></label>\n  <button class=\"btn\" onclick=\"importCsv()\">Importer le texte coll\u00E9</button>\n  <p id=\"csvmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Table de tir</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">JSON \u00E0 remplir depuis la table r\u00E9glementaire : par charge, des points [distance m, hausse en milli\u00E8mes, variation par 10 m]. Les coefficients m\u00E9t\u00E9o \u00E9ventuels ne sont pas utilis\u00E9s.</p>\n  <textarea id=\"table\" spellcheck=\"false\"></textarea>\n  <button class=\"btn\" onclick=\"sauver()\">Enregistrer la table</button>\n  <button class=\"btn alt\" onclick=\"resetTable()\">Revenir \u00E0 l'exemple</button>\n </div>\n</details>\n<details class=\"sect\"><summary>Altitudes</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Altitudes hors ligne</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Importez des dalles SRTM (fichiers .hgt, par exemple N48E002.hgt : une dalle par carr\u00E9 de 1\u00B0 de latitude et de longitude). Elles restent enregistr\u00E9es dans l'application. Sans dalle, l'altitude est demand\u00E9e en ligne. Pr\u00E9cision : environ 90 m horizontalement et plusieurs m\u00E8tres en altitude. V\u00E9rifiez sur la carte.</p>\n  <input id=\"hgtfile\" type=\"file\" multiple onchange=\"importHgt(this)\">\n  <p id=\"hgtlist\" class=\"note\"></p>\n  <button class=\"btn alt\" onclick=\"effacerHgt()\">Effacer les dalles</button>\n </div>\n</details>\n<details class=\"sect\"><summary>Carte</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage de la carte</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Coordonn\u00E9es \u00E9crites \u00E0 c\u00F4t\u00E9 des points de la carte.</p>\n  <div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div>\n  <div class=\"rowb\" style=\"margin-top:10px\"><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende();go('carte')\">Voir la l\u00E9gende</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Taille des symboles et des noms</b></p>\n  <div class=\"seg\"><button data-sym=\"1\" onclick=\"carteSym(1)\">Normal</button><button data-sym=\"1.4\" onclick=\"carteSym(1.4)\">Grand</button><button data-sym=\"1.8\" onclick=\"carteSym(1.8)\">Tr\u00E8s grand</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>\u00C9cran de la carte</b></p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sto.set('carteAuto',sto.get('carteAuto')==='0'?'1':'0');this.classList.toggle('on',sto.get('carteAuto')!=='0')\" id=\"bauto\">Plein \u00E9cran \u00E0 l'ouverture</button><button class=\"mini\" onclick=\"carteTraceBasc()\">Trace de marche : afficher / masquer</button><button class=\"mini\" onclick=\"C.trace=[];carteRendre()\">Effacer la trace</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Carte hors ligne</b> : placez la carte sur la zone voulue (par exemple autour d'Arbinda), choisissez le fond (Satellite, Plan ou Topo), puis t\u00E9l\u00E9chargez. Marche dans l'application install\u00E9e.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteHorsLigne(2)\">T\u00E9l\u00E9charger la zone visible</button><button class=\"mini\" onclick=\"carteHorsLigne(4)\">Plus de d\u00E9tail</button><button class=\"mini\" onclick=\"carteViderCache()\">Vider</button></div>\n  <p id=\"cdl\" class=\"note\"></p>\n  <p class=\"note\">D\u00E9tail du satellite : niveau <b id=\"satniv\">13</b>. Si la carte affiche des cases beiges, diminuez ; si elle est trop floue, augmentez.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteDetail(-1);majBoutons()\">D\u00E9tail \u2212</button><button class=\"mini\" onclick=\"carteDetail(1);majBoutons()\">D\u00E9tail +</button></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Satellite hybride (MapTiler)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 MapTiler</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Fond satellite avec routes et noms de lieux, <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil. Compte gratuit : maptiler.com \u2192 Cl\u00E9s API.</p>\n  <label>Coller la cl\u00E9<input id=\"mtkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"mtEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"mtTester()\">Tester</button><button class=\"mini\" onclick=\"mtEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"mtetat\" class=\"note\"></p><p id=\"mtmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect\"><summary>Rep\u00E8res et cible</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mes rep\u00E8res</h2></div>\n  <div id=\"repbox\"></div>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gpxExport()\">Exporter GPX (rep\u00E8res + trace)</button><button class=\"mini\" onclick=\"cibleRetirer()\">Retirer la cible</button></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Fichiers KMZ / KML / GPX</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Lire des coordonn\u00E9es</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Choisissez un fichier <b>.kmz, .kml ou .gpx</b> de votre t\u00E9l\u00E9phone. Les points, lignes et zones s'affichent sur la carte, et leurs coordonn\u00E9es sont lisibles ci-dessous.</p>\n  <input id=\"kmlfile\" type=\"file\" multiple onchange=\"kmlImporter(this)\">\n  <p id=\"kmlmsg\" class=\"note\"></p>\n  <div id=\"kmlbox\"></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Sauvegarde et mises \u00E0 jour</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mise \u00E0 jour</h2></div>\n  <p class=\"note\">Version install\u00E9e : <b id=\"verApp\">51</b>. Si une nouvelle version est publi\u00E9e sur GitHub mais n'appara\u00EEt pas, touchez le bouton : l'application vide sa copie interne (vos donn\u00E9es restent) et se recharge.</p>\n  <button class=\"btn\" onclick=\"majMaintenant()\">Mettre \u00E0 jour maintenant</button>\n  <p id=\"majmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Sauvegarde de mes donn\u00E9es</h2></div>\n  <p class=\"note\">Table de tir, historique, rep\u00E8res, cartes import\u00E9es (r\u00E9glages), fichiers KML/GPX et pr\u00E9f\u00E9rences. \u00C0 faire avant de d\u00E9sinstaller ou changer de t\u00E9l\u00E9phone.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sauvTelecharger()\">T\u00E9l\u00E9charger la sauvegarde</button><button class=\"mini\" onclick=\"sauvCopier()\">Copier le texte</button></div>\n  <label>Restaurer depuis un fichier<input type=\"file\" id=\"sauvfic\" accept=\".json,application/json,text/plain\" onchange=\"sauvRestaurerFichier(this)\"></label>\n  <label>\u2026 ou coller le texte de sauvegarde<textarea id=\"sauvtxt\" style=\"height:90px\" placeholder=\"Collez ici le texte copi\u00E9\"></textarea></label>\n  <button class=\"mini\" onclick=\"sauvRestaurerTexte()\">Restaurer le texte coll\u00E9</button>\n  <p id=\"sauvmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect\"><summary>V\u00E9rification</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>V\u00E9rifier le calcul</h2></div>\n  <p class=\"note\">Calcule un exemple connu (pi\u00E8ce 14\u00B013'59.25\" N 0\u00B052'42.52\" O, objectif 14\u00B016'30.20\" N 0\u00B053'35.57\" O) avec le code de cet appareil et le compare \u00E0 la valeur de r\u00E9f\u00E9rence.</p>\n  <button class=\"btn\" onclick=\"autotest()\">Lancer la v\u00E9rification</button>\n  <p id=\"atres\" class=\"note\" style=\"white-space:pre-line;font-size:14px;color:var(--fg)\"></p>\n </div>\n</details>\n";
 var rnd = function (x) { return x < 0 ? -Math.floor(-x + 0.5 + 1e-9) : Math.floor(x + 0.5 + 1e-9); };
 var fmt = function (x, d) {
 if (d === void 0) { d = 0; }
@@ -1857,12 +1857,16 @@ if (r.pts.length > 3000)
 r.pts = r.pts.slice(0, 3000);
 if (!r.pts.length && !r.lignes.length && !r.polys.length)
 throw new Error("aucun point, ligne ou zone trouvé");
+var nomF = f.name.replace(/\.[^.]+$/, "");
+KML.c = KML.c.filter(function (x) { return x.nom !== nomF; });
 KML.c.push({ id: Date.now() + fait, nom: f.name.replace(/\.[^.]+$/, ""), vis: true, pts: r.pts.map(function (p) { return { n: p.n, la: +p.la.toFixed(6), lo: +p.lo.toFixed(6), a: Math.round(p.a) }; }), lignes: r.lignes.map(function (l) { return { n: l.n, c: l.c.map(function (q) { return [+q[0].toFixed(6), +q[1].toFixed(6)]; }) }; }), polys: r.polys.map(function (l) { return { n: l.n, c: l.c.map(function (q) { return [+q[0].toFixed(6), +q[1].toFixed(6)]; }) }; }) });
 kmlSauver();
 fait++;
 msg.textContent = f.name + " : " + r.pts.length + " point(s), " + r.lignes.length + " ligne(s), " + r.polys.length + " zone(s).";
 kmlRendre();
 carteRendre();
+if (inp.partage)
+kmlVoir(KML.c.length - 1);
 }).catch(function (e) { msg.textContent = "Lecture impossible (" + f.name + ") : " + e.message; });
 });
 inp.value = "";
@@ -1880,7 +1884,7 @@ box.innerHTML = '<p class="note">Aucun fichier chargé.</p>';
 return;
 }
 box.innerHTML = KML.c.map(function (c, i) {
-var h = '<div class="hitem"><div class="hh"><b>' + c.nom.replace(/</g, "&lt;") + '</b> · ' + c.pts.length + ' pt · ' + c.lignes.length + ' ligne · ' + c.polys.length + ' zone</div><div class="rowb"><button class="mini" onclick="kmlVis(' + i + ')">' + (c.vis ? "Masquer" : "Afficher") + '</button><button class="mini" onclick="kmlSuppr(' + i + ')">Supprimer</button></div>';
+var h = '<div class="hitem"><div class="hh"><b>' + c.nom.replace(/</g, "&lt;") + '</b> · ' + c.pts.length + ' pt · ' + c.lignes.length + ' ligne · ' + c.polys.length + ' zone</div><div class="rowb"><button class="mini" onclick="kmlVis(' + i + ')">' + (c.vis ? "Masquer" : "Afficher") + '</button><button class="mini" onclick="kmlVoir(' + i + ')">Voir sur la carte</button><button class="mini" onclick="kmlSuppr(' + i + ')">Supprimer</button></div>';
 if (c.pts.length) {
 h += '<details><summary>Points (' + c.pts.length + ')</summary>';
 c.pts.slice(0, 200).forEach(function (p, k) { h += '<div class="hc"><b>' + p.n.replace(/</g, "&lt;") + '</b><br>' + kmlCoord(p) + '<br><button class="mini" onclick="kmlVers(' + i + ',' + k + ',\'p\')">→ Pièce</button> <button class="mini" onclick="kmlVers(' + i + ',' + k + ',\'t\')">→ Objectif</button> <button class="mini" onclick="kmlVers(' + i + ',' + k + ',\'c\')">Voir sur la carte</button></div>'; });
@@ -1888,8 +1892,67 @@ if (c.pts.length > 200)
 h += '<p class="note">… 200 premiers points affichés.</p>';
 h += '</details>';
 }
+var sect = function (titre, tab, cle) {
+if (!tab.length)
+return "";
+var t = '<details><summary>' + titre + ' (' + tab.length + ')</summary>';
+tab.slice(0, 60).forEach(function (l, k) {
+var la = l.c.map(function (q) { return q[0]; }), lo = l.c.map(function (q) { return q[1]; });
+var mn = function (a) { return Math.min.apply(null, a); }, mx = function (a) { return Math.max.apply(null, a); };
+var cen = { la: (mn(la) + mx(la)) / 2, lo: (mn(lo) + mx(lo)) / 2 };
+t += '<div class="hc"><b>' + l.n.replace(/</g, "&lt;") + '</b> · ' + l.c.length + ' sommet(s)<br>Centre : ' + kmlCoord(cen) + '<br><button class="mini" onclick="kmlVoirObj(' + i + ',\'' + cle + '\',' + k + ')">Voir sur la carte</button> <button class="mini" onclick="kmlCentreVers(' + i + ',\'' + cle + '\',' + k + ',\'t\')">Centre → Objectif</button> <button class="mini" onclick="kmlCentreVers(' + i + ',\'' + cle + '\',' + k + ',\'p\')">Centre → Pièce</button>';
+t += '<details><summary>Coordonnées des sommets</summary>';
+l.c.slice(0, 80).forEach(function (q, n) { t += '<div>' + (n + 1) + '. ' + kmlCoord({ la: q[0], lo: q[1] }) + '</div>'; });
+if (l.c.length > 80)
+t += '<p class="note">… 80 premiers sommets.</p>';
+t += '</details></div>';
+});
+return t + '</details>';
+};
+h += sect("Zones", c.polys, "polys") + sect("Lignes", c.lignes, "lignes");
 return h + '</div>';
 }).join("");
+}
+function kmlBoite(objs) {
+var a = 90, b = -90, c0 = 180, d = -180;
+objs.forEach(function (q) { a = Math.min(a, q[0]); b = Math.max(b, q[0]); c0 = Math.min(c0, q[1]); d = Math.max(d, q[1]); });
+return a > b ? null : { la0: a, la1: b, lo0: c0, lo1: d };
+}
+function kmlAller(bx) {
+if (!bx)
+return;
+C.init || carteOuvrir();
+go("carte");
+if (C.mode === "img")
+carteMode("sat");
+var ctr = { lat: (bx.la0 + bx.la1) / 2, lon: (bx.lo0 + bx.lo1) / 2 }, W = (C.lw || 360) * 0.85, H = (C.lh || 600) * 0.85;
+var z = 18;
+for (; z > 3; z--) {
+var p = mercPx(bx.la1, bx.lo0, z), q = mercPx(bx.la0, bx.lo1, z);
+if (Math.abs(q.x - p.x) <= W && Math.abs(q.y - p.y) <= H)
+break;
+}
+C.z = Math.min(z, SRC[C.mode].max);
+centrerSur(ctr);
+carteRendre();
+}
+function kmlVoir(i) {
+var c = KML.c[i];
+if (!c)
+return;
+var pts = c.pts.map(function (p) { return [p.la, p.lo]; });
+c.lignes.concat(c.polys).forEach(function (l) { l.c.forEach(function (q) { pts.push([q[0], q[1]]); }); });
+kmlAller(kmlBoite(pts));
+}
+function kmlVoirObj(i, cle, k) { var l = KML.c[i][cle][k]; if (l)
+kmlAller(kmlBoite(l.c)); }
+function kmlCentreVers(i, cle, k, id) {
+var l = KML.c[i][cle][k];
+if (!l)
+return;
+var b = kmlBoite(l.c);
+affecterPoint(id, { lat: (b.la0 + b.la1) / 2, lon: (b.lo0 + b.lo1) / 2 });
+$("kmlmsg").textContent = l.n + " (centre) → " + (id === "p" ? "pièce" : "objectif") + " (coordonnées remplies dans Saisie).";
 }
 function kmlVis(i) { KML.c[i].vis = !KML.c[i].vis; kmlSauver(); kmlRendre(); carteRendre(); }
 function kmlSuppr(i) { if (!confirm("Supprimer ce fichier ?"))
@@ -1998,6 +2061,7 @@ var h = '<div class="cr cf"><b>Repère</b><input id="repnom2" type="text" maxlen
 c.innerHTML = h;
 c.style.display = "block";
 }
+
 function ctxCopier() {
 var c = C.cur;
 if (!c)
@@ -2069,7 +2133,6 @@ return;
 }
 affecterPoint(id, { lat: r.lat, lon: r.lon });
 }
-
 function gpxExport() {
 var e = function (x) { return String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;"); };
 var g = '<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Mortier" xmlns="http://www.topografix.com/GPX/1/1">\n';
@@ -2301,6 +2364,7 @@ C.calib.pts.forEach(function (q, i) { var x = C.vx + q.u * C.vs, y = C.vy + q.v 
 h += rendreEtiquettes();
 $("csvg").innerHTML = h;
 }
+
 function rendreAiguille() {
 var svg = $("caig"), T = cibleActive();
 if (!C.gps || !T) {
@@ -2348,7 +2412,6 @@ var hh = C.gpsT ? new Date(C.gpsT) : null, g = C.gps && hh ? " · GPS ±" + fmt(
 $("cinfo").textContent = (nav ? nav + " · " + t : t) + g + (C.manuel ? " · position saisie à la main" : "") + (C.gpsMsg ? "\n" + C.gpsMsg : "") + (C.cible && !C.gps ? "\nCible définie : la ligne apparaîtra dès que votre position est connue (GPS ou « Ma position = curseur »)." : "") + "\n(carte v22 · détail satellite niveau " + C.satMax + ")";
 $("cinfo2").textContent = nav || t;
 }
-
 function carteZoom(dz, sx, sy) {
 var _a = cTaille(), W = _a.W, H = _a.H;
 if (sx === undefined) {
@@ -2880,6 +2943,7 @@ d.onclick = function () { location.reload(); };
 document.body.appendChild(d);
 });
 }
+
 var watchId = null, premierFix = true;
 function setChip(id, on) { $(id).classList.toggle("on", on); }
 function toggleGps() {
@@ -2946,7 +3010,6 @@ if ($("mauto").checked)
 meteoAuto();
 }
 }
-
 function posErr(e) {
 var m = { 1: "Autorisation refusée : activez la localisation pour l'application ou le navigateur.", 2: "Position indisponible (signal GPS).", 3: "Délai dépassé, nouvelle tentative…" };
 $("gpss").textContent = m[e.code] || "Erreur de localisation.";
@@ -3338,6 +3401,7 @@ navigator.clipboard.writeText(t).then(fin, repli);
 else
 repli();
 }
+
 function coordColler(id) {
 var msg = $(id + "u1m");
 var manuel = function () { msg.style.color = "var(--err)"; msg.textContent = "Collage automatique refusé : appuyez longuement dans la case « Coordonnées » puis choisissez Coller."; };
@@ -3420,7 +3484,7 @@ creer("t");
 setInterval(function () { maj("p"); maj("t"); }, 400);
 })();
 function sauvContenu() {
-var o = { app: "mortier", version: 50, date: new Date().toISOString(), donnees: {} };
+var o = { app: "mortier", version: 51, date: new Date().toISOString(), donnees: {} };
 try {
 for (var i = 0; i < localStorage.length; i++) {
 var k = localStorage.key(i);
@@ -3432,7 +3496,6 @@ o.donnees[k] = localStorage.getItem(k);
 catch (e) { }
 return JSON.stringify(o);
 }
-
 function sauvMsg(t, err) { var m = $("sauvmsg"); if (m) {
 m.textContent = t;
 m.style.color = err ? "var(--err)" : "";
@@ -3547,6 +3610,30 @@ document.addEventListener("change", function (ev) { if (ev.target.id === "oa")
 maj(); });
 setInterval(maj, 700);
 maj();
+})();
+(function () {
+if (!/[?&]partage=/.test(location.search) || !window.caches)
+return;
+caches.open("partage-v1").then(function (c) {
+return c.keys().then(function (ks) {
+return Promise.all(ks.map(function (k) { return c.match(k).then(function (r) { return r.blob(); }).then(function (b) { return new File([b], decodeURIComponent(k.url.split("/").pop()), { type: b.type }); }); })).then(function (fs) {
+return Promise.all(ks.map(function (k) { return c.delete(k); })).then(function () { return fs; });
+});
+});
+}).then(function (fs) {
+try {
+history.replaceState(null, "", location.pathname);
+}
+catch (e) { }
+if (!fs.length)
+return;
+setTimeout(function () {
+go("reglages");
+document.querySelectorAll("details.sect").forEach(function (d) { if (d.querySelector("#kmlbox"))
+d.open = true; });
+kmlImporter({ files: fs, partage: true, value: "" });
+}, 300);
+}).catch(function () { });
 })();
 function corrSens(id, sg) {
 var i = $(id);
