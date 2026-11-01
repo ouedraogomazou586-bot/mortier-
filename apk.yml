@@ -1,0 +1,149 @@
+# Compile l'application Mortier en fichier .apk (Android) à partir des fichiers du dépôt.
+# Lancement : onglet « Actions » -> « Compiler Mortier (APK) » -> « Run workflow ».
+name: Compiler Mortier (APK)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Récupérer les fichiers du dépôt
+        uses: actions/checkout@v4
+
+      - name: Vérifier les fichiers de l'application
+        run: |
+          test -f index.html || { echo "ERREUR : index.html est introuvable à la racine du dépôt."; exit 1; }
+          ls -la
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Garder la même clé de signature d'une compilation à l'autre
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: mortier-debug-keystore-v1
+
+      - name: Créer le projet Android
+        run: |
+          mkdir -p /tmp/natif/www
+          cp index.html /tmp/natif/www/
+          for f in sw.js manifest.webmanifest ic192.png ic512.png; do [ -f "$f" ] && cp "$f" /tmp/natif/www/ || true; done
+          # chaque compilation a son propre nom de cache hors ligne
+          [ -f /tmp/natif/www/sw.js ] && sed -i "s/mortier-v3/mortier-n${{ github.run_number }}/" /tmp/natif/www/sw.js || true
+          cd /tmp/natif
+          cat > package.json <<'EOF'
+          {"name":"mortier","version":"1.0.0","private":true,"dependencies":{"@capacitor/android":"^6.2.0","@capacitor/app":"^6.0.0","@capacitor/cli":"^6.2.0","@capacitor/core":"^6.2.0"}}
+          EOF
+          cat > capacitor.config.json <<'EOF'
+          {"appId":"bf.mortier.tir","appName":"Mortier","webDir":"www","server":{"androidScheme":"https"}}
+          EOF
+          npm install --no-audit --no-fund
+          npx cap add android
+          npx cap sync android
+
+      - name: Régler Android (Ouvrir avec, position, icône, version)
+        run: |
+          cd /tmp/natif
+          cat > /tmp/filtres.xml <<'EOF'
+                  <intent-filter>
+                      <action android:name="android.intent.action.VIEW" />
+                      <category android:name="android.intent.category.DEFAULT" />
+                      <category android:name="android.intent.category.BROWSABLE" />
+                      <data android:scheme="content" />
+                      <data android:scheme="file" />
+                      <data android:mimeType="application/vnd.google-earth.kmz" />
+                      <data android:mimeType="application/vnd.google-earth.kml+xml" />
+                      <data android:mimeType="application/gpx+xml" />
+                      <data android:mimeType="application/gpx" />
+                  </intent-filter>
+                  <intent-filter>
+                      <action android:name="android.intent.action.VIEW" />
+                      <category android:name="android.intent.category.DEFAULT" />
+                      <category android:name="android.intent.category.BROWSABLE" />
+                      <data android:scheme="content" />
+                      <data android:scheme="file" />
+                      <data android:mimeType="*/*" />
+                      <data android:pathPattern=".*\\.kmz" />
+                      <data android:pathPattern=".*\\.kml" />
+                      <data android:pathPattern=".*\\.gpx" />
+                      <data android:pathPattern=".*\\..*\\.kmz" />
+                      <data android:pathPattern=".*\\..*\\.kml" />
+                      <data android:pathPattern=".*\\..*\\.gpx" />
+                  </intent-filter>
+          EOF
+          cat > /tmp/regler.py <<'EOF'
+          import re, sys
+          p = "android/app/src/main/AndroidManifest.xml"
+          s = open(p, encoding="utf-8").read()
+          f = open("/tmp/filtres.xml", encoding="utf-8").read()
+          assert "</activity>" in s, "manifeste inattendu : balise activity introuvable"
+          s = s.replace("</activity>", f + "        </activity>", 1)
+          perms = ('    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n'
+                   '    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n'
+                   '    <uses-feature android:name="android.hardware.location.gps" android:required="false" />\n')
+          s = s.replace("</manifest>", perms + "</manifest>", 1)
+          open(p, "w", encoding="utf-8").write(s)
+          print(s)
+          EOF
+          python3 /tmp/regler.py
+          # icône de l'application
+          pip install --quiet pillow
+          cat > /tmp/icones.py <<'EOF'
+          import os, shutil
+          from PIL import Image
+          src = None
+          for n in ("ic512.png", "ic192.png"):
+              if os.path.exists("www/" + n):
+                  src = Image.open("www/" + n).convert("RGBA"); break
+          if src is None:
+              print("pas d'icône : icône par défaut"); raise SystemExit
+          res = "android/app/src/main/res"
+          shutil.rmtree(res + "/mipmap-anydpi-v26", ignore_errors=True)
+          for d, px in (("mdpi", 48), ("hdpi", 72), ("xhdpi", 96), ("xxhdpi", 144), ("xxxhdpi", 192)):
+              folder = res + "/mipmap-" + d
+              os.makedirs(folder, exist_ok=True)
+              im = src.resize((px, px), Image.LANCZOS)
+              for nom in ("ic_launcher.png", "ic_launcher_round.png", "ic_launcher_foreground.png"):
+                  im.save(folder + "/" + nom)
+          EOF
+          python3 /tmp/icones.py
+          # numéro de version = numéro de compilation (permet les mises à jour)
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/; s/versionName \"1.0\"/versionName \"${{ github.run_number }}\"/" android/app/build.gradle
+          grep -n "versionCode\|versionName" android/app/build.gradle
+
+      - name: Compiler l'APK
+        working-directory: /tmp/natif/android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Préparer le fichier
+        run: |
+          cp /tmp/natif/android/app/build/outputs/apk/debug/app-debug.apk "Mortier-${{ github.run_number }}.apk"
+          ls -la Mortier-*.apk
+
+      - name: Publier l'APK (page « Releases » du dépôt)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-${{ github.run_number }}
+          name: Mortier ${{ github.run_number }}
+          body: Application Android Mortier, compilation numéro ${{ github.run_number }}. Téléchargez le fichier .apk ci-dessous puis installez-le.
+          files: Mortier-${{ github.run_number }}.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Mortier-apk
+          path: Mortier-${{ github.run_number }}.apk
