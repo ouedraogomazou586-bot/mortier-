@@ -146,6 +146,56 @@ details summary{cursor:pointer;color:var(--acc);font-weight:700;font-size:14px}
 .rowb{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 nav button{font-size:10px}
 .tile .sub{font-size:15px;font-weight:700;color:var(--mut);margin-top:2px}
+
+:root[data-theme="pro"]{--bg:#f2f4f7;--surf:#ffffff;--surf2:#e3e8ee;--fg:#18222d;--mut:#52606d;--acc:#1f4e8c;--line:#d7dde4;--ok:#2e7d32;--err:#b3261e;--hi:#1f4e8c;--btnfg:#ffffff}
+:root[data-theme="pro"] header{background:#1f4e8c;border:0;color:#fff}
+:root[data-theme="pro"] header h1{color:#fff}
+:root[data-theme="pro"] .chip{color:#dbe6f4;border-color:#5d82b3}
+:root[data-theme="pro"] .chip.on{background:#fff;color:#1f4e8c;border-color:#fff}
+:root[data-theme="pro"] .card,:root[data-theme="pro"] .tile{border:0;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.14)}
+:root[data-theme="pro"] .tile.main{border:0;box-shadow:0 0 0 2px #1f4e8c}
+:root[data-theme="pro"] .btn{border-radius:14px;padding:16px}
+:root[data-theme="pro"] nav{background:#fff}
+#p-saisie[data-ss="p"] .ss:not(.ss-p),#p-saisie[data-ss="t"] .ss:not(.ss-t){display:none!important}
+body.j1 .j2{display:none!important}
+.j1only{display:none}body.j1 .j1only{display:block}
+.subtabs{display:flex;gap:6px;margin-bottom:12px}
+.subtabs button{flex:1;padding:10px 0;border:0;border-radius:10px;background:var(--surf2);color:var(--mut);font-size:14px;font-weight:600}
+.subtabs button.on{background:var(--acc);color:var(--btnfg)}
+#p-tir[data-st="r"] .st:not(.st-r),#p-tir[data-st="d"] .st:not(.st-d),#p-tir[data-st="c"] .st:not(.st-c),#p-tir[data-st="h"] .st:not(.st-h){display:none!important}
+.home{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.home .t{background:var(--surf);border:0;border-radius:16px;padding:16px 14px;text-align:left;color:var(--fg);font-size:16px;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.home .t svg{display:block;width:34px;height:34px;padding:7px;border-radius:11px;background:var(--acc);stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-bottom:10px}
+.home .t span{display:block;font-weight:400;font-size:12px;color:var(--mut);margin-top:3px}
+.hm3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
+.hm3 b{display:block;font:800 30px/1.1 ui-monospace,Menlo,monospace;color:var(--acc)}
+.hm3 small{font-size:12px;color:var(--mut)}
+body.simple .adv{display:none!important}
+nav .wrap{grid-template-columns:repeat(5,1fr)}
+#n-meteo,#n-boussole{display:none}
+details.rare>summary{font-size:13px;color:var(--mut);padding:4px 0}
+:root[data-theme="minimal"]{--bg:#ffffff;--surf:#ffffff;--surf2:#f0f0f0;--fg:#111111;--mut:#777777;--acc:#e4572e;--line:#e6e6e6;--ok:#2e7d32;--err:#c62828;--hi:#111111;--btnfg:#ffffff}
+:root[data-theme="minimal"] header{background:#fff;border-bottom:1px solid #e6e6e6;color:#111}
+:root[data-theme="minimal"] header h1{color:#111}
+:root[data-theme="minimal"] h2{color:#111}
+:root[data-theme="minimal"] .card,:root[data-theme="minimal"] .tile{border:1px solid #e6e6e6;border-radius:4px;box-shadow:none}
+:root[data-theme="minimal"] .tile.main{border:1px solid #111}
+:root[data-theme="minimal"] input,:root[data-theme="minimal"] select,:root[data-theme="minimal"] textarea{border-radius:4px;background:#fafafa}
+:root[data-theme="minimal"] .btn{background:#111;color:#fff;border-radius:4px}
+:root[data-theme="minimal"] .btn.alt{background:transparent;color:#111;border:2px solid #111}
+:root[data-theme="minimal"] .mini{border-color:#111;color:#111;border-radius:4px}
+:root[data-theme="minimal"] .mini.on,:root[data-theme="minimal"] .seg button.on{background:#111;color:#fff}
+:root[data-theme="minimal"] .seg{border-radius:4px}
+:root[data-theme="minimal"] .chip{border-radius:4px}
+:root[data-theme="minimal"] .chip.on{background:#e4572e;border-color:#e4572e;color:#fff}
+:root[data-theme="minimal"] .subtabs button{border-radius:4px;background:#f0f0f0}
+:root[data-theme="minimal"] .subtabs button.on{background:#e4572e;color:#fff}
+:root[data-theme="minimal"] nav{background:#fff}
+:root[data-theme="minimal"] nav button.on{color:#e4572e}
+:root[data-theme="minimal"] .home .t{border:1px solid #e6e6e6;border-radius:4px;box-shadow:none}
+:root[data-theme="minimal"] .home .t svg{border-radius:4px;background:#e4572e}
+:root[data-theme="minimal"] .hm3 b,:root[data-theme="minimal"] #dhv{color:#111!important}
+:root[data-theme="minimal"] summary{color:#111}
 </style>
 </head>
 <body>
@@ -156,8 +206,24 @@ nav button{font-size:10px}
 <div id="bandeTable" hidden style="background:#a3261c;color:#fff;padding:10px 14px;font-size:15px;font-weight:700;position:sticky;top:0;z-index:50">⚠ TABLE DE TIR FICTIVE (exemple) : les hausses sont fausses. Importez VOTRE table : Paramètres → Table de tir.</div>
 <div id="jsfail" style="background:#a3261c;color:#fff;padding:10px;font-size:14px">Le script n'a pas démarré : le code est incomplet ou non pris en charge par ce navigateur. Ouvrez le fichier dans Chrome.</div>
 <main class="wrap">
-<div class="panel" id="p-saisie">
-<div class="card"><div class="hd"><h2>Pièce</h2><button id="gpsb" class="mini" onclick="toggleGps()">📍 Position en temps réel</button></div>
+<div class="panel" id="p-accueil">
+<div class="card"><div class="k" id="hmNom" style="font-size:12px;color:var(--mut);text-transform:uppercase;margin-bottom:8px">Dernier tir</div>
+<div id="hmVide" class="note" style="margin:0">Aucun tir calculé pour l'instant.</div>
+<div id="hmTir" class="hm3" hidden><div><b id="hmAz">–</b><small>azimut</small></div><div><b id="hmHa">–</b><small>hausse</small></div><div><b id="hmDe">–</b><small>dérive</small></div></div></div>
+<button class="btn" style="margin:0 0 12px" onclick="go('saisie')">Nouveau tir</button>
+<div class="home">
+<button class="t" onclick="go('tir');stir('c')"><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></svg>Correction<span>Observateur</span></button>
+<button class="t" onclick="go('tir');stir('d')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4v4M12 12l4-3"/></svg>Dérive<span>Repérage des jalons</span></button>
+<button class="t" onclick="go('carte')"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>Carte<span>Positions, fichiers</span></button>
+<button class="t" onclick="go('meteo')"><svg viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 19h6"/></svg>Météo<span>Vent, température</span></button>
+<button class="t" onclick="go('boussole')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Boussole<span>Azimut de référence</span></button>
+<button class="t" onclick="go('tir');stir('h')"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>Fiches<span>Historique des tirs</span></button>
+</div>
+<div class="card" style="margin-top:12px;padding:12px 16px"><div style="display:flex;justify-content:space-between;font-size:15px"><span>Table de tir</span><b id="hmTable">–</b></div></div>
+</div>
+<div class="panel" id="p-saisie" data-ss="p" hidden>
+<div class="subtabs"><button id="ss-p" class="on" onclick="ssaisie('p')">1 · Pièce</button><button id="ss-t" onclick="ssaisie('t')">2 · Objectif</button></div>
+<div class="card ss ss-p"><div class="hd"><h2>Pièce</h2><button id="gpsb" class="mini" onclick="toggleGps()">📍 Position en temps réel</button></div>
 <div class="seg" id="pseg"><button type="button" data-f="utm" class="on" onclick="setFmt('p','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('p','dms')">Degrés ° ' "</button></div>
 <select id="pm" hidden><option value="utm">utm</option><option value="dms">dms</option></select>
 <div id="pu">
@@ -179,10 +245,10 @@ nav button{font-size:10px}
 <div class="g3"><label>Alt. (m)<input id="pda" type="number" inputmode="decimal" value="0"></label></div>
 </div>
 <p class="note"><span id="pmnt"></span> <button class="mini" onclick="altAuto('p')">Alt. auto</button></p>
-<p id="gpss" class="note">Touchez « Position en temps réel » : les champs de la pièce se remplissent seuls (UTM ou degrés, et altitude). Retouchez le bouton pour figer la position. Sans GPS : saisie manuelle ou onglet Carte.</p>
-<p class="note" style="opacity:.7;margin-top:-6px">Version <b id="verSaisie">67</b></p>
+<p id="gpss" class="note">« Position en temps réel » remplit les champs seule. Retouchez pour figer.</p>
+<p class="note" hidden>Version <b id="verSaisie">83</b></p>
 </div>
-<div class="card"><div class="hd"><h2>Objectif</h2></div>
+<div class="card ss ss-t"><div class="hd"><h2>Objectif</h2></div>
 <div class="seg" id="tseg"><button type="button" data-f="utm" class="on" onclick="setFmt('t','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('t','dms')">Degrés ° ' "</button></div>
 <select id="tm" hidden><option value="utm">utm</option><option value="dms">dms</option></select>
 <div id="tu">
@@ -205,33 +271,51 @@ nav button{font-size:10px}
 </div>
 <p class="note"><span id="tmnt"></span> <button class="mini" onclick="altAuto('t')">Alt. auto</button></p>
 </div>
-<button class="btn" onclick="calcul(true)">Calculer le tir</button>
+<button class="btn alt ss ss-p" onclick="ssaisie('t')">Suivant : objectif</button>
+<button class="btn ss ss-t" onclick="calcul(true)">Calculer le tir</button>
 <p id="errSaisie" class="err"></p>
 </div>
 <div class="panel" id="p-carte" hidden></div>
-<div class="panel" id="p-tir" hidden>
-<div id="vide" class="empty">Saisissez la pièce et l'objectif, puis appuyez sur « Calculer le tir ».</div>
+<div class="panel" id="p-tir" data-st="r" hidden>
+<div class="subtabs"><button id="st-r" class="on" onclick="stir('r')">Résultat</button><button id="st-d" onclick="stir('d')">Dérive</button><button id="st-c" onclick="stir('c')">Correction</button><button id="st-h" onclick="stir('h')">Fiches</button></div>
+<div id="vide" class="empty st st-r st-d st-c">Saisissez la pièce et l'objectif, puis appuyez sur « Calculer le tir ».</div>
 <div id="resultat" hidden>
-<div class="tiles">
+<div class="tiles st st-r">
 <div class="tile main"><div class="k">Azimut de tir</div><div class="v"><span id="rAz">–</span></div><div class="sub" id="rAzD"></div></div>
 <div class="tile main"><div class="k">Hausse</div><div class="v"><span id="rHa">–</span></div><div class="sub" id="rHs"></div></div>
 <div class="tile"><div class="k">Charge</div><div class="v" id="rCh">–</div></div>
 <div class="tile"><div class="k">Distance</div><div class="v"><span id="rDi">–</span><span class="u">m</span></div></div>
 </div>
-<p id="msg" class="err"></p>
-<div class="card"><div class="hd"><h2>Détail</h2><span><button class="mini" onclick="histEnregistrer()">Enregistrer</button> <button class="mini" onclick="copier()">Copier</button></span></div>
+<p id="msg" class="err st st-r"></p>
+<div class="card st st-r"><div class="hd"><h2>Détail</h2><span><button class="mini" onclick="histEnregistrer()">Enregistrer</button> <button class="mini" onclick="copier()">Copier</button></span></div>
 <input id="fnom" type="text" maxlength="40" placeholder="Nom de la fiche (facultatif), ex. Objectif A" style="margin-bottom:8px">
-<table id="tab"></table></div>
-<div class="card"><div class="hd"><h2>Dérive (tambour)</h2></div>
-<table id="dtab"></table>
+<details><summary>Détails du calcul</summary><table id="tab"></table></details></div>
+<div class="seg st st-d" style="margin-bottom:10px;display:flex"><button type="button" id="nbj1" style="flex:1" onclick="jalMode(1)">1 jalon</button><button type="button" id="nbj2" style="flex:1" onclick="jalMode(2)">2 jalons</button></div>
+<div class="card st st-d" style="text-align:center"><div class="k" id="dhk" style="font-size:12px;color:var(--mut);text-transform:uppercase">Dérive à afficher</div>
+<div id="dhv" style="font:800 54px/1.1 ui-monospace,Menlo,monospace;color:var(--acc);margin:6px 0">–</div>
+<div id="dhs" class="note" style="margin:0 0 4px"></div></div>
+<div class="card st st-d">
 <div class="g2">
-<label>Az. direction de référence <span class="uaz">(millièmes)</span><input id="azref" type="number" inputmode="decimal" placeholder="ex. 3000" onchange="saveDer()"></label>
 <label>Déplacement latéral (m, + droite)<input id="dlat" type="text" inputmode="decimal" value="0" oninput="majDerive()"></label>
+<label class="j2">Dérive lue sur le jalon 1 <span class="uaz">(millièmes)</span><input id="drep" type="number" inputmode="decimal" placeholder="ex. 3112" onchange="repAppliquer()"></label>
 </div>
+<p class="note j1only">Un seul jalon : pas de repérage. Pointez le jalon avec la dérive affichée ; les corrections latérales sont appliquées automatiquement.</p>
+<p class="note j2">1) Pointez le jalon 2. 2) Repérez le jalon 1 et saisissez la valeur lue. 3) Laissez cette valeur sur le tambour et repointez le jalon 2. Les corrections se font ensuite à partir d'elle, automatiquement.</p>
+<details><summary>Détails</summary><table id="dtab"></table></details>
+<details><summary>Réglages de la dérive</summary>
+<label>Az. direction de référence <span class="uaz">(millièmes)</span><input id="azref" type="number" inputmode="decimal" placeholder="ex. 3000" onchange="saveDer()"></label>
 <button class="btn alt" onclick="refBoussole()">Prendre l'azimut de la boussole</button>
-<p class="note">Éléments initiaux (dérive 30-00, hausse 7-00) et sens du bouton : voir Paramètres → Calcul du tir.</p>
+<p class="note j2">Sans lecture : par mesures (jalons alignés sur l'azimut de référence)</p>
+<div class="g3 j2">
+<label>Dist. jalon 1 (m)<input id="gj1" type="number" inputmode="decimal" oninput="repGeoSave()"></label>
+<label>Dist. jalon 2 (m)<input id="gj2" type="number" inputmode="decimal" oninput="repGeoSave()"></label>
+<label>Décalage (m, + droite)<input id="gje" type="text" inputmode="decimal" oninput="repGeoSave()"></label>
 </div>
-<div class="card"><div class="hd"><h2>Correction observateur</h2></div>
+<button class="mini j2" style="margin-top:8px" onclick="repEffacer()">Effacer le repérage</button>
+<p class="note">Éléments initiaux (dérive 30-00, hausse 7-00) et sens du bouton : voir Paramètres → Calcul du tir.</p>
+</details>
+</div>
+<div class="card st st-c"><div class="hd"><h2>Correction observateur</h2></div>
 <div class="seg" style="margin-bottom:8px"><button type="button" id="oaBm" onclick="oaUnite('mil')">Azimut en millièmes</button><button type="button" id="oaBd" onclick="oaUnite('deg')">Azimut en degrés</button></div>
 <div class="g3">
 <label>Az. obs→obj. <span id="oaun">(millièmes)</span><input id="oa" type="number" inputmode="decimal"></label>
@@ -244,12 +328,12 @@ nav button{font-size:10px}
 <p class="note" style="margin:8px 0 4px"><b>Longueur</b> : où le tir est tombé par rapport à l'objectif</p>
 <div class="rowb" style="margin-top:0"><button type="button" class="mini" onclick="corrSens('lon',1)">Tir trop COURT<br>→ allonger (+)</button><button type="button" class="mini" onclick="corrSens('lon',-1)">Tir trop LONG<br>→ raccourcir (−)</button></div>
 <p id="corrres" class="note" style="font-weight:700;color:var(--fg)"></p>
-<p class="note">Touchez ce que vous avez observé, puis tapez la distance en mètres (le signe se met tout seul). Tir trop court de 50 m : la hausse AUGMENTE. Tir trop long de 50 m : la hausse DIMINUE. L'objectif est déplacé et le tir recalculé.</p>
+<details><summary>Aide</summary><p class="note">Touchez ce que vous avez observé, puis tapez la distance en mètres (le signe se met tout seul). Tir trop court de 50 m : la hausse AUGMENTE. Tir trop long de 50 m : la hausse DIMINUE. L'objectif est déplacé et le tir recalculé.</p></details>
 <button class="btn alt" onclick="corriger()">Appliquer la correction</button>
 <div id="corrlist"></div>
 </div>
 </div>
-<div class="card"><div class="hd"><h2>Historique des tirs</h2><button class="mini" onclick="histCopierTout()">Copier tout</button></div>
+<div class="card st st-h"><div class="hd"><h2>Historique des tirs</h2><button class="mini" onclick="histCopierTout()">Copier tout</button></div>
 <p class="note" style="margin-top:0">Touchez « Enregistrer » dans le détail d'un tir. Les corrections de l'observateur sont mémorisées avec la fiche.</p>
 <div id="histo"></div>
 <button class="btn alt" onclick="histVider()">Effacer l'historique</button></div>
@@ -257,15 +341,16 @@ nav button{font-size:10px}
 <div class="panel" id="p-meteo" hidden>
 <div class="card">
 <div class="hd"><h2>Conditions</h2></div>
-<p class="note" style="margin:0 0 4px">Informations seulement : la météo est affichée dans le détail du tir, mais n'est appliquée ni à la hausse ni à l'azimut.</p>
-<label>Vitesse du vent (m/s)<input id="wv" type="number" inputmode="decimal" value="0"></label>
-<label style="margin-top:8px">Direction du vent : vient de <span class="uaz">(millièmes)</span><input id="wd" type="number" inputmode="decimal" value="0"></label>
-<p id="wdinfo" class="note" style="margin:4px 0 10px;font-weight:700"></p>
 <div class="g2">
+<label>Vent (m/s)<input id="wv" type="number" inputmode="decimal" value="0"></label>
+<label>Vient de <span class="uaz">(millièmes)</span><input id="wd" type="number" inputmode="decimal" value="0"></label>
+</div>
+<details><summary>Cadran du vent</summary><p id="wdinfo" class="note" style="margin:4px 0 10px;font-weight:700"></p></details>
+<details><summary>Écarts de température et de pression</summary><div class="g2">
 <label>Écart temp. (°C)<input id="dt" type="text" inputmode="decimal" value="0"></label>
 <label>Écart pression (hPa)<input id="dp" type="text" inputmode="decimal" value="0"></label>
-</div>
-<p class="note">Écarts = valeur mesurée − référence de la table. Direction du vent = d'où il vient (azimut, dans l'unité choisie dans Paramètres).</p>
+</div></details>
+<details><summary>Aide</summary><p class="note">Informations seulement : la météo est affichée dans le détail du tir, mais n'est appliquée ni à la hausse ni à l'azimut. Écarts = valeur mesurée − référence de la table. Direction du vent = d'où il vient.</p></details>
 </div>
 <div class="card">
 <div class="hd"><h2>Météo automatique</h2></div>
@@ -286,7 +371,7 @@ nav button{font-size:10px}
 </div>
 <div class="panel" id="p-boussole" hidden>
 <div class="card">
-<svg id="dial" viewBox="-120 -120 240 240" aria-label="Boussole">
+<svg id="dial" viewBox="-120 -120 240 240" aria-label="Boussole" style="max-width:230px;display:block;margin:0 auto">
 <g id="rose"><circle r="100" fill="none" stroke="var(--line)" stroke-width="2"/><g id="ticks"></g>
 <g id="cible" style="display:none"><polygon points="0,-104 -9,-120 9,-120" fill="var(--hi)"/></g></g>
 <polygon points="0,-82 -7,-66 7,-66" fill="var(--acc)"/>
@@ -300,15 +385,16 @@ nav button{font-size:10px}
 </table>
 <button id="cpb" class="btn" onclick="toggleCompass()">Activer la boussole</button>
 </div>
-<div class="card">
+<div class="card"><details><summary>Réglages de la boussole</summary>
 <label>Déclinaison magnétique (°, Est +)<input id="decl" type="text" inputmode="decimal" value="0" step="0.1" onchange="saveDecl()"></label>
 <p id="cps" class="note">Tenez le téléphone à plat, loin des masses métalliques (tube, véhicule). Repère rapide : le pointage final se fait avec votre moyen réglementaire. Azimut de quadrillage = magnétique + déclinaison.</p>
-</div>
+</details></div>
 </div>
 <div class="panel" id="p-reglages" hidden></div>
 </main>
 <nav><div class="wrap">
-<button id="n-saisie" class="on" onclick="go('saisie')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>Saisie</button>
+<button id="n-accueil" class="on" onclick="go('accueil')"><svg viewBox="0 0 24 24"><path d="M3 11 12 3l9 8M5 10v10h14V10"/></svg>Accueil</button>
+<button id="n-saisie" onclick="go('saisie')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>Saisie</button>
 <button id="n-carte" onclick="go('carte')"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>Carte</button>
 <button id="n-tir" onclick="go('tir')"><svg viewBox="0 0 24 24"><path d="M4 20 20 4M14 4h6v6"/><path d="M4 14v6h6"/></svg>Tir</button>
 <button id="n-meteo" onclick="go('meteo')"><svg viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 19h6"/></svg>Météo</button>
@@ -325,7 +411,7 @@ if(!Object.values){Object.values=function(o){return Object.keys(o).map(function(
 document.getElementById("jsfail").style.display = "none";
 var $ = function (id) { return document.getElementById(id); };
 var $n = function (id) { return parseFloat(String($(id).value).replace(",", ".")); };
-$("p-reglages").innerHTML = "\n<h1 class=\"ptitre\">Param\u00E8tres</h1>\n<h3 class=\"grp\">Tir et affichage</h3>\n<details class=\"sect\" open><summary>Affichage et unit\u00E9s</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage</h2></div>\n  <label>Th\u00E8me\n   <select id=\"theme\" onchange=\"setTheme(this.value)\">\n    <option value=\"auto\">Automatique</option><option value=\"sombre\">Sombre</option>\n    <option value=\"rouge\">Nuit rouge</option><option value=\"soleil\">Plein soleil (fort contraste)</option>\n   </select></label>\n  <label style=\"margin-top:8px\">Unit\u00E9 de l'azimut\n   <select id=\"uniteaz\" onchange=\"setUniteAz(this.value)\">\n    <option value=\"mil\">Milli\u00E8mes</option><option value=\"degres\">Degr\u00E9s</option>\n   </select></label>\n  <label style=\"margin-top:8px\">\u00C9criture des milli\u00E8mes (6000 par tour)\n   <select id=\"fmtang\" onchange=\"setFormat(this.value)\">\n    <option value=\"pacte\">Pacte de Varsovie : 30-00</option><option value=\"nombre\">Nombre : 3000</option>\n   </select></label>\n </div>\n</details>\n<details class=\"sect\"><summary>Calcul du tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Calcul de la hausse</h2></div>\n  <label>M\u00E9thode<select id=\"methode\" onchange=\"setMethode(this.value)\">\n   <option value=\"proche\">Ligne la plus proche de la table (948 m \u2192 950 m)</option>\n   <option value=\"table\">Table : ligne inf\u00E9rieure + variation par 10 m</option>\n   <option value=\"lineaire\">Interpolation lin\u00E9aire</option></select></label>\n  <p class=\"note\">\u00AB Ligne la plus proche \u00BB : on prend la distance de la table la plus proche de la distance r\u00E9elle et sa hausse telle qu'elle est \u00E9crite (exemple : 948 m \u2192 ligne 950 m). Avec \u00AB Table \u00BB, exemple charge 0 \u00E0 270 m : 3-89 (ligne 250 m) + 2 \u00D7 5 = 3-99.</p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>\u00C9l\u00E9ments initiaux et d\u00E9rive</h2></div>\n    <div class=\"g2\">\n     <label>D\u00E9rive initiale<input id=\"dref\" type=\"number\" inputmode=\"decimal\" value=\"3000\" onchange=\"saveDer()\"></label>\n     <label>Hausse initiale<input id=\"href\" type=\"number\" inputmode=\"decimal\" value=\"700\" onchange=\"saveDer()\"></label>\n    </div>\n    <label style=\"margin-top:8px\">La lecture augmente en tournant<select id=\"dsens\" onchange=\"saveDer()\"><option value=\"1\">vers la droite</option><option value=\"-1\" selected>vers la gauche</option></select></label>\n    <p class=\"note\">\u00C9l\u00E9ments initiaux : d\u00E9rive 30-00 et hausse 7-00. D\u00E9rive = d\u00E9rive initiale + \u00E9cart entre l'azimut de tir et celui de la direction de r\u00E9f\u00E9rence (sens ci-dessus) : objectif \u00E0 droite de la direction de r\u00E9f\u00E9rence = d\u00E9rive plus petite que 30-00.</p>\n </div>\n</details>\n<details class=\"sect\"><summary>Table de tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Import CSV</h2><button class=\"mini\" onclick=\"exportCsv()\">Exporter</button></div>\n  <p class=\"note\" style=\"margin-top:0\">Colonnes : <b>charge, distance, hausse, variation</b> (variation = hausse par 10 m, lue dans la table). Optionnel : vent_face, vent_lat, temp, pression (une fois par charge). Collez le texte du fichier dans la zone ci-dessous, puis appuyez sur Importer (aucun fichier \u00E0 choisir). S\u00E9parateur virgule, point-virgule ou tabulation ; virgule d\u00E9cimale accept\u00E9e ; en-t\u00EAte facultatif.</p>\n  <textarea id=\"csv\" spellcheck=\"false\" style=\"height:150px;margin-top:0\" placeholder=\"Collez ici le contenu du fichier CSV\" oninput=\"document.getElementById('csvmsg').textContent=this.value.split('\n').filter(function(l){return l.trim()}).length+' ligne(s) coll\u00E9e(s). Appuyez sur Importer.'\"></textarea>\n  <label class=\"btn\" style=\"display:block;text-align:center;cursor:pointer\">\uD83D\uDCC2 Choisir le fichier CSV de la table<input type=\"file\" accept=\".csv,.txt,text/csv,text/plain,*/*\" style=\"display:none\" onchange=\"csvFichier(this)\"></label>\n  <button class=\"btn\" onclick=\"importCsv()\">Importer le texte coll\u00E9</button>\n  <p id=\"csvmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Table de tir</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">JSON \u00E0 remplir depuis la table r\u00E9glementaire : par charge, des points [distance m, hausse en milli\u00E8mes, variation par 10 m]. Les coefficients m\u00E9t\u00E9o \u00E9ventuels ne sont pas utilis\u00E9s.</p>\n  <textarea id=\"table\" spellcheck=\"false\"></textarea>\n  <button class=\"btn\" onclick=\"sauver()\">Enregistrer la table</button>\n  <button class=\"btn alt\" onclick=\"resetTable()\">Revenir \u00E0 l'exemple</button>\n </div>\n</details>\n<details class=\"sect\"><summary>Altitudes</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Altitudes hors ligne</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Importez des dalles SRTM (fichiers .hgt, par exemple N48E002.hgt : une dalle par carr\u00E9 de 1\u00B0 de latitude et de longitude). Elles restent enregistr\u00E9es dans l'application. Sans dalle, l'altitude est demand\u00E9e en ligne. Pr\u00E9cision : environ 90 m horizontalement et plusieurs m\u00E8tres en altitude. V\u00E9rifiez sur la carte.</p>\n  <p class=\"note\"><b>Le plus simple :</b> avec internet, touchez le bouton ci-dessous. L'application t\u00E9l\u00E9charge une seule fois la dalle d'altitude de votre zone (environ 10 Mo), puis l'altitude de la pi\u00E8ce et de l'objectif s'affiche <b>sans r\u00E9seau</b>.</p>\n  <button class=\"btn\" onclick=\"telechargerHgt()\">T\u00E9l\u00E9charger l'altitude de ma zone</button>\n  <label>\u2026 ou une dalle pr\u00E9cise (exemple N14W001)<input id=\"hgtnom\" type=\"text\" autocapitalize=\"characters\" autocomplete=\"off\" spellcheck=\"false\" placeholder=\"N14W001\"></label>\n  <button class=\"mini\" onclick=\"telechargerHgt($('hgtnom').value)\">T\u00E9l\u00E9charger cette dalle</button>\n  <p id=\"hgtmsg\" class=\"note\"></p>\n  <p class=\"note\"><b>Si le t\u00E9l\u00E9chargement automatique \u00E9choue :</b> 1) touchez ce lien pour t\u00E9l\u00E9charger la dalle avec le navigateur : <a href=\"https://s3.amazonaws.com/elevation-tiles-prod/skadi/N14/N14W001.hgt.gz\" target=\"_blank\" rel=\"noopener\">N14W001.hgt.gz</a> (zone d'Arbinda, environ 10 Mo) ; 2) importez le fichier t\u00E9l\u00E9charg\u00E9 ci-dessous, sans le d\u00E9compresser.</p>\n  <p class=\"note\" style=\"margin-bottom:2px\">Importer un fichier .hgt ou .hgt.gz d\u00E9j\u00E0 sur le t\u00E9l\u00E9phone :</p>\n  <input id=\"hgtfile\" type=\"file\" multiple onchange=\"importHgt(this)\">\n  <p id=\"hgtlist\" class=\"note\"></p>\n  <button class=\"btn alt\" onclick=\"effacerHgt()\">Effacer les dalles</button>\n </div>\n</details>\n<h3 class=\"grp\">Cartes et fichiers</h3>\n<details class=\"sect\"><summary>Carte</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage de la carte</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Coordonn\u00E9es \u00E9crites \u00E0 c\u00F4t\u00E9 des points de la carte.</p>\n  <div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div>\n  <div class=\"rowb\" style=\"margin-top:10px\"><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende();go('carte')\">Voir la l\u00E9gende</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Taille des symboles et des noms</b></p>\n  <div class=\"seg\"><button data-sym=\"1\" onclick=\"carteSym(1)\">Normal</button><button data-sym=\"1.4\" onclick=\"carteSym(1.4)\">Grand</button><button data-sym=\"1.8\" onclick=\"carteSym(1.8)\">Tr\u00E8s grand</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>\u00C9cran de la carte</b></p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sto.set('carteAuto',sto.get('carteAuto')==='0'?'1':'0');this.classList.toggle('on',sto.get('carteAuto')!=='0')\" id=\"bauto\">Plein \u00E9cran \u00E0 l'ouverture</button><button class=\"mini\" onclick=\"carteTraceBasc()\">Trace de marche : afficher / masquer</button><button class=\"mini\" onclick=\"C.trace=[];carteRendre()\">Effacer la trace</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Carte hors ligne</b> : placez la carte sur la zone voulue (par exemple autour d'Arbinda), choisissez le fond (Satellite, Plan ou Topo), puis t\u00E9l\u00E9chargez. Marche dans l'application install\u00E9e.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteHorsLigne(2)\">T\u00E9l\u00E9charger la zone visible</button><button class=\"mini\" onclick=\"carteHorsLigne(4)\">Plus de d\u00E9tail</button><button class=\"mini\" onclick=\"carteViderCache()\">Vider</button></div>\n  <p id=\"cdl\" class=\"note\"></p>\n  <p class=\"note\">D\u00E9tail du satellite : niveau <b id=\"satniv\">13</b>. Si la carte affiche des cases beiges, diminuez ; si elle est trop floue, augmentez.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteDetail(-1);majBoutons()\">D\u00E9tail \u2212</button><button class=\"mini\" onclick=\"carteDetail(1);majBoutons()\">D\u00E9tail +</button></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Fond Google (cl\u00E9 requise)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 Google</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Satellite avec routes et noms (Google Map Tiles API), <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil.</p>\n  <label>Coller la cl\u00E9<input id=\"gkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 Google ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"gTester()\">Tester</button><button class=\"mini\" onclick=\"gEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"getat\" class=\"note\"></p><p id=\"gmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect\"><summary>Fond MapTiler (hybride)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 MapTiler</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Fond satellite avec routes et noms de lieux, <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil. Compte gratuit : maptiler.com \u2192 Cl\u00E9s API.</p>\n  <label>Coller la cl\u00E9<input id=\"mtkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"mtEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"mtTester()\">Tester</button><button class=\"mini\" onclick=\"mtEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"mtetat\" class=\"note\"></p><p id=\"mtmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect\"><summary>Rep\u00E8res et cible</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mes rep\u00E8res</h2></div>\n  <div id=\"repbox\"></div>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gpxExport()\">Exporter GPX (rep\u00E8res + trace)</button><button class=\"mini\" onclick=\"cibleRetirer()\">Retirer la cible</button></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Fichiers KMZ / KML / GPX</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Lire des coordonn\u00E9es</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Choisissez un fichier <b>.kmz, .kml ou .gpx</b> de votre t\u00E9l\u00E9phone. Les points, lignes et zones s'affichent sur la carte, et leurs coordonn\u00E9es sont lisibles ci-dessous.</p>\n  <input id=\"kmlfile\" type=\"file\" multiple onchange=\"kmlImporter(this)\">\n  <p class=\"note\" style=\"margin-bottom:2px\">Si rien ne se passe, essayez cette seconde m\u00E9thode :</p>\n  <input id=\"kmlfile2\" type=\"file\" accept=\".kmz,.kml,.gpx,.zip,application/vnd.google-earth.kmz,application/vnd.google-earth.kml+xml,application/gpx+xml,application/zip,application/octet-stream,application/xml,text/xml,*/*\" oninput=\"kmlImporter(this)\">\n  <p id=\"kmlmsg\" class=\"note\"></p>\n  <div id=\"kmlbox\"></div>\n </div>\n</details>\n<h3 class=\"grp\">Application</h3>\n<details class=\"sect\"><summary>Mises \u00E0 jour et sauvegarde</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mise \u00E0 jour</h2></div>\n  <p class=\"note\">Version install\u00E9e : <b id=\"verApp\">67</b>. Si une nouvelle version est publi\u00E9e sur GitHub mais n'appara\u00EEt pas, touchez le bouton : l'application vide sa copie interne (vos donn\u00E9es restent) et se recharge.</p>\n  <button class=\"btn\" onclick=\"majMaintenant()\">Mettre \u00E0 jour maintenant</button>\n  <p id=\"majmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Sauvegarde de mes donn\u00E9es</h2></div>\n  <p class=\"note\">Table de tir, historique, rep\u00E8res, cartes import\u00E9es (r\u00E9glages), fichiers KML/GPX et pr\u00E9f\u00E9rences. \u00C0 faire avant de d\u00E9sinstaller ou changer de t\u00E9l\u00E9phone.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sauvTelecharger()\">T\u00E9l\u00E9charger la sauvegarde</button><button class=\"mini\" onclick=\"sauvCopier()\">Copier le texte</button></div>\n  <label>Restaurer depuis un fichier<input type=\"file\" id=\"sauvfic\" accept=\".json,application/json,text/plain\" onchange=\"sauvRestaurerFichier(this)\"></label>\n  <label>\u2026 ou coller le texte de sauvegarde<textarea id=\"sauvtxt\" style=\"height:90px\" placeholder=\"Collez ici le texte copi\u00E9\"></textarea></label>\n  <button class=\"mini\" onclick=\"sauvRestaurerTexte()\">Restaurer le texte coll\u00E9</button>\n  <p id=\"sauvmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect\"><summary>V\u00E9rification du calcul</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>V\u00E9rifier le calcul</h2></div>\n  <p class=\"note\">Calcule un exemple connu (pi\u00E8ce 14\u00B013'59.25\" N 0\u00B052'42.52\" O, objectif 14\u00B016'30.20\" N 0\u00B053'35.57\" O) avec le code de cet appareil et le compare \u00E0 la valeur de r\u00E9f\u00E9rence.</p>\n  <button class=\"btn\" onclick=\"autotest()\">Lancer la v\u00E9rification</button>\n  <p id=\"atres\" class=\"note\" style=\"white-space:pre-line;font-size:14px;color:var(--fg)\"></p>\n </div>\n</details>\n";
+$("p-reglages").innerHTML = "\n<h1 class=\"ptitre\">Param\u00E8tres</h1>\n<h3 class=\"grp\">Tir et affichage</h3>\n<details class=\"sect\" open><summary>Affichage et unit\u00E9s</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage</h2></div>\n  <label>Th\u00E8me\n   <select id=\"theme\" onchange=\"setTheme(this.value)\">\n    <option value=\"minimal\">Minimal blanc</option><option value=\"pro\">Professionnel (bleu)</option><option value=\"auto\">Automatique</option><option value=\"sombre\">Sombre</option>\n    <option value=\"rouge\">Nuit rouge</option><option value=\"soleil\">Plein soleil (fort contraste)</option>\n   </select></label>\n  <label style=\"margin-top:8px\"><input type=\"checkbox\" id=\"avance\" onchange=\"setAvance(this.checked)\" style=\"width:auto;margin-right:8px\">R\u00E9glages avanc\u00E9s (altitudes, cartes, cl\u00E9s, v\u00E9rification)</label>\n  <label style=\"margin-top:8px\">Unit\u00E9 de l'azimut\n   <select id=\"uniteaz\" onchange=\"setUniteAz(this.value)\">\n    <option value=\"mil\">Milli\u00E8mes</option><option value=\"degres\">Degr\u00E9s</option>\n   </select></label>\n  <label style=\"margin-top:8px\">\u00C9criture des milli\u00E8mes (6000 par tour)\n   <select id=\"fmtang\" onchange=\"setFormat(this.value)\">\n    <option value=\"pacte\">Pacte de Varsovie : 30-00</option><option value=\"nombre\">Nombre : 3000</option>\n   </select></label>\n </div>\n</details>\n<details class=\"sect\"><summary>Calcul du tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Calcul de la hausse</h2></div>\n  <label>M\u00E9thode<select id=\"methode\" onchange=\"setMethode(this.value)\">\n   <option value=\"proche\">Ligne la plus proche de la table (948 m \u2192 950 m)</option>\n   <option value=\"table\">Table : ligne inf\u00E9rieure + variation par 10 m</option>\n   <option value=\"lineaire\">Interpolation lin\u00E9aire</option></select></label>\n  <p class=\"note\">\u00AB Ligne la plus proche \u00BB : on prend la distance de la table la plus proche de la distance r\u00E9elle et sa hausse telle qu'elle est \u00E9crite (exemple : 948 m \u2192 ligne 950 m). Avec \u00AB Table \u00BB, exemple charge 0 \u00E0 270 m : 3-89 (ligne 250 m) + 2 \u00D7 5 = 3-99.</p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>\u00C9l\u00E9ments initiaux et d\u00E9rive</h2></div>\n    <div class=\"g2\">\n     <label>D\u00E9rive initiale<input id=\"dref\" type=\"number\" inputmode=\"decimal\" value=\"3000\" onchange=\"saveDer()\"></label>\n     <label>Hausse initiale<input id=\"href\" type=\"number\" inputmode=\"decimal\" value=\"700\" onchange=\"saveDer()\"></label>\n    </div>\n    <label style=\"margin-top:8px\">La lecture augmente en tournant<select id=\"dsens\" onchange=\"saveDer()\"><option value=\"1\">vers la droite</option><option value=\"-1\" selected>vers la gauche</option></select></label>\n    <p class=\"note\">\u00C9l\u00E9ments initiaux : d\u00E9rive 30-00 et hausse 7-00. D\u00E9rive = d\u00E9rive initiale + \u00E9cart entre l'azimut de tir et celui de la direction de r\u00E9f\u00E9rence (sens ci-dessus) : objectif \u00E0 droite de la direction de r\u00E9f\u00E9rence = d\u00E9rive plus petite que 30-00.</p>\n </div>\n</details>\n<details class=\"sect\"><summary>Table de tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Import CSV</h2><button class=\"mini\" onclick=\"exportCsv()\">Exporter</button></div>\n  <p class=\"note\" style=\"margin-top:0\">Colonnes : <b>charge, distance, hausse, variation</b> (variation = hausse par 10 m, lue dans la table). Optionnel : vent_face, vent_lat, temp, pression (une fois par charge). Collez le texte du fichier dans la zone ci-dessous, puis appuyez sur Importer (aucun fichier \u00E0 choisir). S\u00E9parateur virgule, point-virgule ou tabulation ; virgule d\u00E9cimale accept\u00E9e ; en-t\u00EAte facultatif.</p>\n  <textarea id=\"csv\" spellcheck=\"false\" style=\"height:150px;margin-top:0\" placeholder=\"Collez ici le contenu du fichier CSV\" oninput=\"document.getElementById('csvmsg').textContent=this.value.split('\n').filter(function(l){return l.trim()}).length+' ligne(s) coll\u00E9e(s). Appuyez sur Importer.'\"></textarea>\n  <label class=\"btn\" style=\"display:block;text-align:center;cursor:pointer\">\uD83D\uDCC2 Choisir le fichier CSV de la table<input type=\"file\" accept=\".csv,.txt,text/csv,text/plain,*/*\" style=\"display:none\" onchange=\"csvFichier(this)\"></label>\n  <button class=\"btn\" onclick=\"importCsv()\">Importer le texte coll\u00E9</button>\n  <p id=\"csvmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Table de tir</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">JSON \u00E0 remplir depuis la table r\u00E9glementaire : par charge, des points [distance m, hausse en milli\u00E8mes, variation par 10 m]. Les coefficients m\u00E9t\u00E9o \u00E9ventuels ne sont pas utilis\u00E9s.</p>\n  <textarea id=\"table\" spellcheck=\"false\"></textarea>\n  <button class=\"btn\" onclick=\"sauver()\">Enregistrer la table</button>\n  <button class=\"btn alt\" onclick=\"resetTable()\">Revenir \u00E0 l'exemple</button>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Altitudes</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Altitudes hors ligne</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Importez des dalles SRTM (fichiers .hgt, par exemple N48E002.hgt : une dalle par carr\u00E9 de 1\u00B0 de latitude et de longitude). Elles restent enregistr\u00E9es dans l'application. Sans dalle, l'altitude est demand\u00E9e en ligne. Pr\u00E9cision : environ 90 m horizontalement et plusieurs m\u00E8tres en altitude. V\u00E9rifiez sur la carte.</p>\n  <p class=\"note\"><b>Le plus simple :</b> avec internet, touchez le bouton ci-dessous. L'application t\u00E9l\u00E9charge une seule fois la dalle d'altitude de votre zone (environ 10 Mo), puis l'altitude de la pi\u00E8ce et de l'objectif s'affiche <b>sans r\u00E9seau</b>.</p>\n  <button class=\"btn\" onclick=\"telechargerHgt()\">T\u00E9l\u00E9charger l'altitude de ma zone</button>\n  <label>\u2026 ou une dalle pr\u00E9cise (exemple N14W001)<input id=\"hgtnom\" type=\"text\" autocapitalize=\"characters\" autocomplete=\"off\" spellcheck=\"false\" placeholder=\"N14W001\"></label>\n  <button class=\"mini\" onclick=\"telechargerHgt($('hgtnom').value)\">T\u00E9l\u00E9charger cette dalle</button>\n  <p id=\"hgtmsg\" class=\"note\"></p>\n  <p class=\"note\"><b>Si le t\u00E9l\u00E9chargement automatique \u00E9choue :</b> 1) touchez ce lien pour t\u00E9l\u00E9charger la dalle avec le navigateur : <a href=\"https://s3.amazonaws.com/elevation-tiles-prod/skadi/N14/N14W001.hgt.gz\" target=\"_blank\" rel=\"noopener\">N14W001.hgt.gz</a> (zone d'Arbinda, environ 10 Mo) ; 2) importez le fichier t\u00E9l\u00E9charg\u00E9 ci-dessous, sans le d\u00E9compresser.</p>\n  <p class=\"note\" style=\"margin-bottom:2px\">Importer un fichier .hgt ou .hgt.gz d\u00E9j\u00E0 sur le t\u00E9l\u00E9phone :</p>\n  <input id=\"hgtfile\" type=\"file\" multiple onchange=\"importHgt(this)\">\n  <p id=\"hgtlist\" class=\"note\"></p>\n  <button class=\"btn alt\" onclick=\"effacerHgt()\">Effacer les dalles</button>\n </div>\n</details>\n<h3 class=\"grp\">Cartes et fichiers</h3>\n<details class=\"sect\"><summary>Carte</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage de la carte</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Coordonn\u00E9es \u00E9crites \u00E0 c\u00F4t\u00E9 des points de la carte.</p>\n  <div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div>\n  <div class=\"rowb\" style=\"margin-top:10px\"><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende();go('carte')\">Voir la l\u00E9gende</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Taille des symboles et des noms</b></p>\n  <div class=\"seg\"><button data-sym=\"1\" onclick=\"carteSym(1)\">Normal</button><button data-sym=\"1.4\" onclick=\"carteSym(1.4)\">Grand</button><button data-sym=\"1.8\" onclick=\"carteSym(1.8)\">Tr\u00E8s grand</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>\u00C9cran de la carte</b></p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sto.set('carteAuto',sto.get('carteAuto')==='0'?'1':'0');this.classList.toggle('on',sto.get('carteAuto')!=='0')\" id=\"bauto\">Plein \u00E9cran \u00E0 l'ouverture</button><button class=\"mini\" onclick=\"carteTraceBasc()\">Trace de marche : afficher / masquer</button><button class=\"mini\" onclick=\"C.trace=[];carteRendre()\">Effacer la trace</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Carte hors ligne</b> : placez la carte sur la zone voulue (par exemple autour d'Arbinda), choisissez le fond (Satellite, Plan ou Topo), puis t\u00E9l\u00E9chargez. Marche dans l'application install\u00E9e.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteHorsLigne(2)\">T\u00E9l\u00E9charger la zone visible</button><button class=\"mini\" onclick=\"carteHorsLigne(4)\">Plus de d\u00E9tail</button><button class=\"mini\" onclick=\"carteViderCache()\">Vider</button></div>\n  <p id=\"cdl\" class=\"note\"></p>\n  <p class=\"note\">D\u00E9tail du satellite : niveau <b id=\"satniv\">13</b>. Si la carte affiche des cases beiges, diminuez ; si elle est trop floue, augmentez.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteDetail(-1);majBoutons()\">D\u00E9tail \u2212</button><button class=\"mini\" onclick=\"carteDetail(1);majBoutons()\">D\u00E9tail +</button></div>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fond Google (cl\u00E9 requise)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 Google</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Satellite avec routes et noms (Google Map Tiles API), <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil.</p>\n  <label>Coller la cl\u00E9<input id=\"gkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 Google ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"gTester()\">Tester</button><button class=\"mini\" onclick=\"gEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"getat\" class=\"note\"></p><p id=\"gmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fond MapTiler (hybride)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 MapTiler</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Fond satellite avec routes et noms de lieux, <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil. Compte gratuit : maptiler.com \u2192 Cl\u00E9s API.</p>\n  <label>Coller la cl\u00E9<input id=\"mtkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"mtEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"mtTester()\">Tester</button><button class=\"mini\" onclick=\"mtEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"mtetat\" class=\"note\"></p><p id=\"mtmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Rep\u00E8res et cible</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mes rep\u00E8res</h2></div>\n  <div id=\"repbox\"></div>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gpxExport()\">Exporter GPX (rep\u00E8res + trace)</button><button class=\"mini\" onclick=\"cibleRetirer()\">Retirer la cible</button></div>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fichiers KMZ / KML / GPX</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Lire des coordonn\u00E9es</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Choisissez un fichier <b>.kmz, .kml ou .gpx</b> de votre t\u00E9l\u00E9phone. Les points, lignes et zones s'affichent sur la carte, et leurs coordonn\u00E9es sont lisibles ci-dessous.</p>\n  <input id=\"kmlfile\" type=\"file\" multiple onchange=\"kmlImporter(this)\">\n  <p class=\"note\" style=\"margin-bottom:2px\">Si rien ne se passe, essayez cette seconde m\u00E9thode :</p>\n  <input id=\"kmlfile2\" type=\"file\" accept=\".kmz,.kml,.gpx,.zip,application/vnd.google-earth.kmz,application/vnd.google-earth.kml+xml,application/gpx+xml,application/zip,application/octet-stream,application/xml,text/xml,*/*\" oninput=\"kmlImporter(this)\">\n  <p id=\"kmlmsg\" class=\"note\"></p>\n  <div id=\"kmlbox\"></div>\n </div>\n</details>\n<h3 class=\"grp\">Application</h3>\n<details class=\"sect\"><summary>Mises \u00E0 jour et sauvegarde</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mise \u00E0 jour</h2></div>\n  <p class=\"note\">Version install\u00E9e : <b id=\"verApp\">83</b>. Si une nouvelle version est publi\u00E9e sur GitHub mais n'appara\u00EEt pas, touchez le bouton : l'application vide sa copie interne (vos donn\u00E9es restent) et se recharge.</p>\n  <button class=\"btn\" onclick=\"majMaintenant()\">Mettre \u00E0 jour maintenant</button>\n  <p id=\"majmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Sauvegarde de mes donn\u00E9es</h2></div>\n  <p class=\"note\">Table de tir, historique, rep\u00E8res, cartes import\u00E9es (r\u00E9glages), fichiers KML/GPX et pr\u00E9f\u00E9rences. \u00C0 faire avant de d\u00E9sinstaller ou changer de t\u00E9l\u00E9phone.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sauvTelecharger()\">T\u00E9l\u00E9charger la sauvegarde</button><button class=\"mini\" onclick=\"sauvCopier()\">Copier le texte</button></div>\n  <label>Restaurer depuis un fichier<input type=\"file\" id=\"sauvfic\" accept=\".json,application/json,text/plain\" onchange=\"sauvRestaurerFichier(this)\"></label>\n  <label>\u2026 ou coller le texte de sauvegarde<textarea id=\"sauvtxt\" style=\"height:90px\" placeholder=\"Collez ici le texte copi\u00E9\"></textarea></label>\n  <button class=\"mini\" onclick=\"sauvRestaurerTexte()\">Restaurer le texte coll\u00E9</button>\n  <p id=\"sauvmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>V\u00E9rification du calcul</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>V\u00E9rifier le calcul</h2></div>\n  <p class=\"note\">Calcule un exemple connu (pi\u00E8ce 14\u00B013'59.25\" N 0\u00B052'42.52\" O, objectif 14\u00B016'30.20\" N 0\u00B053'35.57\" O) avec le code de cet appareil et le compare \u00E0 la valeur de r\u00E9f\u00E9rence.</p>\n  <button class=\"btn\" onclick=\"autotest()\">Lancer la v\u00E9rification</button>\n  <p id=\"atres\" class=\"note\" style=\"white-space:pre-line;font-size:14px;color:var(--fg)\"></p>\n </div>\n</details>\n";
 var rnd = function (x) { return x < 0 ? -Math.floor(-x + 0.5 + 1e-9) : Math.floor(x + 0.5 + 1e-9); };
 var fmt = function (x, d) {
 if (d === void 0) { d = 0; }
@@ -381,7 +467,7 @@ function sang(x) { return (x < 0 ? "− " : "+ ") + ang(Math.abs(x)); }
 function ecartAng(x) { return (x < 0 ? "gauche " : "droite ") + ang(Math.abs(x)); }
 function sensBouton(x) { x = diffSigne(x); return (x >= 0 ? "vers le bas " : "vers le haut ") + ang(Math.abs(x)); }
 function diffSigne(x) { x = ((x % MIL) + MIL) % MIL; return x > MIL / 2 ? x - MIL : x; }
-var TABS = ["saisie", "carte", "tir", "meteo", "boussole", "reglages"];
+var TABS = ["accueil", "saisie", "carte", "tir", "meteo", "boussole", "reglages"];
 function go(n) {
 TABS.forEach(function (t) { $("p-" + t).hidden = t !== n; $("n-" + t).classList.toggle("on", t === n); });
 window.scrollTo(0, 0);
@@ -396,6 +482,8 @@ kmlRendre();
 repRendre();
 }
 }
+if (n === "accueil")
+accueilMaj();
 if (n === "meteo" && typeof meteoOuvrir === "function")
 meteoOuvrir();
 if (n === "carte")
@@ -403,13 +491,65 @@ setTimeout(function () { carteOuvrir(); }, 30);
 else if (typeof carteLiveOff === "function")
 carteLiveOff();
 }
+function ssaisie(k) {
+$("p-saisie").dataset.ss = k;
+["p", "t"].forEach(function (x) { return $("ss-" + x).classList.toggle("on", x === k); });
+window.scrollTo(0, 0);
+}
+function stir(k) {
+$("p-tir").dataset.st = k;
+["r", "d", "c", "h"].forEach(function (x) { return $("st-" + x).classList.toggle("on", x === k); });
+if (k === "d" && typeof majDerive === "function")
+majDerive();
+window.scrollTo(0, 0);
+}
+function setAvance(on) { document.body.classList.toggle("simple", !on); sto.set("avance", on ? "1" : "0"); }
+(function () { var on = sto.get("avance") === "1"; document.body.classList.toggle("simple", !on); var c = $("avance"); if (c)
+c.checked = on; })();
+function derAffichee() {
+var dn = derNow();
+if (dn === null)
+return null;
+if (NBJ === 1)
+return dn;
+if (repJalon)
+return repJalon.r + (dn - repJalon.b);
+var g = repDelta();
+if (g !== null)
+return dn + (parseInt($("dsens").value, 10) || 1) * g;
+return dn;
+}
+
+function accueilMaj() {
+var ok = azTir !== null && derniereDist !== null;
+$("hmVide").hidden = ok;
+$("hmTir").hidden = !ok;
+var nom = $("fnom") ? $("fnom").value : "";
+$("hmNom").textContent = "Dernier tir" + (nom ? " · " + nom : "");
+if (ok) {
+$("hmAz").textContent = $("rAz").textContent;
+$("hmHa").textContent = $("rHa").textContent;
+var d = null;
+try {
+d = derAffichee();
+}
+catch (e) { }
+$("hmDe").textContent = d === null ? "–" : ang(d);
+}
+var reel = JSON.stringify(TABLE) !== JSON.stringify(EXEMPLE);
+$("hmTable").textContent = reel ? "✓ réelle" : "⚠ fictive";
+$("hmTable").style.color = reel ? "var(--ok)" : "var(--err)";
+}
 function setTheme(t) {
 document.documentElement.dataset.theme = t;
 sto.set("theme", t);
 var bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
 document.querySelector('meta[name="theme-color"]').content = bg || "#0f130c";
 }
-(function () { var t = sto.get("theme") || "auto"; $("theme").value = t; setTheme(t); })();
+(function () { if (sto.get("ui78") !== "1") {
+sto.set("theme", "minimal");
+sto.set("ui78", "1");
+} var t = sto.get("theme") || "minimal"; $("theme").value = t; setTheme(t); })();
 function bascule(id) {
 var m = $(id + "m").value;
 $(id + "u").hidden = m !== "utm";
@@ -430,7 +570,6 @@ if (sud)
 n += 1e7;
 return { e: e, n: n };
 }
-
 function utmToLl(e, n, zone, sud) {
 var x = e - 500000, y = sud ? n - 1e7 : n, M = y / K0;
 var mu = M / (A * (1 - E2 / 4 - 3 * E2 * E2 / 64 - 5 * Math.pow(E2, 3) / 256));
@@ -661,7 +800,7 @@ var pu = versZone(P, zone, sud), tu = versZone(T, zone, sud);
 var de = tu.e - pu.e, dn = tu.n - pu.n, dist = Math.hypot(de, dn);
 var az = azimut(de, dn), dh = T.alt - P.alt;
 var altOk = altSure.p && altSure.t, site = (dist > 0 && altOk) ? Math.atan(dh / dist) * 1000 : 0;
-derniere = { e: tu.e, n: tu.n, zone: zone, sud: sud };
+derniere = { e: tu.e, n: tu.n, zone: zone, sud: sud, pe: pu.e, pn: pu.n, d: dist, az: az };
 var wv = $n("wv") || 0, wd = (isNaN(azIn("wd")) ? 0 : azIn("wd")), dT = $n("dt") || 0, dP = $n("dp") || 0;
 var rel = (wd - az) * 2 * Math.PI / MIL;
 var face = wv * Math.cos(rel), droite = wv * Math.sin(rel);
@@ -720,8 +859,10 @@ derniereDist = dist;
 hausseFinale = c ? hs : null;
 majBoussole();
 majDerive();
-if (aller)
+if (aller) {
 go("tir");
+stir("r");
+}
 }
 function copier() {
 var ok = function () { return alert("Fiche copiée"); };
@@ -751,10 +892,101 @@ $("azref").value = azOut(gridCap);
 saveDer();
 }
 majUnites();
+var NBJ = sto.get("nbj") === "1" ? 1 : 2;
+function jalMode(n) { NBJ = n; sto.set("nbj", String(n)); document.body.classList.toggle("j1", n === 1); $("nbj1").classList.toggle("on", n === 1); $("nbj2").classList.toggle("on", n === 2); majDerive(); if (typeof accueilMaj === "function")
+accueilMaj(); }
+var repJalon = null;
+(function () { try {
+var d = JSON.parse(sto.get("repGeo"));
+if (d) {
+$("gj1").value = d.a;
+$("gj2").value = d.b;
+$("gje").value = d.e;
+}
+}
+catch (e) { } })();
+function repGeoSave() { sto.set("repGeo", JSON.stringify({ a: $("gj1").value, b: $("gj2").value, e: $("gje").value })); majDerive(); }
+function repDelta() {
+var f = function (id) { return parseFloat(String($(id).value).replace(",", ".")); };
+var d1 = f("gj1"), d2 = f("gj2"), e = f("gje");
+if (!(d1 > 0) || !(d2 > 0) || isNaN(e))
+return null;
+return (Math.atan(-e / d1) - Math.atan(-e / d2)) * MIL / (2 * Math.PI);
+}
+(function () { try {
+var d = JSON.parse(sto.get("repJalon"));
+if (d && isFinite(d.r) && isFinite(d.b)) {
+repJalon = d;
+$("drep").value = d.r;
+}
+}
+catch (e) { } })();
+function derNow() {
+var dref = parseFloat($("dref").value) || 3000, s = parseInt($("dsens").value, 10) || 1, azr = azIn("azref");
+if (isNaN(azr) || azTir === null)
+return null;
+var der = dref + s * diffSigne(azTir - azr);
+var lat = parseFloat(String($("dlat").value).replace(",", ".")) || 0;
+if (lat && derniereDist > 0)
+der += s * lat * 1000 / derniereDist;
+return der;
+}
+
+function repAvis(t) { var d = $("repToast"); if (!d) {
+d = document.createElement("div");
+d.id = "repToast";
+d.style.cssText = "position:fixed;left:16px;right:16px;bottom:84px;z-index:99;background:rgba(24,34,45,.95);color:#fff;padding:12px;border-radius:12px;text-align:center;font-size:15px";
+document.body.appendChild(d);
+} d.textContent = t; d.style.display = "block"; clearTimeout(d._t); d._t = setTimeout(function () { d.style.display = "none"; }, 2500); }
+function repAppliquer() {
+var r = parseFloat(String($("drep").value).replace(",", "."));
+var b = derNow();
+if (isNaN(r)) {
+repAvis("Saisissez la dérive lue sur le jalon 1");
+return;
+}
+if (b === null) {
+repAvis("Calculez d'abord un tir et saisissez l'azimut de référence");
+return;
+}
+repJalon = { r: r, b: b };
+sto.set("repJalon", JSON.stringify(repJalon));
+majDerive();
+repAvis("Repérage enregistré : pointez de nouveau sur le jalon 2");
+}
+function repEffacer() { repJalon = null; sto.set("repJalon", ""); $("drep").value = ""; majDerive(); }
+function dheroMaj() {
+var d = null;
+try {
+d = derAffichee();
+}
+catch (e) { }
+var jal1 = NBJ === 2 && (!!repJalon || repDelta() !== null);
+$("dhk").textContent = jal1 ? "Dérive de repérage · pointage jalon 2" : (NBJ === 1 ? "Dérive à afficher · pointage du jalon" : "Dérive à afficher");
+$("dhv").textContent = d === null ? "–" : ang(d);
+var sub = "";
+if (d !== null) {
+var lat = parseFloat(String($("dlat").value).replace(",", ".")) || 0;
+if (lat && derniereDist > 0) {
+var c = lat * 1000 / derniereDist, s2 = parseInt($("dsens").value, 10) || 1;
+sub = "Correction " + ecartAng(c) + " · bouton " + sensBouton(s2 * c);
+}
+else
+sub = (jal1 || NBJ === 1) ? "" : "Saisissez le repérage du jalon 1 pour l'activer";
+if (jal1) {
+var lu = repJalon ? "Repérage lu : " + ang(repJalon.r) : "Repérage par mesures";
+sub = lu + (sub ? " · " + sub : "");
+}
+}
+else
+sub = "Calculez d'abord un tir";
+$("dhs").textContent = sub;
+}
 function majDerive() {
 var t = $("dtab");
 if (azTir === null || derniereDist === null) {
 t.innerHTML = "<tr><td>Calculez d'abord un tir</td><td></td></tr>";
+dheroMaj();
 return;
 }
 var dref = parseFloat($("dref").value) || 3000, href = parseFloat($("href").value) || 700, s = parseInt($("dsens").value, 10) || 1;
@@ -765,11 +997,23 @@ rows.push(["Écart de direction", ecartAng(ec)]);
 rows.push(["Dérive à afficher", ang(der)]);
 rows.push(["Bouton de complément", sensBouton(der - dref)]);
 var lat = parseFloat(String($("dlat").value).replace(",", ".")) || 0;
+var corrTot = (lat && derniereDist > 0) ? lat * 1000 / derniereDist : 0;
 if (lat && derniereDist > 0) {
 var corr = lat * 1000 / derniereDist;
 rows.push(["Correction latérale", ecartAng(corr)]);
-rows.push(["Dérive corrigée", ang(der + s * corr)]);
+rows.push([(repJalon || repDelta() !== null) ? "Dérive jalon 2 corrigée" : "Dérive corrigée", ang(der + s * corr)]);
 rows.push(["Bouton pour la correction", sensBouton(s * corr)]);
+}
+var dG = (NBJ === 1 || repJalon) ? null : repDelta();
+if (dG !== null) {
+rows.push(["Dérive de repérage à afficher (pointage jalon 2)", "<b>" + ang(der + s * corrTot + s * dG) + "</b>"]);
+rows.push(["Dérive de tir avant repérage", ang(der + s * corrTot)]);
+}
+else if (NBJ === 2 && repJalon) {
+var dn = derNow(), dj = repJalon.r + (dn - repJalon.b);
+rows.push(["Dérive de repérage à afficher (pointage jalon 2)", "<b>" + ang(dj) + "</b>"]);
+rows.push(["Repérage lu au départ (jalon 1)", ang(repJalon.r)]);
+rows.push(["Dérive de tir avant repérage", ang(dn)]);
 }
 }
 else
@@ -778,6 +1022,7 @@ rows.push(["Éléments initiaux", "dérive " + ang(dref) + " · hausse " + ang(h
 if (hausseFinale !== null)
 rows.push(["Hausse : écart depuis l'initiale", sang(hausseFinale - href)]);
 t.innerHTML = rows.map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>"; }).join("");
+dheroMaj();
 }
 var altManuel = { p: false, t: false }, altSure = { p: false, t: false }, seqAlt = { p: 0, t: 0 }, tuiles = {};
 var dbp = null;
@@ -827,7 +1072,6 @@ return ok.length ? ok[0] : null;
 }
 return a * (1 - fx) * (1 - fy) + b * fx * (1 - fy) + c * (1 - fx) * fy + d * fx * fy;
 }
-
 function altCle(lat, lon) { return lat.toFixed(3) + "," + lon.toFixed(3); }
 function altCacheLire(lat, lon) { try {
 var o = JSON.parse(sto.get("altCache") || "{}");
@@ -3196,7 +3440,10 @@ return;
 }
 var e = histEnregistrer(true);
 var r = a * 2 * Math.PI / MIL;
-var de = lon * Math.sin(r) + lat * Math.cos(r), dn = lon * Math.cos(r) - lat * Math.sin(r);
+var g = derniere.az * 2 * Math.PI / MIL, psi = r - g, d0 = derniere.d;
+var dR = lon * Math.cos(psi) - lat * Math.sin(psi), dS = lon * Math.sin(psi) + lat * Math.cos(psi);
+var D = Math.max(1, d0 + dR), ang = Math.atan2(dS, D), gn = g + ang;
+var de = derniere.pe + D * Math.sin(gn) - derniere.e, dn = derniere.pn + D * Math.cos(gn) - derniere.n;
 setFmt("t", "utm");
 $("tz").value = derniere.zone;
 $("th").value = derniere.sud ? "S" : "N";
@@ -3744,7 +3991,7 @@ var lab = document.createElement("label");
 lab.innerHTML = 'Coordonnées UTM (zone + lettre, Est, Nord)<input id="' + id + 'u1" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="30P  729374  1573259" style="font-weight:700;letter-spacing:.5px">';
 bloc.insertBefore(lab, g2);
 var bt = document.createElement("div");
-bt.innerHTML = '<div class="rowb" style="margin:6px 0 0"><button type="button" class="mini" onclick="coordColler(\'' + id + '\')">📋 Coller</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'utm\')">Copier UTM</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'ll\')">Copier lat/lon</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'dms\')">Copier DMS</button></div><span id="' + id + 'u1m" class="note" style="display:block;margin:4px 0 6px"></span>';
+bt.innerHTML = '<div class="rowb" style="margin:6px 0 0"><button type="button" class="mini" onclick="coordColler(\'' + id + '\')">📋 Coller</button></div><details><summary>Copier la position</summary><div class="rowb" style="margin:6px 0 0"><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'utm\')">UTM</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'ll\')">lat/lon</button><button type="button" class="mini" onclick="coordCopier(\'' + id + '\',\'dms\')">DMS</button></div></details><span id="' + id + 'u1m" class="note" style="display:block;margin:4px 0 6px"></span>';
 bloc.parentNode.insertBefore(bt, bloc);
 var dd = $(id + "d");
 if (dd) {
@@ -3782,7 +4029,7 @@ creer("t");
 setInterval(function () { maj("p"); maj("t"); }, 400);
 })();
 function sauvContenu() {
-var o = { app: "mortier", version: 67, date: new Date().toISOString(), donnees: {} };
+var o = { app: "mortier", version: 83, date: new Date().toISOString(), donnees: {} };
 try {
 for (var i = 0; i < localStorage.length; i++) {
 var k = localStorage.key(i);
@@ -4074,8 +4321,8 @@ cartePlein(false);
 return;
 }
 var cur = TABS.filter(function (t) { return !$("p-" + t).hidden; })[0];
-if (cur && cur !== "saisie") {
-go("saisie");
+if (cur && cur !== "accueil") {
+go("accueil");
 return;
 }
 }
@@ -4145,6 +4392,65 @@ catch (e) { }
 }
 });
 })();
+var ORDRE = ["accueil", "saisie", "tir", "meteo", "boussole", "reglages"];
+function swipeNav(dir) {
+var cur = ORDRE.filter(function (t) { return !$("p-" + t).hidden; })[0];
+if (!cur)
+return;
+var sub = { saisie: { get: function () { return $("p-saisie").dataset.ss; }, set: ssaisie, l: ["p", "t"] }, tir: { get: function () { return $("p-tir").dataset.st; }, set: stir, l: ["r", "d", "c", "h"] } }[cur];
+if (sub) {
+var i = sub.l.indexOf(sub.get()) + dir;
+if (i >= 0 && i < sub.l.length) {
+sub.set(sub.l[i]);
+return;
+}
+}
+var j = ORDRE.indexOf(cur) + dir;
+if (j < 0 || j >= ORDRE.length)
+return;
+go(ORDRE[j]);
+if (dir < 0) {
+if (ORDRE[j] === "tir")
+stir("h");
+if (ORDRE[j] === "saisie")
+ssaisie("t");
+}
+else {
+if (ORDRE[j] === "tir")
+stir("r");
+if (ORDRE[j] === "saisie")
+ssaisie("p");
+}
+}
+(function () {
+var x0 = 0, y0 = 0, t0 = 0, ok = false;
+document.addEventListener("touchstart", function (e) {
+ok = false;
+if (e.touches.length !== 1)
+return;
+var el = e.target;
+if (el.closest && el.closest("input,select,textarea,#carte,#hpop,#hctx,svg#dial,table,.seg"))
+return;
+var c = $("carte");
+if (c && c.classList.contains("plein"))
+return;
+x0 = e.touches[0].clientX;
+y0 = e.touches[0].clientY;
+t0 = Date.now();
+ok = true;
+}, { passive: true });
+document.addEventListener("touchend", function (e) {
+if (!ok)
+return;
+ok = false;
+var t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+if (Date.now() - t0 > 700 || Math.abs(dx) < 70 || Math.abs(dx) < 1.7 * Math.abs(dy))
+return;
+swipeNav(dx > 0 ? 1 : -1);
+}, { passive: true });
+})();
+jalMode(NBJ);
+go("accueil");
 
 
 </script>
