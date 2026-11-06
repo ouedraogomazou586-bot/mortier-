@@ -219,7 +219,7 @@ label:has(>input[type=checkbox]){display:flex;align-items:center;font-size:15px;
 .wrap{padding:0 18px}
 header{padding:14px 0 12px;margin-bottom:16px}
 h1{font-size:18px;font-weight:800;letter-spacing:.1px}
-.chip{font-size:10px;padding:2px 7px}
+.chip{font-size:12px;padding:0 12px;min-height:34px;font-family:inherit;background:transparent;display:inline-flex;align-items:center;cursor:pointer}
 .card{padding:20px;margin-bottom:16px}
 .card>.hd{margin-bottom:14px}
 h2{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);font-weight:700}
@@ -235,6 +235,15 @@ textarea{padding:12px 14px}
 .tiles{gap:14px;margin-bottom:16px}
 details summary{font-size:15px;padding:12px 0}
 details>summary{color:var(--fg)}
+.st-c .g3{align-items:end}
+.cc{border-top:1px solid var(--line);padding:14px 0}
+.cc .cch{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
+.cc .cch span{font-size:12px;color:var(--mut)}
+.cc .ccl{font-size:14px;color:var(--mut);margin:4px 0 10px}
+.cc .ccg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cc .ccg small{display:block;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.cc .ccg b{display:block;font:700 20px/1.2 ui-monospace,Menlo,monospace;white-space:nowrap}
+.cc .ccg i{font-style:normal;font-size:12px;color:var(--mut)}
 .st-c .rowb .mini{flex:1 1 45%;padding:12px 10px;line-height:1.35;text-align:center}
 .rowb{gap:10px;margin-top:14px}
 table td{padding:11px 0}
@@ -247,6 +256,7 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 .home{gap:14px}.home .t{padding:20px 16px}
 .subtabs{gap:8px;margin-bottom:16px}.subtabs button{padding:13px 0;font-size:14px}
 .hm3 b{font-size:clamp(20px,6.4vw,30px);white-space:nowrap}.hm3{gap:4px}
+.tile .v{white-space:nowrap;font-size:clamp(26px,9vw,40px)!important}
 :root[data-theme="minimal"] .tile.main{border:1px solid #e6e6e6}
 :root[data-theme="minimal"] .mini{border-color:#cfcfcf;background:#fff}
 :root[data-theme="minimal"] input,:root[data-theme="minimal"] select,:root[data-theme="minimal"] textarea{background:#fff;border:1px solid #dcdcdc}
@@ -256,7 +266,7 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 <body>
 <header><div class="wrap">
 <h1>Mortier</h1>
-<div class="chips"><span id="cG" class="chip">GPS</span><span id="cM" class="chip">Météo</span><span id="cC" class="chip">Boussole</span></div>
+<div class="chips"><button type="button" id="cG" class="chip" aria-label="GPS : ouvrir la saisie de la position" onclick="go('saisie');ssaisie('p')">GPS</button><button type="button" id="cM" class="chip" aria-label="Ouvrir la météo" onclick="go('meteo')">Météo</button><button type="button" id="cC" class="chip" aria-label="Ouvrir la boussole" onclick="go('boussole')">Boussole</button></div>
 </div></header>
 <div id="bandeTable" hidden style="background:#a3261c;color:#fff;padding:8px 14px;font-size:13px;font-weight:700;line-height:1.35;position:sticky;top:0;z-index:50">⚠ TABLE FICTIVE : hausses fausses. Importez votre table (Paramètres → Table de tir).</div>
 <div id="jsfail" style="background:#a3261c;color:#fff;padding:10px;font-size:14px">Le script n'a pas démarré : le code est incomplet ou non pris en charge par ce navigateur. Ouvrez le fichier dans Chrome.</div>
@@ -266,6 +276,12 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 <div id="hmVide" class="note" style="margin:0">Aucun tir calculé pour l'instant.</div>
 <div id="hmTir" class="hm3" hidden><div><b id="hmAz">–</b><small>azimut</small></div><div><b id="hmHa">–</b><small>hausse</small></div><div><b id="hmDe">–</b><small>dérive</small></div></div></div>
 <button class="btn" style="margin:0 0 12px" onclick="go('saisie')">Nouveau tir</button>
+<div class="card" style="padding:14px 16px;margin-bottom:12px"><div class="k" style="font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Mortier</div>
+<div class="seg" id="hmMort" style="display:flex"></div>
+<div id="hmMortN" class="note" style="margin:8px 0 0"></div></div>
+<div class="card" style="padding:14px 16px;margin-bottom:14px"><div class="k" style="font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Pointage</div>
+<div class="seg" style="display:flex"><button type="button" id="hmj1" style="flex:1" onclick="jalMode(1)">1 jalon</button><button type="button" id="hmj2" style="flex:1" onclick="jalMode(2)">2 jalons</button></div>
+<div id="hmjt" class="note" style="margin:8px 0 0"></div></div>
 <div class="home">
 <button class="t" onclick="go('tir');stir('c')"><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></svg>Correction<span>Observateur</span></button>
 <button class="t" onclick="go('tir');stir('d')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4v4M12 12l4-3"/></svg>Dérive<span>Repérage des jalons</span></button>
@@ -301,7 +317,7 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 </div>
 <p class="note"><span id="pmnt"></span> <button class="mini" onclick="altAuto('p')">Alt. auto</button></p>
 <p id="gpss" class="note">« Position en temps réel » remplit les champs seule. Retouchez pour figer.</p>
-<p class="note" hidden>Version <b id="verSaisie">93</b></p>
+<p class="note" hidden>Version <b id="verSaisie">119</b></p>
 </div>
 <div class="card ss ss-t"><div class="hd"><h2>Objectif</h2></div>
 <div class="seg" id="tseg"><button type="button" data-f="utm" class="on" onclick="setFmt('t','utm')">UTM</button><button type="button" data-f="dms" onclick="setFmt('t','dms')">Degrés ° ' "</button></div>
@@ -337,10 +353,14 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 <div id="resultat" hidden>
 <div class="tiles st st-r">
 <div class="tile main"><div class="k">Azimut de tir</div><div class="v"><span id="rAz">–</span></div><div class="sub" id="rAzD"></div></div>
-<div class="tile main"><div class="k">Hausse</div><div class="v"><span id="rHa">–</span></div><div class="sub" id="rHs"></div></div>
+<div class="tile main"><div class="k" id="rHaK">Hausse</div><div class="v"><span id="rHa">–</span></div><div class="sub" id="rHs"></div></div>
 <div class="tile"><div class="k">Charge</div><div class="v" id="rCh">–</div></div>
 <div class="tile"><div class="k">Distance</div><div class="v"><span id="rDi">–</span><span class="u">m</span></div></div>
 </div>
+<div class="card st st-r" id="h3card" style="padding:12px 8px"><div class="hm3"><div><b id="h3a">–</b><small>sans site</small></div><div><b id="h3b">–</b><small>avec site</small></div><div><b id="h3c">–</b><small id="h3cl">avec météo</small></div></div><p class="note" id="h3n" style="margin:8px 6px 0;text-align:center"></p><p class="note" id="h3v" style="margin:4px 6px 0;text-align:center"></p><details id="h3dd" open style="margin:8px 10px 0;display:none"><summary style="cursor:pointer;font-size:14px;color:var(--mut);min-height:36px;display:flex;align-items:center">Détail de la correction météo (toucher pour replier)</summary><div class="note" id="h3d" style="margin:4px 0 0;text-align:left;white-space:pre-line"></div></details></div>
+<div class="card st st-r" id="mmir" style="padding:12px 14px"><details id="mmird"><summary style="cursor:pointer;min-height:36px;display:flex;align-items:center;font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em">Météo : saisie manuelle (facultatif)</summary>
+<div class="g3"><label>Air (°C)<input id="rtair" type="text" inputmode="decimal" placeholder="ex. 38"></label><label>Vent (m/s)<input id="rwv" type="text" inputmode="decimal"></label><label>Vient de <span class="uaz">(millièmes)</span><input id="rwd" type="number" inputmode="decimal"></label></div>
+<p class="note" id="rnote" style="margin:8px 0 0">La météo se récupère automatiquement au calcul. Vous n'avez rien à saisir.</p></details></div>
 <p id="msg" class="err st st-r"></p>
 <div class="card st st-r"><div class="hd"><h2>Détail</h2><span><button class="mini" onclick="histEnregistrer()">Enregistrer</button> <button class="mini" onclick="copier()">Copier</button></span></div>
 <input id="fnom" type="text" maxlength="40" placeholder="Nom de la fiche (facultatif), ex. Objectif A" style="margin-bottom:8px">
@@ -377,6 +397,7 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 <label>Latéral (m)<input id="lat" type="text" inputmode="decimal" value="0"></label>
 <label>Longueur (m)<input id="lon" type="text" inputmode="decimal" value="0"></label>
 </div>
+<button type="button" class="mini" style="margin-top:10px" onclick="oaAuto(true)">Observateur = azimut de tir</button>
 <p id="oadeg" class="note" style="font-weight:700;color:var(--fg);margin:6px 0 2px"></p>
 <p class="note" style="margin-bottom:4px"><b>Latéral</b> : où le tir est tombé par rapport à l'objectif, vu de l'observateur</p>
 <div class="rowb" style="margin-top:0"><button type="button" class="mini" onclick="corrSens('lat',1)">Tir tombé à GAUCHE<br>→ corriger à droite (+)</button><button type="button" class="mini" onclick="corrSens('lat',-1)">Tir tombé à DROITE<br>→ corriger à gauche (−)</button></div>
@@ -384,7 +405,7 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 <div class="rowb" style="margin-top:0"><button type="button" class="mini" onclick="corrSens('lon',1)">Tir trop COURT<br>→ allonger (+)</button><button type="button" class="mini" onclick="corrSens('lon',-1)">Tir trop LONG<br>→ raccourcir (−)</button></div>
 <p id="corrres" class="note" style="font-weight:700;color:var(--fg)"></p>
 <details><summary>Aide</summary><p class="note">Touchez ce que vous avez observé, puis tapez la distance en mètres (le signe se met tout seul). Tir trop court de 50 m : la hausse AUGMENTE. Tir trop long de 50 m : la hausse DIMINUE. L'objectif est déplacé et le tir recalculé.</p></details>
-<button class="btn alt" onclick="corriger()">Appliquer la correction</button>
+<button class="btn" onclick="corriger()">Appliquer la correction</button>
 <div id="corrlist"></div>
 </div>
 </div>
@@ -400,17 +421,36 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 <label>Vent (m/s)<input id="wv" type="number" inputmode="decimal" value="0"></label>
 <label>Vient de <span class="uaz">(millièmes)</span><input id="wd" type="number" inputmode="decimal" value="0"></label>
 </div>
+<div class="g2"><label>Température de l'air (°C)<input id="tair" type="text" inputmode="decimal" placeholder="ex. 38"></label></div>
 <details><summary>Cadran du vent</summary><p id="wdinfo" class="note" style="margin:4px 0 10px;font-weight:700"></p></details>
 <details><summary>Écarts de température et de pression</summary><div class="g2">
 <label>Écart temp. (°C)<input id="dt" type="text" inputmode="decimal" value="0"></label>
 <label>Écart pression (hPa)<input id="dp" type="text" inputmode="decimal" value="0"></label>
 </div></details>
-<details><summary>Aide</summary><p class="note">Informations seulement : la météo est affichée dans le détail du tir, mais n'est appliquée ni à la hausse ni à l'azimut. Écarts = valeur mesurée − référence de la table. Direction du vent = d'où il vient.</p></details>
+<details><summary>Aide</summary><p class="note">Le vent est affiché seulement. La température, la pression et l'humidité donnent la densité de l'air, qui peut corriger la hausse si vous activez la correction ci-dessous. Écarts = valeur mesurée − référence de la table. Direction du vent = d'où il vient.</p></details>
+</div>
+<div class="card">
+<div class="hd"><h2>Air, charge et vent</h2></div>
+<div class="g2">
+<label>Humidité (%)<input id="hu" type="text" inputmode="decimal" placeholder="auto"></label>
+<label>Charge (°C)<input id="tp" type="text" inputmode="decimal" placeholder="température"></label>
+</div>
+<p id="mrho" class="note" style="font-weight:700"></p>
+<p id="mhaut" class="note"></p>
+<label style="display:flex;align-items:center;font-size:15px;color:var(--fg);margin-top:8px;min-height:44px"><input id="mapp" type="checkbox">Appliquer la météo à la hausse (air, charge et vent balistique)</label>
+<p id="mcor" class="note"></p>
+<label style="display:flex;align-items:center;font-size:15px;color:var(--fg);margin-top:4px;min-height:44px;display:none"><input id="mvent" type="checkbox">Appliquer le vent (portée et azimut)</label>
+<label style="display:flex;align-items:center;font-size:15px;color:var(--fg);min-height:44px"><input id="mvbal" type="checkbox" checked>Vent balistique (moyenne 10 / 80 / 120 m le long de la trajectoire)</label>
+<p id="mvt" class="note"></p>
+<details><summary>Coefficients</summary><div class="g2">
+<label>Sensibilité de l'air<input id="kair" type="text" inputmode="decimal" value="0.30"></label>
+<label>Charge (% portée par °C)<input id="kpo" type="text" inputmode="decimal" value="0.20"></label>
+</div><div class="g2"><label>Efficacité du vent<input id="kvent" type="text" inputmode="decimal" value="0.45"></label></div><p class="note">Vent : déplacement = vitesse du vent x temps de vol estimé x efficacité. Valeurs générales estimées, à remplacer par celles de votre table ou d'un tir de réglage. La correction de la charge ne s'applique que si sa température est saisie. L'humidité de la table est supposée nulle.</p></details>
 </div>
 <div class="card">
 <div class="hd"><h2>Météo automatique</h2></div>
 <button class="btn alt" style="margin-top:0" onclick="meteoAuto()">Récupérer à la position de la pièce</button>
-<label style="display:flex;align-items:center;font-size:15px;color:var(--fg);margin-top:12px"><input id="mauto" type="checkbox" onchange="toggleAuto()">Mise à jour toutes les 10 min</label>
+<label style="display:flex;align-items:center;font-size:15px;color:var(--fg);margin-top:12px;min-height:44px"><input id="mauto" type="checkbox" onchange="toggleAuto()">Mise à jour toutes les 10 min</label>
 <p id="mst" class="note"></p>
 </div>
 <div class="card">
@@ -458,7 +498,7 @@ details.sect>.card{border:0!important;box-shadow:none!important;margin:0;padding
 </div></nav>
 <script>
 (function(){var f=document.getElementById("jsfail");if(f)f.innerHTML="Le script principal n'a pas démarré, mais le JavaScript de base fonctionne.<br>Navigateur : "+navigator.userAgent})();
-window.onerror=function(msg,src,line){var d=document.createElement("div");d.style.cssText="background:#a3261c;color:#fff;padding:10px;font:13px monospace;position:fixed;top:0;left:0;right:0;z-index:99";d.textContent="Erreur JS ligne "+line+" : "+msg;document.body.appendChild(d)};
+window.onerror=function(msg,src,line,col,err){try{var d=document.createElement("div");d.style.cssText="background:#7a1d00;color:#fff;padding:10px;font:12px monospace;position:fixed;top:0;left:0;right:0;z-index:99999;max-height:45vh;overflow:auto";var st=(err&&err.stack)?String(err.stack).split("\n").slice(0,4).join(" | "):"";d.textContent="ERREUR INTERNE (ce n'est pas la table de tir). "+msg+" · ligne "+line+":"+col+" · "+String(src||"").slice(-40)+(st?" · "+st:"")+"  (toucher pour fermer)";d.onclick=function(){d.remove()};document.body.appendChild(d)}catch(x){}};
 </script>
 <script>
 if(!Object.values){Object.values=function(o){return Object.keys(o).map(function(k){return o[k]})}}
@@ -466,7 +506,7 @@ if(!Object.values){Object.values=function(o){return Object.keys(o).map(function(
 document.getElementById("jsfail").style.display = "none";
 var $ = function (id) { return document.getElementById(id); };
 var $n = function (id) { return parseFloat(String($(id).value).replace(",", ".")); };
-$("p-reglages").innerHTML = "\n<h1 class=\"ptitre\">Param\u00E8tres</h1>\n<div class=\"subtabs\"><button type=\"button\" id=\"sr-t\" class=\"on\" onclick=\"sreg('t')\">Tir</button><button type=\"button\" id=\"sr-c\" onclick=\"sreg('c')\">Cartes</button><button type=\"button\" id=\"sr-a\" onclick=\"sreg('a')\">Application</button></div>\n<div class=\"rg rg-t\">\n<details class=\"sect\" open><summary>Affichage et unit\u00E9s</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage</h2></div>\n  <label>Th\u00E8me\n   <select id=\"theme\" onchange=\"setTheme(this.value)\">\n    <option value=\"minimal\">Minimal blanc</option><option value=\"pro\">Professionnel (bleu)</option><option value=\"auto\">Automatique</option><option value=\"sombre\">Sombre</option>\n    <option value=\"rouge\">Nuit rouge</option><option value=\"soleil\">Plein soleil (fort contraste)</option>\n   </select></label>\n  <label style=\"margin-top:8px\"><input type=\"checkbox\" id=\"avance\" onchange=\"setAvance(this.checked)\" style=\"width:auto;margin-right:8px\">R\u00E9glages avanc\u00E9s (altitudes, cartes, cl\u00E9s, v\u00E9rification)</label>\n  <label style=\"margin-top:8px\">Unit\u00E9 de l'azimut\n   <select id=\"uniteaz\" onchange=\"setUniteAz(this.value)\">\n    <option value=\"mil\">Milli\u00E8mes</option><option value=\"degres\">Degr\u00E9s</option>\n   </select></label>\n  <label style=\"margin-top:8px\">\u00C9criture des milli\u00E8mes (6000 par tour)\n   <select id=\"fmtang\" onchange=\"setFormat(this.value)\">\n    <option value=\"pacte\">Pacte de Varsovie : 30-00</option><option value=\"nombre\">Nombre : 3000</option>\n   </select></label>\n </div>\n</details>\n<details class=\"sect\"><summary>Calcul du tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Calcul de la hausse</h2></div>\n  <label>M\u00E9thode<select id=\"methode\" onchange=\"setMethode(this.value)\">\n   <option value=\"proche\">Ligne la plus proche de la table (948 m \u2192 950 m)</option>\n   <option value=\"table\">Table : ligne inf\u00E9rieure + variation par 10 m</option>\n   <option value=\"lineaire\">Interpolation lin\u00E9aire</option></select></label>\n  <p class=\"note\">\u00AB Ligne la plus proche \u00BB : on prend la distance de la table la plus proche de la distance r\u00E9elle et sa hausse telle qu'elle est \u00E9crite (exemple : 948 m \u2192 ligne 950 m). Avec \u00AB Table \u00BB, exemple charge 0 \u00E0 270 m : 3-89 (ligne 250 m) + 2 \u00D7 5 = 3-99.</p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>\u00C9l\u00E9ments initiaux et d\u00E9rive</h2></div>\n    <div class=\"g2\">\n     <label>D\u00E9rive initiale<input id=\"dref\" type=\"number\" inputmode=\"decimal\" value=\"3000\" onchange=\"saveDer()\"></label>\n     <label>Hausse initiale<input id=\"href\" type=\"number\" inputmode=\"decimal\" value=\"700\" onchange=\"saveDer()\"></label>\n    </div>\n    <label style=\"margin-top:8px\">La lecture augmente en tournant<select id=\"dsens\" onchange=\"saveDer()\"><option value=\"1\">vers la droite</option><option value=\"-1\" selected>vers la gauche</option></select></label>\n    <p class=\"note\">\u00C9l\u00E9ments initiaux : d\u00E9rive 30-00 et hausse 7-00. D\u00E9rive = d\u00E9rive initiale + \u00E9cart entre l'azimut de tir et celui de la direction de r\u00E9f\u00E9rence (sens ci-dessus) : objectif \u00E0 droite de la direction de r\u00E9f\u00E9rence = d\u00E9rive plus petite que 30-00.</p>\n </div>\n</details>\n<details class=\"sect\"><summary>Table de tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Import CSV</h2><button class=\"mini\" onclick=\"exportCsv()\">Exporter</button></div>\n  <p class=\"note\" style=\"margin-top:0\">Colonnes : <b>charge, distance, hausse, variation</b> (variation = hausse par 10 m, lue dans la table). Optionnel : vent_face, vent_lat, temp, pression (une fois par charge). Collez le texte du fichier dans la zone ci-dessous, puis appuyez sur Importer (aucun fichier \u00E0 choisir). S\u00E9parateur virgule, point-virgule ou tabulation ; virgule d\u00E9cimale accept\u00E9e ; en-t\u00EAte facultatif.</p>\n  <textarea id=\"csv\" spellcheck=\"false\" style=\"height:150px;margin-top:0\" placeholder=\"Collez ici le contenu du fichier CSV\" oninput=\"document.getElementById('csvmsg').textContent=this.value.split('\n').filter(function(l){return l.trim()}).length+' ligne(s) coll\u00E9e(s). Appuyez sur Importer.'\"></textarea>\n  <label class=\"btn\" style=\"display:block;text-align:center;cursor:pointer\">\uD83D\uDCC2 Choisir le fichier CSV de la table<input type=\"file\" accept=\".csv,.txt,text/csv,text/plain,*/*\" style=\"display:none\" onchange=\"csvFichier(this)\"></label>\n  <button class=\"btn\" onclick=\"importCsv()\">Importer le texte coll\u00E9</button>\n  <p id=\"csvmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Table de tir</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">JSON \u00E0 remplir depuis la table r\u00E9glementaire : par charge, des points [distance m, hausse en milli\u00E8mes, variation par 10 m]. Les coefficients m\u00E9t\u00E9o \u00E9ventuels ne sont pas utilis\u00E9s.</p>\n  <textarea id=\"table\" spellcheck=\"false\"></textarea>\n  <button class=\"btn\" onclick=\"sauver()\">Enregistrer la table</button>\n  <button class=\"btn alt\" onclick=\"resetTable()\">Revenir \u00E0 l'exemple</button>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Altitudes</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Altitudes hors ligne</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Importez des dalles SRTM (fichiers .hgt, par exemple N48E002.hgt : une dalle par carr\u00E9 de 1\u00B0 de latitude et de longitude). Elles restent enregistr\u00E9es dans l'application. Sans dalle, l'altitude est demand\u00E9e en ligne. Pr\u00E9cision : environ 90 m horizontalement et plusieurs m\u00E8tres en altitude. V\u00E9rifiez sur la carte.</p>\n  <p class=\"note\"><b>Le plus simple :</b> avec internet, touchez le bouton ci-dessous. L'application t\u00E9l\u00E9charge une seule fois la dalle d'altitude de votre zone (environ 10 Mo), puis l'altitude de la pi\u00E8ce et de l'objectif s'affiche <b>sans r\u00E9seau</b>.</p>\n  <button class=\"btn\" onclick=\"telechargerHgt()\">T\u00E9l\u00E9charger l'altitude de ma zone</button>\n  <label>\u2026 ou une dalle pr\u00E9cise (exemple N14W001)<input id=\"hgtnom\" type=\"text\" autocapitalize=\"characters\" autocomplete=\"off\" spellcheck=\"false\" placeholder=\"N14W001\"></label>\n  <button class=\"mini\" onclick=\"telechargerHgt($('hgtnom').value)\">T\u00E9l\u00E9charger cette dalle</button>\n  <p id=\"hgtmsg\" class=\"note\"></p>\n  <p class=\"note\"><b>Si le t\u00E9l\u00E9chargement automatique \u00E9choue :</b> 1) touchez ce lien pour t\u00E9l\u00E9charger la dalle avec le navigateur : <a href=\"https://s3.amazonaws.com/elevation-tiles-prod/skadi/N14/N14W001.hgt.gz\" target=\"_blank\" rel=\"noopener\">N14W001.hgt.gz</a> (zone d'Arbinda, environ 10 Mo) ; 2) importez le fichier t\u00E9l\u00E9charg\u00E9 ci-dessous, sans le d\u00E9compresser.</p>\n  <p class=\"note\" style=\"margin-bottom:2px\">Importer un fichier .hgt ou .hgt.gz d\u00E9j\u00E0 sur le t\u00E9l\u00E9phone :</p>\n  <input id=\"hgtfile\" aria-label=\"Importer une dalle d'altitude\" type=\"file\" multiple onchange=\"importHgt(this)\">\n  <p id=\"hgtlist\" class=\"note\"></p>\n  <button class=\"btn alt\" onclick=\"effacerHgt()\">Effacer les dalles</button>\n </div>\n</details>\n</div><div class=\"rg rg-c\">\n<details class=\"sect\"><summary>Carte</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage de la carte</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Coordonn\u00E9es \u00E9crites \u00E0 c\u00F4t\u00E9 des points de la carte.</p>\n  <div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div>\n  <div class=\"rowb\" style=\"margin-top:10px\"><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende();go('carte')\">Voir la l\u00E9gende</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Taille des symboles et des noms</b></p>\n  <div class=\"seg\"><button data-sym=\"1\" onclick=\"carteSym(1)\">Normal</button><button data-sym=\"1.4\" onclick=\"carteSym(1.4)\">Grand</button><button data-sym=\"1.8\" onclick=\"carteSym(1.8)\">Tr\u00E8s grand</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>\u00C9cran de la carte</b></p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sto.set('carteAuto',sto.get('carteAuto')==='0'?'1':'0');this.classList.toggle('on',sto.get('carteAuto')!=='0')\" id=\"bauto\">Plein \u00E9cran \u00E0 l'ouverture</button><button class=\"mini\" onclick=\"carteTraceBasc()\">Trace de marche : afficher / masquer</button><button class=\"mini\" onclick=\"C.trace=[];carteRendre()\">Effacer la trace</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Carte hors ligne</b> : placez la carte sur la zone voulue (par exemple autour d'Arbinda), choisissez le fond (Satellite, Plan ou Topo), puis t\u00E9l\u00E9chargez. Marche dans l'application install\u00E9e.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteHorsLigne(2)\">T\u00E9l\u00E9charger la zone visible</button><button class=\"mini\" onclick=\"carteHorsLigne(4)\">Plus de d\u00E9tail</button><button class=\"mini\" onclick=\"carteViderCache()\">Vider</button></div>\n  <p id=\"cdl\" class=\"note\"></p>\n  <p class=\"note\">D\u00E9tail du satellite : niveau <b id=\"satniv\">13</b>. Si la carte affiche des cases beiges, diminuez ; si elle est trop floue, augmentez.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteDetail(-1);majBoutons()\">D\u00E9tail \u2212</button><button class=\"mini\" onclick=\"carteDetail(1);majBoutons()\">D\u00E9tail +</button></div>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fond Google (cl\u00E9 requise)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 Google</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Satellite avec routes et noms (Google Map Tiles API), <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil.</p>\n  <label>Coller la cl\u00E9<input id=\"gkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 Google ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"gTester()\">Tester</button><button class=\"mini\" onclick=\"gEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"getat\" class=\"note\"></p><p id=\"gmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fond MapTiler (hybride)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 MapTiler</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Fond satellite avec routes et noms de lieux, <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil. Compte gratuit : maptiler.com \u2192 Cl\u00E9s API.</p>\n  <label>Coller la cl\u00E9<input id=\"mtkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"mtEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"mtTester()\">Tester</button><button class=\"mini\" onclick=\"mtEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"mtetat\" class=\"note\"></p><p id=\"mtmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Rep\u00E8res et cible</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mes rep\u00E8res</h2></div>\n  <div id=\"repbox\"></div>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gpxExport()\">Exporter GPX (rep\u00E8res + trace)</button><button class=\"mini\" onclick=\"cibleRetirer()\">Retirer la cible</button></div>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fichiers KMZ / KML / GPX</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Lire des coordonn\u00E9es</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Choisissez un fichier <b>.kmz, .kml ou .gpx</b> de votre t\u00E9l\u00E9phone. Les points, lignes et zones s'affichent sur la carte, et leurs coordonn\u00E9es sont lisibles ci-dessous.</p>\n  <input id=\"kmlfile\" aria-label=\"Importer un fichier KMZ, KML ou GPX\" type=\"file\" multiple onchange=\"kmlImporter(this)\">\n  <p class=\"note\" style=\"margin-bottom:2px\">Si rien ne se passe, essayez cette seconde m\u00E9thode :</p>\n  <input id=\"kmlfile2\" aria-label=\"Importer un fichier KMZ, KML ou GPX (autre m\u00E9thode)\" type=\"file\" accept=\".kmz,.kml,.gpx,.zip,application/vnd.google-earth.kmz,application/vnd.google-earth.kml+xml,application/gpx+xml,application/zip,application/octet-stream,application/xml,text/xml,*/*\" oninput=\"kmlImporter(this)\">\n  <p id=\"kmlmsg\" class=\"note\"></p>\n  <div id=\"kmlbox\"></div>\n </div>\n</details>\n</div><div class=\"rg rg-a\">\n<details class=\"sect\"><summary>Mises \u00E0 jour et sauvegarde</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mise \u00E0 jour</h2></div>\n  <p class=\"note\">Version install\u00E9e : <b id=\"verApp\">93</b>. Si une nouvelle version est publi\u00E9e sur GitHub mais n'appara\u00EEt pas, touchez le bouton : l'application vide sa copie interne (vos donn\u00E9es restent) et se recharge.</p>\n  <button class=\"btn\" onclick=\"majMaintenant()\">Mettre \u00E0 jour maintenant</button>\n  <p id=\"majmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Sauvegarde de mes donn\u00E9es</h2></div>\n  <p class=\"note\">Table de tir, historique, rep\u00E8res, cartes import\u00E9es (r\u00E9glages), fichiers KML/GPX et pr\u00E9f\u00E9rences. \u00C0 faire avant de d\u00E9sinstaller ou changer de t\u00E9l\u00E9phone.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sauvTelecharger()\">T\u00E9l\u00E9charger la sauvegarde</button><button class=\"mini\" onclick=\"sauvCopier()\">Copier le texte</button></div>\n  <label>Restaurer depuis un fichier<input type=\"file\" id=\"sauvfic\" accept=\".json,application/json,text/plain\" onchange=\"sauvRestaurerFichier(this)\"></label>\n  <label>\u2026 ou coller le texte de sauvegarde<textarea id=\"sauvtxt\" style=\"height:90px\" placeholder=\"Collez ici le texte copi\u00E9\"></textarea></label>\n  <button class=\"mini\" onclick=\"sauvRestaurerTexte()\">Restaurer le texte coll\u00E9</button>\n  <p id=\"sauvmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>V\u00E9rification du calcul</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>V\u00E9rifier le calcul</h2></div>\n  <p class=\"note\">Calcule un exemple connu (pi\u00E8ce 14\u00B013'59.25\" N 0\u00B052'42.52\" O, objectif 14\u00B016'30.20\" N 0\u00B053'35.57\" O) avec le code de cet appareil et le compare \u00E0 la valeur de r\u00E9f\u00E9rence.</p>\n  <button class=\"btn\" onclick=\"autotest()\">Lancer la v\u00E9rification</button>\n  <p id=\"atres\" class=\"note\" style=\"white-space:pre-line;font-size:14px;color:var(--fg)\"></p>\n </div>\n</details>\n</div>\n";
+$("p-reglages").innerHTML = "\n<h1 class=\"ptitre\">Param\u00E8tres</h1>\n<div class=\"subtabs\"><button type=\"button\" id=\"sr-t\" class=\"on\" onclick=\"sreg('t')\">Tir</button><button type=\"button\" id=\"sr-c\" onclick=\"sreg('c')\">Cartes</button><button type=\"button\" id=\"sr-a\" onclick=\"sreg('a')\">Application</button></div>\n<div class=\"rg rg-t\">\n<details class=\"sect\" open><summary>Affichage et unit\u00E9s</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage</h2></div>\n  <label>Th\u00E8me\n   <select id=\"theme\" onchange=\"setTheme(this.value)\">\n    <option value=\"minimal\">Minimal blanc</option><option value=\"pro\">Professionnel (bleu)</option><option value=\"auto\">Automatique</option><option value=\"sombre\">Sombre</option>\n    <option value=\"rouge\">Nuit rouge</option><option value=\"soleil\">Plein soleil (fort contraste)</option>\n   </select></label>\n  <label style=\"margin-top:8px\"><input type=\"checkbox\" id=\"avance\" onchange=\"setAvance(this.checked)\" style=\"width:auto;margin-right:8px\">R\u00E9glages avanc\u00E9s (altitudes, cartes, cl\u00E9s, v\u00E9rification)</label>\n  <label style=\"margin-top:8px\">Unit\u00E9 de l'azimut\n   <select id=\"uniteaz\" onchange=\"setUniteAz(this.value)\">\n    <option value=\"mil\">Milli\u00E8mes</option><option value=\"degres\">Degr\u00E9s</option>\n   </select></label>\n  <label style=\"margin-top:8px\">\u00C9criture des milli\u00E8mes (6000 par tour)\n   <select id=\"fmtang\" onchange=\"setFormat(this.value)\">\n    <option value=\"pacte\">Pacte de Varsovie : 30-00</option><option value=\"nombre\">Nombre : 3000</option>\n   </select></label>\n </div>\n</details>\n<details class=\"sect\"><summary>Calcul du tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Calcul de la hausse</h2></div>\n  <label>M\u00E9thode<select id=\"methode\" onchange=\"setMethode(this.value)\">\n   <option value=\"proche\">Ligne la plus proche de la table (948 m \u2192 950 m)</option>\n   <option value=\"table\">Table : ligne inf\u00E9rieure + variation par 10 m</option>\n   <option value=\"lineaire\">Interpolation lin\u00E9aire</option></select></label>\n  <p class=\"note\">\u00AB Ligne la plus proche \u00BB : on prend la distance de la table la plus proche de la distance r\u00E9elle et sa hausse telle qu'elle est \u00E9crite (exemple : 948 m \u2192 ligne 950 m). Avec \u00AB Table \u00BB, exemple charge 0 \u00E0 270 m : 3-89 (ligne 250 m) + 2 \u00D7 5 = 3-99.</p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>\u00C9l\u00E9ments initiaux et d\u00E9rive</h2></div>\n    <div class=\"g2\">\n     <label>D\u00E9rive initiale<input id=\"dref\" type=\"number\" inputmode=\"decimal\" value=\"3000\" onchange=\"saveDer()\"></label>\n     <label>Hausse initiale<input id=\"href\" type=\"number\" inputmode=\"decimal\" value=\"700\" onchange=\"saveDer()\"></label>\n    </div>\n    <label style=\"margin-top:8px\">La lecture augmente en tournant<select id=\"dsens\" onchange=\"saveDer()\"><option value=\"1\">vers la droite</option><option value=\"-1\" selected>vers la gauche</option></select></label>\n    <p class=\"note\">\u00C9l\u00E9ments initiaux : d\u00E9rive 30-00 et hausse 7-00. D\u00E9rive = d\u00E9rive initiale + \u00E9cart entre l'azimut de tir et celui de la direction de r\u00E9f\u00E9rence (sens ci-dessus) : objectif \u00E0 droite de la direction de r\u00E9f\u00E9rence = d\u00E9rive plus petite que 30-00.</p>\n </div>\n</details>\n<details class=\"sect\" id=\"essSect\"><summary>Tirs d'essai (calage de la m\u00E9t\u00E9o)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Noter l'\u00E9cart d'un tir</h2></div>\n  <p class=\"note\" id=\"esInfo\">Calculez un tir, tirez, puis notez ici o\u00F9 l'obus est tomb\u00E9. Au bout de 3 \u00E0 5 tirs, l'application propose de nouveaux coefficients pour l'air et le vent.</p>\n  <div class=\"g2\"><label>Impact<select id=\"esSens\"><option value=\"1\">trop long</option><option value=\"-1\">trop court</option><option value=\"0\">sur l'objectif</option></select></label>\n  <label>\u00C9cart (m)<input id=\"esEcart\" type=\"text\" inputmode=\"decimal\" placeholder=\"ex. 30\"></label></div>\n  <button class=\"btn\" onclick=\"essaiAjouter()\">Enregistrer ce tir</button>\n  <p class=\"note\" id=\"esMsg\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Tirs not\u00E9s \u00B7 <span id=\"esN\">0</span></h2></div>\n  <div id=\"esListe\" class=\"note\"></div>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"essaiCalage()\">Calculer les coefficients</button><button class=\"mini\" onclick=\"essaiEffacer()\">Effacer les tirs</button></div>\n  <p class=\"note\" id=\"esRes\" style=\"white-space:pre-line\"></p>\n  <div class=\"rowb\" id=\"esAct\" style=\"display:none\"><button class=\"mini\" onclick=\"essaiAppliquer()\">Appliquer</button><button class=\"mini\" onclick=\"essaiOrigine()\">Valeurs d'origine</button></div>\n </div>\n</details>\n<details class=\"sect\"><summary>Table de tir</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mortier</h2></div>\n  <div class=\"seg\" id=\"rgMort\" style=\"display:flex\"></div>\n  <p id=\"rgMortN\" class=\"note\">L'import et l'enregistrement ci-dessous concernent le mortier choisi.</p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Import CSV</h2><button class=\"mini\" onclick=\"exportCsv()\">Exporter</button></div>\n  <p class=\"note\" style=\"margin-top:0\">Colonnes : <b>charge, distance, hausse, variation</b> (variation = hausse par 10 m, lue dans la table). Optionnel : vent_face, vent_lat, temp, pression (une fois par charge). Collez le texte du fichier dans la zone ci-dessous, puis appuyez sur Importer (aucun fichier \u00E0 choisir). S\u00E9parateur virgule, point-virgule ou tabulation ; virgule d\u00E9cimale accept\u00E9e ; en-t\u00EAte facultatif.</p>\n  <textarea id=\"csv\" spellcheck=\"false\" style=\"height:150px;margin-top:0\" placeholder=\"Collez ici le contenu du fichier CSV\" oninput=\"document.getElementById('csvmsg').textContent=this.value.split('\n').filter(function(l){return l.trim()}).length+' ligne(s) coll\u00E9e(s). Appuyez sur Importer.'\"></textarea>\n  <label class=\"btn\" style=\"display:block;text-align:center;cursor:pointer\">\uD83D\uDCC2 Choisir le fichier CSV de la table<input type=\"file\" accept=\".csv,.txt,text/csv,text/plain,*/*\" style=\"display:none\" onchange=\"csvFichier(this)\"></label>\n  <button class=\"btn\" onclick=\"importCsv()\">Importer le texte coll\u00E9</button>\n  <p id=\"csvmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Table de tir</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">JSON \u00E0 remplir depuis la table r\u00E9glementaire : par charge, des points [distance m, hausse en milli\u00E8mes, variation par 10 m]. Les coefficients m\u00E9t\u00E9o \u00E9ventuels ne sont pas utilis\u00E9s.</p>\n  <textarea id=\"table\" spellcheck=\"false\"></textarea>\n  <button class=\"btn\" onclick=\"sauver()\">Enregistrer la table</button>\n  <button class=\"btn alt\" onclick=\"resetTable()\">Revenir \u00E0 l'exemple</button>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Altitudes</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Altitudes hors ligne</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Importez des dalles SRTM (fichiers .hgt, par exemple N48E002.hgt : une dalle par carr\u00E9 de 1\u00B0 de latitude et de longitude). Elles restent enregistr\u00E9es dans l'application. Sans dalle, l'altitude est demand\u00E9e en ligne. Pr\u00E9cision : environ 90 m horizontalement et plusieurs m\u00E8tres en altitude. V\u00E9rifiez sur la carte.</p>\n  <p class=\"note\"><b>Le plus simple :</b> avec internet, touchez le bouton ci-dessous. L'application t\u00E9l\u00E9charge une seule fois la dalle d'altitude de votre zone (environ 10 Mo), puis l'altitude de la pi\u00E8ce et de l'objectif s'affiche <b>sans r\u00E9seau</b>.</p>\n  <button class=\"btn\" onclick=\"telechargerHgt()\">T\u00E9l\u00E9charger l'altitude de ma zone</button>\n  <label>\u2026 ou une dalle pr\u00E9cise (exemple N14W001)<input id=\"hgtnom\" type=\"text\" autocapitalize=\"characters\" autocomplete=\"off\" spellcheck=\"false\" placeholder=\"N14W001\"></label>\n  <button class=\"mini\" onclick=\"telechargerHgt($('hgtnom').value)\">T\u00E9l\u00E9charger cette dalle</button>\n  <p id=\"hgtmsg\" class=\"note\"></p>\n  <p class=\"note\"><b>Si le t\u00E9l\u00E9chargement automatique \u00E9choue :</b> 1) touchez ce lien pour t\u00E9l\u00E9charger la dalle avec le navigateur : <a href=\"https://s3.amazonaws.com/elevation-tiles-prod/skadi/N14/N14W001.hgt.gz\" target=\"_blank\" rel=\"noopener\">N14W001.hgt.gz</a> (zone d'Arbinda, environ 10 Mo) ; 2) importez le fichier t\u00E9l\u00E9charg\u00E9 ci-dessous, sans le d\u00E9compresser.</p>\n  <p class=\"note\" style=\"margin-bottom:2px\">Importer un fichier .hgt ou .hgt.gz d\u00E9j\u00E0 sur le t\u00E9l\u00E9phone :</p>\n  <input id=\"hgtfile\" aria-label=\"Importer une dalle d'altitude\" type=\"file\" multiple onchange=\"importHgt(this)\">\n  <p id=\"hgtlist\" class=\"note\"></p>\n  <button class=\"btn alt\" onclick=\"effacerHgt()\">Effacer les dalles</button>\n </div>\n</details>\n</div><div class=\"rg rg-c\">\n<details class=\"sect\"><summary>Carte</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Affichage de la carte</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Coordonn\u00E9es \u00E9crites \u00E0 c\u00F4t\u00E9 des points de la carte.</p>\n  <div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div>\n  <div class=\"rowb\" style=\"margin-top:10px\"><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende();go('carte')\">Voir la l\u00E9gende</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Taille des symboles et des noms</b></p>\n  <div class=\"seg\"><button data-sym=\"1\" onclick=\"carteSym(1)\">Normal</button><button data-sym=\"1.4\" onclick=\"carteSym(1.4)\">Grand</button><button data-sym=\"1.8\" onclick=\"carteSym(1.8)\">Tr\u00E8s grand</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>\u00C9cran de la carte</b></p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sto.set('carteAuto',sto.get('carteAuto')==='0'?'1':'0');this.classList.toggle('on',sto.get('carteAuto')!=='0')\" id=\"bauto\">Plein \u00E9cran \u00E0 l'ouverture</button><button class=\"mini\" onclick=\"carteTraceBasc()\">Trace de marche : afficher / masquer</button><button class=\"mini\" onclick=\"C.trace=[];carteRendre()\">Effacer la trace</button></div>\n  <p class=\"note\" style=\"margin-top:12px\"><b>Carte hors ligne</b> : placez la carte sur la zone voulue (par exemple autour d'Arbinda), choisissez le fond (Satellite, Plan ou Topo), puis t\u00E9l\u00E9chargez. Marche dans l'application install\u00E9e.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteHorsLigne(2)\">T\u00E9l\u00E9charger la zone visible</button><button class=\"mini\" onclick=\"carteHorsLigne(4)\">Plus de d\u00E9tail</button><button class=\"mini\" onclick=\"carteViderCache()\">Vider</button></div>\n  <p id=\"cdl\" class=\"note\"></p>\n  <p class=\"note\">D\u00E9tail du satellite : niveau <b id=\"satniv\">13</b>. Si la carte affiche des cases beiges, diminuez ; si elle est trop floue, augmentez.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"carteDetail(-1);majBoutons()\">D\u00E9tail \u2212</button><button class=\"mini\" onclick=\"carteDetail(1);majBoutons()\">D\u00E9tail +</button></div>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fond Google (cl\u00E9 requise)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 Google</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Satellite avec routes et noms (Google Map Tiles API), <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil.</p>\n  <label>Coller la cl\u00E9<input id=\"gkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 Google ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"gTester()\">Tester</button><button class=\"mini\" onclick=\"gEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"getat\" class=\"note\"></p><p id=\"gmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fond MapTiler (hybride)</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Cl\u00E9 MapTiler</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Fond satellite avec routes et noms de lieux, <b>en ligne seulement</b>. La cl\u00E9 reste sur cet appareil. Compte gratuit : maptiler.com \u2192 Cl\u00E9s API.</p>\n  <label>Coller la cl\u00E9<input id=\"mtkey\" type=\"text\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"Collez la cl\u00E9 ici\"></label>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"mtEnregistrer()\">Enregistrer et tester</button><button class=\"mini\" onclick=\"mtTester()\">Tester</button><button class=\"mini\" onclick=\"mtEffacer()\">Supprimer la cl\u00E9</button></div>\n  <p id=\"mtetat\" class=\"note\"></p><p id=\"mtmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Rep\u00E8res et cible</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mes rep\u00E8res</h2></div>\n  <div id=\"repbox\"></div>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"gpxExport()\">Exporter GPX (rep\u00E8res + trace)</button><button class=\"mini\" onclick=\"cibleRetirer()\">Retirer la cible</button></div>\n </div>\n</details>\n<details class=\"sect adv\"><summary>Fichiers KMZ / KML / GPX</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Lire des coordonn\u00E9es</h2></div>\n  <p class=\"note\" style=\"margin-top:0\">Choisissez un fichier <b>.kmz, .kml ou .gpx</b> de votre t\u00E9l\u00E9phone. Les points, lignes et zones s'affichent sur la carte, et leurs coordonn\u00E9es sont lisibles ci-dessous.</p>\n  <input id=\"kmlfile\" aria-label=\"Importer un fichier KMZ, KML ou GPX\" type=\"file\" multiple onchange=\"kmlImporter(this)\">\n  <p class=\"note\" style=\"margin-bottom:2px\">Si rien ne se passe, essayez cette seconde m\u00E9thode :</p>\n  <input id=\"kmlfile2\" aria-label=\"Importer un fichier KMZ, KML ou GPX (autre m\u00E9thode)\" type=\"file\" accept=\".kmz,.kml,.gpx,.zip,application/vnd.google-earth.kmz,application/vnd.google-earth.kml+xml,application/gpx+xml,application/zip,application/octet-stream,application/xml,text/xml,*/*\" oninput=\"kmlImporter(this)\">\n  <p id=\"kmlmsg\" class=\"note\"></p>\n  <div id=\"kmlbox\"></div>\n </div>\n</details>\n</div><div class=\"rg rg-a\">\n<details class=\"sect\"><summary>Mises \u00E0 jour et sauvegarde</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Mise \u00E0 jour</h2></div>\n  <p class=\"note\">Version install\u00E9e : <b id=\"verApp\">119</b>. Si une nouvelle version est publi\u00E9e sur GitHub mais n'appara\u00EEt pas, touchez le bouton : l'application vide sa copie interne (vos donn\u00E9es restent) et se recharge.</p>\n  <button class=\"btn\" onclick=\"majMaintenant()\">Mettre \u00E0 jour maintenant</button>\n  <p id=\"majmsg\" class=\"note\"></p>\n </div>\n <div class=\"card\">\n  <div class=\"hd\"><h2>Sauvegarde de mes donn\u00E9es</h2></div>\n  <p class=\"note\">Table de tir, historique, rep\u00E8res, cartes import\u00E9es (r\u00E9glages), fichiers KML/GPX et pr\u00E9f\u00E9rences. \u00C0 faire avant de d\u00E9sinstaller ou changer de t\u00E9l\u00E9phone.</p>\n  <div class=\"rowb\"><button class=\"mini\" onclick=\"sauvTelecharger()\">T\u00E9l\u00E9charger la sauvegarde</button><button class=\"mini\" onclick=\"sauvCopier()\">Copier le texte</button></div>\n  <label>Restaurer depuis un fichier<input type=\"file\" id=\"sauvfic\" accept=\".json,application/json,text/plain\" onchange=\"sauvRestaurerFichier(this)\"></label>\n  <label>\u2026 ou coller le texte de sauvegarde<textarea id=\"sauvtxt\" style=\"height:90px\" placeholder=\"Collez ici le texte copi\u00E9\"></textarea></label>\n  <button class=\"mini\" onclick=\"sauvRestaurerTexte()\">Restaurer le texte coll\u00E9</button>\n  <p id=\"sauvmsg\" class=\"note\"></p>\n </div>\n</details>\n<details class=\"sect adv\"><summary>V\u00E9rification du calcul</summary>\n <div class=\"card\">\n  <div class=\"hd\"><h2>V\u00E9rifier le calcul</h2></div>\n  <p class=\"note\">Calcule un exemple connu (pi\u00E8ce 14\u00B013'59.25\" N 0\u00B052'42.52\" O, objectif 14\u00B016'30.20\" N 0\u00B053'35.57\" O) avec le code de cet appareil et le compare \u00E0 la valeur de r\u00E9f\u00E9rence.</p>\n  <button class=\"btn\" onclick=\"autotest()\">Lancer la v\u00E9rification</button>\n  <p id=\"atres\" class=\"note\" style=\"white-space:pre-line;font-size:14px;color:var(--fg)\"></p>\n </div>\n</details>\n</div>\n";
 var rnd = function (x) { return x < 0 ? -Math.floor(-x + 0.5 + 1e-9) : Math.floor(x + 0.5 + 1e-9); };
 var fmt = function (x, d) {
 if (d === void 0) { d = 0; }
@@ -518,6 +558,7 @@ if (derniere)
 calcul(false);
 majBoussole();
 }
+
 function sang(x) { return (x < 0 ? "− " : "+ ") + ang(Math.abs(x)); }
 function ecartAng(x) { return (x < 0 ? "gauche " : "droite ") + ang(Math.abs(x)); }
 function sensBouton(x) { x = diffSigne(x); return (x >= 0 ? "vers le bas " : "vers le haut ") + ang(Math.abs(x)); }
@@ -563,7 +604,6 @@ if (k === "d" && typeof majDerive === "function")
 majDerive();
 window.scrollTo(0, 0);
 }
-
 function setAvance(on) { document.body.classList.toggle("simple", !on); sto.set("avance", on ? "1" : "0"); }
 (function () { var on = sto.get("avance") === "1"; document.body.classList.toggle("simple", !on); var c = $("avance"); if (c)
 c.checked = on; })();
@@ -597,7 +637,7 @@ catch (e) { }
 $("hmDe").textContent = d === null ? "–" : ang(d);
 }
 var reel = JSON.stringify(TABLE) !== JSON.stringify(EXEMPLE);
-$("hmTable").textContent = reel ? "✓ réelle" : "⚠ fictive";
+$("hmTable").textContent = mortNom() + " : " + (reel ? "✓ réelle" : "⚠ fictive");
 $("hmTable").style.color = reel ? "var(--ok)" : "var(--err)";
 }
 function setTheme(t) {
@@ -683,22 +723,123 @@ catch (e) {
 TABLE = EXEMPLE;
 }
 $("table").value = JSON.stringify(TABLE, null, 1);
-function csvFichier(el) { var f = el.files && el.files[0]; if (!f)
-return; var r = new FileReader(); r.onload = function () { $("csv").value = String(r.result); importCsv(); el.value = ""; }; r.onerror = function () { alert("Lecture du fichier impossible : collez le texte à la place."); }; r.readAsText(f); }
-function majBandeTable() { $("bandeTable").hidden = JSON.stringify(TABLE) !== JSON.stringify(EXEMPLE); }
-majBandeTable();
-function sauver() {
+var MORT = [], MORTID = "m1";
+(function () {
 try {
-var t = JSON.parse($("table").value);
-t.forEach(function (c) { return c.pts.sort(function (a, b) { return a[0] - b[0]; }); });
-TABLE = t;
-sto.set("tirTable", JSON.stringify(t));
-majBandeTable();
-alert("Table enregistrée");
+MORT = JSON.parse(sto.get("mortiers")) || [];
 }
 catch (e) {
-alert("JSON invalide");
+MORT = [];
 }
+MORTID = sto.get("mortierActif") || "m1";
+if (!Array.isArray(MORT) || !MORT.length) {
+MORT = [{ id: "m1", nom: "60 mm", table: TABLE }, { id: "m2", nom: "120 mm", table: EXEMPLE }];
+MORTID = "m1";
+}
+if (!MORT.some(function (m) { return m.id === MORTID; }))
+MORTID = MORT[0].id;
+MORT.find(function (m) { return m.id === MORTID; }).table = TABLE;
+sto.set("mortiers", JSON.stringify(MORT));
+sto.set("mortierActif", MORTID);
+})();
+function mortAct() { return MORT.find(function (m) { return m.id === MORTID; }); }
+function mortNom() { return mortAct().nom; }
+function mortSave() { sto.set("mortiers", JSON.stringify(MORT)); sto.set("mortierActif", MORTID); }
+function tableMaj(t) {
+TABLE = t;
+sto.set("tirTable", JSON.stringify(t));
+mortAct().table = t;
+mortSave();
+majBandeTable();
+mortierMaj();
+}
+function tableReelle(t) { return JSON.stringify(t) !== JSON.stringify(EXEMPLE); }
+function mortierMaj() {
+["hmMort", "rgMort"].forEach(function (id) {
+var b = $(id);
+if (!b)
+return;
+b.innerHTML = MORT.map(function (m) { return '<button type="button" style="flex:1" class="' + (m.id === MORTID ? "on" : "") + '" onclick="mortierChoisir(\'' + m.id + '\')">' + m.nom + '</button>'; }).join("");
+});
+var etat = MORT.map(function (m) { var t = m.id === MORTID ? TABLE : m.table; return m.nom + " " + (tableReelle(t) ? "✓ table réelle" : "⚠ table fictive"); }).join(" · ");
+["hmMortN"].forEach(function (id) { var n = $(id); if (n)
+n.textContent = etat; });
+var rn = $("rgMortN");
+if (rn)
+rn.textContent = "Mortier modifié : " + mortNom() + ". L'import et l'enregistrement ci-dessous concernent ce mortier. " + etat + ".";
+var k = $("rHaK");
+if (k)
+k.textContent = "Hausse · " + mortNom();
+try {
+essaiListe();
+}
+catch (e) { }
+}
+function mortierChoisir(id, sansCalcul) {
+var m = MORT.find(function (x) { return x.id === id; });
+if (!m || id === MORTID) {
+mortierMaj();
+return;
+}
+mortAct().table = TABLE;
+MORTID = id;
+TABLE = m.table;
+sto.set("tirTable", JSON.stringify(TABLE));
+mortSave();
+$("table").value = JSON.stringify(TABLE, null, 1);
+majBandeTable();
+mortierMaj();
+try {
+var fe = histMax();
+if (fe && fe.snap && fe.snap.mortier && fe.snap.mortier !== MORTID)
+ficheId = null;
+}
+catch (e) { }
+if (derniere && !sansCalcul)
+calcul(false);
+if (typeof accueilMaj === "function")
+accueilMaj();
+}
+function csvFichier(el) { var f = el.files && el.files[0]; if (!f)
+return; var r = new FileReader(); r.onload = function () { $("csv").value = String(r.result); importCsv(); el.value = ""; }; r.onerror = function () { alert("Lecture du fichier impossible : collez le texte à la place."); }; r.readAsText(f); }
+function majBandeTable() { $("bandeTable").hidden = JSON.stringify(TABLE) !== JSON.stringify(EXEMPLE); $("bandeTable").textContent = "⚠ TABLE FICTIVE (" + mortNom() + ") : hausses fausses. Importez votre table (Paramètres → Table de tir)."; }
+majBandeTable();
+mortierMaj();
+function validerTable(t) {
+if (!Array.isArray(t) || !t.length)
+throw "la table est vide";
+t.forEach(function (c) {
+if (!c || !Number.isInteger(c.charge))
+throw "une charge n'a pas de numéro entier";
+if (!Array.isArray(c.pts) || c.pts.length < 2)
+throw "charge " + c.charge + " : au moins 2 points";
+c.pts.forEach(function (p) { if (!Array.isArray(p) || !(p[0] > 0) || typeof p[1] !== "number" || isNaN(p[1]))
+throw "charge " + c.charge + " : point invalide (" + JSON.stringify(p) + ")"; });
+c.pts.sort(function (a, b) { return a[0] - b[0]; });
+for (var i = 1; i < c.pts.length; i++)
+if (c.pts[i][0] === c.pts[i - 1][0])
+throw "charge " + c.charge + " : distance " + c.pts[i][0] + " en double";
+});
+return t;
+}
+function sauver() {
+var t;
+try {
+t = JSON.parse($("table").value);
+}
+catch (e) {
+alert("JSON invalide : " + e.message);
+return;
+}
+try {
+validerTable(t);
+}
+catch (e) {
+alert("Table refusée : " + (e.message || e));
+return;
+}
+tableMaj(t);
+alert("Table enregistrée (" + mortNom() + ")");
 }
 function lireFichier(inp) {
 var f = inp.files && inp.files[0];
@@ -761,9 +902,11 @@ return { table: res, avert: avert };
 function importCsv() {
 try {
 var _a = parseCsv($("csv").value), table = _a.table, avert = _a.avert;
-TABLE = table;
-sto.set("tirTable", JSON.stringify(table));
-majBandeTable();
+if (tableReelle(TABLE) && table.length < TABLE.length && !confirm("Cette table ne contient que " + table.length + " charge(s), la table actuelle du " + mortNom() + " en a " + TABLE.length + ". Tout remplacer ?")) {
+$("csvmsg").textContent = "Import annulé : la table actuelle est conservée.";
+return;
+}
+tableMaj(table);
 $("table").value = JSON.stringify(table, null, 1);
 var n = table.reduce(function (a, o) { return a + o.pts.length; }, 0);
 $("csvmsg").textContent = "Import\u00E9 : ".concat(table.length, " charge(s), ").concat(n, " points. ") + avert.join(" ");
@@ -784,16 +927,38 @@ t += "".concat(o.charge, ",").concat(p[0], ",").concat(p[1], ",").concat(typeof 
 $("csv").value = t;
 $("csvmsg").textContent = "Table actuelle exportée dans la zone ci-dessus : copiez-la dans un tableur.";
 }
-function resetTable() { if (confirm("Remplacer la table par l'exemple fictif ?")) {
-TABLE = EXEMPLE;
+function resetTable() { if (confirm("Remplacer la table du mortier " + mortNom() + " par l'exemple fictif ?")) {
 $("table").value = JSON.stringify(EXEMPLE, null, 1);
-sto.set("tirTable", JSON.stringify(EXEMPLE));
-majBandeTable();
+tableMaj(EXEMPLE);
 } }
 var METHODE = sto.get("methode") || "proche";
 $("methode").value = METHODE;
 function setMethode(v) { METHODE = v; sto.set("methode", v); if (derniere)
 calcul(false); }
+function chargePourMeteo(dist, dEff) {
+var c0 = choixCharge(dist);
+if (!c0)
+return choixCharge(dEff);
+var lo = c0.pts[0][0], hi = c0.pts[c0.pts.length - 1][0], m = Math.max(30, 0.04 * dist);
+return (dEff >= lo - m && dEff <= hi + m) ? c0 : choixCharge(dEff);
+}
+function hInterp(pts, d) {
+if (pts.length < 2)
+return pts.length ? pts[0][1] : 0;
+var i = 0;
+while (i < pts.length - 2 && d > pts[i + 1][0])
+i++;
+var a = pts[i], b = pts[i + 1];
+return a[1] + (b[1] - a[1]) * (d - a[0]) / (b[0] - a[0]);
+}
+function hausseDelta(pts, d0, d1) {
+if (METHODE !== "proche")
+return hausseTable(pts, d1) || { h: hInterp(pts, d1), ref: undefined, base: null };
+var h0 = hausseTable(pts, d0);
+if (!h0)
+return null;
+return { h: h0.h + hInterp(pts, d1) - hInterp(pts, d0), ref: h0.ref, base: null };
+}
 function hausseTable(pts, d) {
 if (METHODE === "proche") {
 var k = 0;
@@ -828,10 +993,35 @@ r += "\n\nRÉSULTAT : " + (okD && okA && okU ? "le calcul de cet appareil est id
 r += "\nNavigateur : " + (navigator.userAgent.match(/(Chrome|Firefox|Safari)\/[\d.]+/) || [""])[0];
 $("atres").textContent = r;
 }
-var derniere = null, azTir = null, fiche = "", derniereDist = null, hausseFinale = null, gridCap = null;
+var derniere = null, azTir = null, fiche = "", derniereDist = null, hausseFinale = null, gridCap = null, essaiCalc = null;
 var altEssai = { p: 0, t: 0 };
+var meteoEnCours = false;
+function meteoAuSite() {
+try {
+if (meteoEnCours || !pieceLl())
+return;
+if (meteoEtat === "manuel")
+return;
+if (meteoRaw && Date.now() - meteoRaw.ts < 900000) {
+var l = pieceLl(), r = meteoRaw.ll;
+if (!r || !l || Math.hypot((l.lat - r.lat) * 111, (l.lon - r.lon) * 111 * Math.cos(l.lat * Math.PI / 180)) < 5)
+return;
+}
+meteoEnCours = true;
+setTimeout(function () { meteoEnCours = false; }, 20000);
+meteoAuto();
+}
+catch (e) {
+meteoEnCours = false;
+}
+}
+
 function calcul(aller) {
 calculCore(aller);
+if (aller && derniere) {
+oaAuto(false);
+meteoAuSite();
+}
 var att = [];
 ["p", "t"].forEach(function (id) { try {
 if (!altSure[id] && lire(id) && Date.now() - (altEssai[id] || 0) > 20000) {
@@ -862,11 +1052,54 @@ var az = azimut(de, dn), dh = T.alt - P.alt;
 var altOk = altSure.p && altSure.t, site = (dist > 0 && altOk) ? Math.atan(dh / dist) * 1000 : 0;
 derniere = { e: tu.e, n: tu.n, zone: zone, sud: sud, pe: pu.e, pn: pu.n, d: dist, az: az };
 var wv = $n("wv") || 0, wd = (isNaN(azIn("wd")) ? 0 : azIn("wd")), dT = $n("dt") || 0, dP = $n("dp") || 0;
+var mc = meteoCorr(), appl = !!($("mapp") && $("mapp").checked), fT = appl ? mc.f : 0, absente = !meteoRaw && !dT && !dP && !mc.hu && mc.tp === null && !wv && String($("tair").value).trim() === "";
+var mvOn = !!($("mvent") && $("mvent").checked), kv = (function () { var v = parseFloat(String($("kvent").value).replace(",", ".")); return isNaN(v) ? 0.45 : v; })();
+var tof = null;
+{
+var c0 = choixCharge(dist), h0 = c0 ? hausseTable(c0.pts, dist) : null;
+if (h0) {
+var th = Math.max(150, Math.min(1450, h0.h)) * 2 * Math.PI / MIL;
+tof = Math.sqrt(2 * dist * Math.tan(th) / 9.81);
+}
+}
 var rel = (wd - az) * 2 * Math.PI / MIL;
-var face = wv * Math.cos(rel), droite = wv * Math.sin(rel);
-var dEff = dist, azC = az;
+var face = wv * Math.cos(rel), droite = wv * Math.sin(rel), balInfo = null;
+{
+var vb = $("mvbal"), VH = ventHaut;
+if (vb && vb.checked && tof !== null && wv && meteoEtat !== "manuel" && VH.w80 != null && VH.w120 != null && VH.d80 != null && VH.d120 != null) {
+var lay_1 = [[10, face, droite]];
+[[80, VH.w80, VH.d80], [120, VH.w120, VH.d120]].forEach(function (L) { var r2 = (L[2] * MIL / 360 - az) * 2 * Math.PI / MIL; lay_1.push([L[0], L[1] * Math.cos(r2), L[1] * Math.sin(r2)]); });
+var H = 9.81 * tof * tof / 8, N = 60;
+var sf = 0, sd = 0;
+for (var i = 0; i < N; i++) {
+var u = (i + 0.5) / N, z = H * 4 * u * (1 - u);
+var f = void 0, d = void 0;
+if (z <= lay_1[0][0]) {
+f = lay_1[0][1];
+d = lay_1[0][2];
+}
+else if (z >= lay_1[2][0]) {
+f = lay_1[2][1];
+d = lay_1[2][2];
+}
+else {
+var k = z < lay_1[1][0] ? 0 : 1, a = lay_1[k], b = lay_1[k + 1], w = (z - a[0]) / (b[0] - a[0]);
+f = a[1] + (b[1] - a[1]) * w;
+d = a[2] + (b[2] - a[2]) * w;
+}
+sf += f;
+sd += d;
+}
+face = sf / N;
+droite = sd / N;
+balInfo = { H: H, v: Math.hypot(face, droite) };
+}
+}
+var te = tof === null ? 0 : kv * tof, wR = face * te, wL = droite * te, dazV = dist > 0 ? (wL / dist) * MIL / (2 * Math.PI) : 0;
+var applique = appl || mvOn, dW = dist + (mvOn ? wR : 0);
+var dEff = dW / (1 + fT), azC = (az + (mvOn ? dazV : 0) + MIL) % MIL;
 azTir = azC;
-var c = choixCharge(dEff);
+var c = chargePourMeteo(dist, dEff);
 var utmTxt = function (u) { var l = utmToLl(u.e, u.n, zone, sud); return zone + bandeLat(l.lat) + "  " + fmt(u.e) + "  " + fmt(u.n); };
 var utmFmt = function (u) { return utmTxt(u).replace(/ /g, "&nbsp;"); };
 var rows = [
@@ -878,17 +1111,43 @@ var rows = [
 ["Angle de site", altOk ? sang(rnd(site)) : "non calculé"]
 ];
 var msg = "";
-if (wv || dT || dP) {
-rows.push(["sep", "Météo (information, non appliquée)"]);
+if (wv || dT || dP || mc.hu || mc.tp !== null || ventHaut.w80 != null || String($("tair").value).trim() !== "") {
+rows.push(["sep", applique ? "Météo (corrections appliquées : " + (appl ? "air/charge" : "") + (appl && mvOn ? " + " : "") + (mvOn ? "vent" : "") + ")" : "Météo (information, non appliquée)"]);
 rows.push(["Vent", fmt(wv, 1) + " m/s, vient de " + azu(wd)]);
 rows.push(["Vent longitudinal", (face >= 0 ? "de face " : "de dos ") + fmt(Math.abs(face), 1) + " m/s"]);
 rows.push(["Vent latéral", (droite >= 0 ? "de droite " : "de gauche ") + fmt(Math.abs(droite), 1) + " m/s"]);
 rows.push(["Écart de température", (dT >= 0 ? "+" : "−") + fmt(Math.abs(dT), 1) + " °C"]);
 rows.push(["Écart de pression", (dP >= 0 ? "+" : "−") + fmt(Math.abs(dP), 1) + " hPa"]);
+if (mc.hu)
+rows.push(["Humidité", fmt(mc.hu, 0) + " %"]);
+rows.push(["Densité de l'air", fmt(mc.r1, 3) + " kg/m³ (" + ((mc.r1 >= mc.r0) ? "+" : "−") + fmt(Math.abs(mc.r1 / mc.r0 - 1) * 100, 1) + " % / table)"]);
+if (mc.tp !== null)
+rows.push(["Température de la charge", fmt(mc.tp, 1) + " °C"]);
+if (ventHaut.w80 != null)
+rows.push(["Vent 80 m / 120 m", fmt(ventHaut.w80, 1) + " m/s du " + azu(ventHaut.d80 * MIL / 360) + " · " + fmt(ventHaut.w120, 1) + " m/s du " + azu(ventHaut.d120 * MIL / 360)]);
+if (tof !== null && wv)
+rows.push(["Vent : temps de vol estimé", fmt(tof, 1) + " s (efficace " + fmt(te, 1) + " s)"]);
+if (wv)
+rows.push(["Vent : correction de portée", (wR >= 0 ? "+" : "−") + fmt(Math.abs(Math.round(wR))) + " m" + (mvOn ? " appliquée" : " non appliquée")]);
+if (wv)
+rows.push(["Vent : correction d'azimut", sang(Math.round(dazV * 10) / 10) + (mvOn ? " appliquée" : " non appliquée")]);
+rows.push(["Correction de portée (air + charge)", (mc.f >= 0 ? "+" : "−") + fmt(Math.abs(mc.f) * 100, 1) + " % (" + (mc.f >= 0 ? "+" : "−") + fmt(Math.abs(Math.round(dist * mc.f))) + " m)" + (appl ? " appliquée" : " non appliquée")]);
 }
-var hausse = null, hs = null;
+var hausse = null, hs = null, hSM = null, hB = null, hMet = null, extrap = null;
+{
+var c0 = choixCharge(dist), h0 = c0 ? hausseTable(c0.pts, dist) : null;
+if (h0) {
+hB = rnd(h0.h);
+hSM = hB + rnd(site);
+}
+var dM = (dist + wR) / (1 + mc.f), c1 = chargePourMeteo(dist, dM), h1 = c1 ? ((c0 && c0.charge === c1.charge ? hausseDelta(c1.pts, dist, dM) : null) || hausseTable(c1.pts, dM)) : null;
+if (h1)
+hMet = rnd(h1.h) + rnd(site);
+if (c1 && (dM < c1.pts[0][0] || dM > c1.pts[c1.pts.length - 1][0]))
+extrap = c1.charge;
+}
 if (c) {
-var hh = hausseTable(c.pts, dEff);
+var cB0 = choixCharge(dist), hd = (cB0 && cB0.charge === c.charge && dEff !== dist) ? hausseDelta(c.pts, dist, dEff) : null, hh = hd || hausseTable(c.pts, dEff);
 hausse = rnd(hh.h);
 hs = hausse + rnd(site);
 rows.push(["sep", "Hausse"]);
@@ -896,35 +1155,110 @@ if (hh.ref !== undefined)
 rows.push(["Distance de la table", fmt(hh.ref) + " m (distance réelle " + fmt(dist) + " m)"]);
 if (hh.base)
 rows.push(["Ligne de table", hh.base[0] + " m : " + ang(hh.base[1]) + ", +" + hh.base[2] + " par 10 m"]);
-rows.push(["Hausse sans site", ang(hausse)]);
+if (applique)
+rows.push(["Distance équivalente", fmt(dEff, 0) + " m (réelle " + fmt(dist) + " m)"]);
+if (hB !== null)
+rows.push(["Hausse sans site", ang(hB)]);
 rows.push(["Correction de site", sang(rnd(site))]);
-rows.push(["Hausse finale (avec site)", ang(hs)]);
+if (hSM !== null)
+rows.push(["Hausse avec site", ang(hSM)]);
+if (hMet !== null)
+rows.push(["Hausse avec météo", ang(hMet)]);
+rows.push(["Hausse affichée", ang(hs) + (applique ? (absente ? " (météo absente)" : " (avec météo)") : " (météo non appliquée)")]);
 }
 else
-msg += "Distance hors des portées de la table saisie.";
+msg += (applique && choixCharge(dist) ? "Distance équivalente " + fmt(dEff, 0) + " m (après correction météo) hors des portées de la table : décochez la correction ou vérifiez la météo." : "Distance hors des portées de la table saisie.");
 if (!altSure.p || !altSure.t)
 msg += (msg ? " " : "") + "⚠ Altitude non confirmée (" + (!altSure.p && !altSure.t ? "pièce et objectif" : !altSure.p ? "pièce" : "objectif") + ") : hausse affichée SANS correction de site. Recherche en cours ; sinon saisissez l'altitude ou touchez Alt. auto.";
 $("tab").innerHTML = rows.map(function (r) { return r[0] === "sep" ? "<tr class=\"sep\"><td colspan=\"2\">".concat(r[1], "</td></tr>") : "<tr><td>".concat(r[0], "</td><td>").concat(r[1], "</td></tr>"); }).join("");
 $("rAz").textContent = azu(azC);
 $("rHa").textContent = c ? ang(hs) : "–";
 $("rAzD").textContent = fmt(azC * 360 / MIL, 1) + "°";
-$("rHs").textContent = c ? "sans site " + ang(hausse) : "";
+$("rHs").textContent = c ? (applique ? (absente ? "météo absente" : "avec " + ((appl && mvOn ? "air + vent" : appl ? "air seul" : "vent seul") + (mvOn && balInfo ? " balistique" : ""))) : "avec site") : "";
+$("h3a").textContent = hB !== null ? ang(hB) : "–";
+$("h3b").textContent = hSM !== null ? ang(hSM) : "–";
+$("h3c").textContent = (hMet !== null && !absente) ? ang(hMet) : "–";
+$("h3cl").textContent = absente ? "météo absente" : "avec météo";
+var cA = choixCharge(dist), cB = chargePourMeteo(dist, (dist + wR) / (1 + mc.f));
+$("h3n").textContent = c ? ((cA && cB && cA.charge !== cB.charge ? "⚠ Charge différente avec la météo (" + cA.charge + " → " + cB.charge + "). " : "") + (applique ? (absente ? (meteoEtat === "cours" ? "Récupération automatique de la météo en cours…" : meteoEtat === "echec" ? "Météo automatique indisponible (réseau) : réessai au prochain calcul" : "Météo en attente : récupération automatique au calcul (réseau nécessaire)") : "Hausse affichée : avec " + ((appl && mvOn ? "air + vent" : appl ? "air seul" : "vent seul") + (mvOn && balInfo ? " balistique" : "")) + " (écart " + sang(rnd(hs - hSM)) + ")" + (mvOn && wv ? " · azimut " + sang(Math.round(dazV * 10) / 10) + " (vent)" : "")) : (absente ? "Hausse avec météo : calcul automatique (la météo se récupère seule, rien à saisir)." : "Hausse affichée : avec site. Météo non appliquée (Météo → Air, charge et vent). « Avec météo » = air + vent de face ou de dos.") + (wv && !mvOn ? " · vent : azimut " + sang(Math.round(dazV * 10) / 10) + " non appliqué" : ""))) : "";
+{
+var mv = $("mvt");
+if (mv)
+mv.textContent = wv ? ((balInfo ? "Vent balistique (sommet ≈ " + fmt(balInfo.H, 0) + " m) : " : "Vent à 10 m : ") + "Vent de face " + fmt(face, 1) + " m/s, de droite " + fmt(droite, 1) + " m/s → portée " + (wR >= 0 ? "+" : "−") + fmt(Math.abs(Math.round(wR))) + " m, azimut " + sang(Math.round(dazV * 10) / 10) + (mvOn ? " (appliqué)" : " (non appliqué)")) : "Vent nul : aucune correction de vent.";
+}
 $("rCh").textContent = c ? c.charge : "–";
 $("rDi").textContent = fmt(dist);
 $("msg").textContent = msg;
 $("vide").hidden = true;
 $("resultat").hidden = false;
-fiche = "FICHE DE TIR\nPi\u00E8ce : ".concat(utmTxt(pu), " alt ").concat(fmt(P.alt), " m\nObjectif : ").concat(utmTxt(tu), " alt ").concat(fmt(T.alt), " m\nDistance : ").concat(fmt(dist), " m\nAzimut : ").concat(azu(azC), "\nCharge : ").concat(c ? c.charge : "–", "\nHausse : ").concat(c ? ang(hs) : "–");
+fiche = "FICHE DE TIR\nMortier : ".concat(mortNom(), "\nPi\u00E8ce : ").concat(utmTxt(pu), " alt ").concat(fmt(P.alt), " m\nObjectif : ").concat(utmTxt(tu), " alt ").concat(fmt(T.alt), " m\nDistance : ").concat(fmt(dist), " m\nAzimut : ").concat(azu(azC), "\nCharge : ").concat(c ? c.charge : "–", "\nHausse : ").concat(c ? ang(hs) : "–", "\nHausse sans site : ").concat(hB !== null ? ang(hB) : "–", "\nHausse avec site : ").concat(hSM !== null ? ang(hSM) : "–", "\nHausse avec m\u00E9t\u00E9o : ").concat(hMet !== null ? ang(hMet) : "–", "\nCorrection m\u00E9t\u00E9o : ").concat(absente ? "aucune donnée" : (mc.f >= 0 ? "+" : "−") + fmt(Math.abs(mc.f) * 100, 1) + " % (" + (appl ? "appliquée" : "non appliquée") + ")");
 derniereDist = dist;
 hausseFinale = c ? hs : null;
 majBoussole();
 majDerive();
+try {
+meteoMaj();
+}
+catch (e) { }
+try {
+miroirMaj();
+}
+catch (e) { }
+try {
+rnoteMaj();
+}
+catch (e) { }
+try {
+essaiCalc = { ok: !absente && tof !== null && !!c, dist: dist, dEff: dEff, ch: c ? c.charge : null, rho: (mc.r0 - mc.r1) / mc.r0, face: face, tof: tof, fp: mc.fp, ta: mc.T, wv: wv, ap: applique };
+}
+catch (e) {
+essaiCalc = null;
+}
+try {
+var hd = $("h3d");
+if (hd) {
+var cD_1 = choixCharge(dist);
+if (!cD_1 || absente || hMet === null || !applique && false) {
+hd.textContent = "";
+}
+else {
+var dh_1 = function (dx) { return hInterp(cD_1.pts, dx) - hInterp(cD_1.pts, dist); }, L_1 = [];
+var add = function (nom, dEq) { var g = dist - dEq; if (Math.abs(g) < 0.5 || (Math.round(dh_1(dEq)) === 0 && Math.abs(g) < 5))
+return; L_1.push("• " + nom + " : portée " + (g > 0 ? "+" : "−") + fmt(Math.abs(Math.round(g)), 0) + " m → hausse " + sang(Math.round(dh_1(dEq)))); };
+add("Température de l'air (" + fmt(mc.T, 1) + " °C)", dist / (1 + mc.fT));
+add("Pression (" + fmt(mc.P, 0) + " hPa)", dist / (1 + mc.fPr));
+if (mc.hu > 0)
+add("Humidité (" + fmt(mc.hu, 0) + " %) et effets croisés", dist / (1 + mc.fH));
+if (mc.tp !== null)
+add("Température de la charge (" + fmt(mc.tp, 0) + " °C)", dist / (1 + mc.fp));
+if (wv)
+add((face >= 0 ? "Vent de face " : "Vent de dos ") + fmt(Math.abs(face), 1) + " m/s", dist + wR);
+var dMt = (dist + wR) / (1 + mc.f), gT = dist - dMt;
+hd.textContent = (L_1.length ? "Ce qui fait varier la hausse « avec météo » :\n" + L_1.join("\n") + "\n= Total : portée " + (gT >= 0 ? "+" : "−") + fmt(Math.abs(Math.round(gT)), 0) + " m → hausse " + sang(hMet - hSM) + (wv && Math.abs(droite) >= 0.05 ? "\nVent de côté " + fmt(Math.abs(droite), 1) + " m/s : azimut " + sang(Math.round(dazV * 10) / 10) + " (ne change pas la hausse)" : "") : "").replace(/(\d)-(\d)/g, "$1\u2011$2");
+}
+var dd = $("h3dd");
+if (dd)
+dd.style.display = hd.textContent ? "block" : "none";
+}
+}
+catch (e) { }
+try {
+var hv = $("h3v");
+if (hv)
+hv.textContent = absente ? "" : (extrap !== null ? "⚠ Distance corrigée hors de la table de la charge " + extrap + " : hausse extrapolée, à vérifier. " : "") + (!wv ? "Vent nul : pas de correction de vent." : balInfo ? "Vent balistique pris en compte : sommet ≈ " + fmt(balInfo.H, 0) + " m, vent moyen " + fmt(balInfo.v, 1) + " m/s (10, 80 et 120 m)." : !($("mvbal") && $("mvbal").checked) ? "Vent à 10 m utilisé (vent balistique désactivé)." : meteoEtat === "manuel" ? "Vent saisi à la main utilisé tel quel." : "Vent à 10 m uniquement : vent en altitude (80 / 120 m) non reçu de la source météo.");
+}
+catch (e) { }
+dernierSauver();
 if (aller) {
 go("tir");
 stir("r");
 }
 }
-
+function dernierSauver() { try {
+if (derniere)
+sto.set("dernierTir", JSON.stringify({ snap: snapSaisie(), f: ficheId, t: Date.now() }));
+}
+catch (e) { } }
 function copier() {
 var ok = function () { return alert("Fiche copiée"); };
 if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -954,7 +1288,7 @@ saveDer();
 }
 majUnites();
 var NBJ = sto.get("nbj") === "1" ? 1 : 2;
-function jalMode(n) { NBJ = n; sto.set("nbj", String(n)); document.body.classList.toggle("j1", n === 1); $("nbj1").classList.toggle("on", n === 1); $("nbj2").classList.toggle("on", n === 2); majDerive(); if (typeof accueilMaj === "function")
+function jalMode(n) { NBJ = n; sto.set("nbj", String(n)); document.body.classList.toggle("j1", n === 1); $("nbj1").classList.toggle("on", n === 1); $("nbj2").classList.toggle("on", n === 2); $("hmj1").classList.toggle("on", n === 1); $("hmj2").classList.toggle("on", n === 2); $("hmjt").textContent = n === 1 ? "Un jalon : pointage direct avec la dérive affichée." : "Deux jalons : pointage, puis repérage du jalon 1."; majDerive(); if (typeof accueilMaj === "function")
 accueilMaj(); }
 var repJalon = null;
 (function () { try {
@@ -1042,6 +1376,7 @@ else
 sub = "Calculez d'abord un tir";
 $("dhs").textContent = sub;
 }
+
 function majDerive() {
 var t = $("dtab");
 if (azTir === null || derniereDist === null) {
@@ -1391,7 +1726,7 @@ return idb("readwrite", function (st) { return st.put(buf, cle); }).then(functio
 }
 suite();
 }
-$("p-carte").innerHTML = "<div class=\"card\">\n<div class=\"seg\" style=\"margin-bottom:8px\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"hyb\" onclick=\"carteMode('hyb')\">Hybride</button><button data-m=\"goo\" onclick=\"carteMode('goo')\">Google</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div>\n<select id=\"cliste\" onchange=\"carteChoisir(this.value)\" style=\"margin:0 0 8px;display:none\"></select>\n<div id=\"carte\"><div id=\"cworld\"><div id=\"cpane\"></div><img id=\"cimage\" alt=\"\"><svg id=\"csvg\"></svg></div>\n<svg id=\"caig\" viewBox=\"-44 -44 88 88\"></svg>\n<div id=\"cleg\" onclick=\"carteLegende()\"><b>L\u00E9gende (touchez pour fermer)</b>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,-12 -10,8 10,8\" fill=\"#2ecc40\" stroke=\"#000\" stroke-width=\"1.5\"/></svg>Pi\u00E8ce</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff3b30\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff3b30\" stroke-width=\"2\"/></svg>Objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,12 -8,-6 8,-6\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"7\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"2.5\" fill=\"#fff\"/></svg>Ma position (GPS)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff8c00\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff8c00\" stroke-width=\"2\"/></svg>Curseur (coordonn\u00E9es du point)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"10\" fill=\"rgba(176,75,255,.35)\" stroke=\"#b04bff\" stroke-width=\"3\"/></svg>Balise num\u00E9rot\u00E9e (parcours)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#ffd400\" stroke-width=\"3\" stroke-dasharray=\"6 4\"/></svg>Ligne pi\u00E8ce \u2192 objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#00e5ff\" stroke-width=\"3\"/></svg>Direction vers la cible depuis moi</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"11\" fill=\"rgba(10,132,255,.15)\" stroke=\"#0a84ff\"/></svg>Pr\u00E9cision du GPS</div>\n<div style=\"margin-top:4px;color:#bbb\">Hybride : noms des localit\u00E9s, fronti\u00E8res et routes sur le satellite (bouton Noms).</div></div>\n<div id=\"hp\"><div id=\"hp1\" class=\"hpan\"></div><div id=\"hp2\" class=\"hpan\"></div><div id=\"hp3\" class=\"hpan\"></div></div>\n<button id=\"hx\" onclick=\"cartePlein(false)\">\u2715</button>\n<div id=\"hpop\"></div>\n<div id=\"hctx\"></div>\n<div id=\"htb\"><button onclick=\"hudMenu('menu')\" title=\"Menu\" aria-label=\"Menu\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 18 9 7l4 7 3-4 5 8z\"/></svg></button><button onclick=\"hudMenu('fond')\" title=\"Fonds\" aria-label=\"Choisir le fond de carte\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z\"/><path d=\"M9 4v14M15 6v14\"/></svg></button><button onclick=\"hudMenu('pts')\" title=\"Points\" aria-label=\"Points et balises\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 21V4M5 4h13l-3 4 3 4H5\"/></svg></button><button data-hsuivre onclick=\"carteSuivre()\" title=\"Suivre\" aria-label=\"Suivre ma position\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"7\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\"/><path d=\"M12 1v4M12 19v4M1 12h4M19 12h4\"/></svg></button><button data-hcap onclick=\"carteCapMode()\" title=\"Cap\" aria-label=\"Orientation de la carte\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m15.5 8.5-2 5-5 2 2-5z\"/></svg></button></div>\n<div id=\"czoom\"><button onclick=\"carteZoom(1)\" aria-label=\"Zoom avant\">+</button><button onclick=\"carteZoom(-1)\" aria-label=\"Zoom arri\u00E8re\">\u2212</button><button id=\"cmoi\" onclick=\"carteMoi()\" title=\"Revenir \u00E0 ma position\" aria-label=\"Revenir \u00E0 ma position\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"3.2\"/><circle cx=\"12\" cy=\"12\" r=\"7.5\"/><path d=\"M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4\"/></svg></button></div>\n<div id=\"chudt\"><div class=\"seg\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"hyb\" onclick=\"carteMode('hyb')\">Hybride</button><button data-m=\"goo\" onclick=\"carteMode('goo')\">Google</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div><button class=\"mini\" onclick=\"cartePlein(false)\">\u2715 Fermer</button></div>\n<div id=\"chudb\">\n<div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div><div id=\"ccur2\" class=\"ccur\"></div><div id=\"cinfo2\"></div>\n<div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"curVers('p')\">\u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">\u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">\u2192 Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"posManuelle()\">Moi = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">\u2715 Objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">\u2715 Pi\u00E8ce</button></div>\n<div class=\"row\"><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button><button class=\"mini\" onclick=\"baliseSuivante()\">Balise \u25B8</button></div></div></div>\n<p id=\"cinfo\" class=\"note\" style=\"font-size:14px;color:var(--fg)\"></p>\n<div style=\"margin-top:8px\"><div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div></div><div id=\"ccur\" class=\"ccur\"></div>\n<div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Placer la pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Placer l'objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Placer une balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"gpsVers('p')\">Ma position GPS \u2192 Pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"curVers('p')\">Curseur \u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">Curseur \u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">Curseur \u2192 Balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"cartePlein(true)\">Plein \u00E9cran</button><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre ma position</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail satellite +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail satellite \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"posManuelle()\">Ma position = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">Retirer l'objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">Retirer la pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"baliseSuivante()\">Balise suivante</button><button class=\"mini\" onclick=\"effacerBalises()\">Effacer les balises</button></div>\n<button class=\"btn\" onclick=\"calcul(true)\">Calculer le tir</button>\n<p id=\"cattr\" class=\"note\"></p></div>\n<div class=\"card\"><div class=\"hd\"><h2>Carte import\u00E9e</h2></div>\n<p class=\"note\" style=\"margin-top:0\">Importez vos cartes depuis le t\u00E9l\u00E9phone (PDF \u00E0 plusieurs pages, photos, scans ou captures) : chaque page devient une carte de la liste. Calibrez chaque carte avec 2 points dont vous connaissez les coordonn\u00E9es UTM (par exemple deux croisements du quadrillage). Pour un PDF, la premi\u00E8re lecture demande internet. La carte est convertie en image, enregistr\u00E9e dans l'application, et fonctionne ensuite sans r\u00E9seau.</p>\n<input id=\"cfile\" aria-label=\"Importer une carte\" type=\"file\" multiple onchange=\"carteImporter(this)\">\n<p id=\"cnb\" class=\"note\"></p>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"carteRenommer()\">Renommer la carte</button><button class=\"mini\" onclick=\"carteSupprimer()\">Supprimer la carte</button></div>\n<button class=\"btn alt\" onclick=\"calibrer()\">Calibrer (2 points)</button></div>";
+$("p-carte").innerHTML = "<div class=\"card\">\n<div class=\"seg\" style=\"margin-bottom:8px\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"hyb\" onclick=\"carteMode('hyb')\">Hybride</button><button data-m=\"goo\" onclick=\"carteMode('goo')\">Google</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div>\n<select id=\"cliste\" onchange=\"carteChoisir(this.value)\" style=\"margin:0 0 8px;display:none\"></select>\n<div id=\"carte\"><div id=\"cworld\"><div id=\"cpane\"></div><img id=\"cimage\" alt=\"\"><svg id=\"csvg\"></svg></div>\n<svg id=\"caig\" viewBox=\"-44 -44 88 88\"></svg>\n<div id=\"cleg\" onclick=\"carteLegende()\"><b>L\u00E9gende (touchez pour fermer)</b>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,-12 -10,8 10,8\" fill=\"#2ecc40\" stroke=\"#000\" stroke-width=\"1.5\"/></svg>Pi\u00E8ce</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff3b30\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff3b30\" stroke-width=\"2\"/></svg>Objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><polygon points=\"0,12 -8,-6 8,-6\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"7\" fill=\"#0a84ff\" stroke=\"#fff\" stroke-width=\"2\"/><circle cy=\"-8\" r=\"2.5\" fill=\"#fff\"/></svg>Ma position (GPS)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"9\" fill=\"none\" stroke=\"#ff8c00\" stroke-width=\"3\"/><path d=\"M-13 0H13M0 -13V13\" stroke=\"#ff8c00\" stroke-width=\"2\"/></svg>Curseur (coordonn\u00E9es du point)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"10\" fill=\"rgba(176,75,255,.35)\" stroke=\"#b04bff\" stroke-width=\"3\"/></svg>Balise num\u00E9rot\u00E9e (parcours)</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#ffd400\" stroke-width=\"3\" stroke-dasharray=\"6 4\"/></svg>Ligne pi\u00E8ce \u2192 objectif</div>\n<div><svg viewBox=\"-14 -14 28 28\"><path d=\"M-13 8L13 -8\" stroke=\"#00e5ff\" stroke-width=\"3\"/></svg>Direction vers la cible depuis moi</div>\n<div><svg viewBox=\"-14 -14 28 28\"><circle r=\"11\" fill=\"rgba(10,132,255,.15)\" stroke=\"#0a84ff\"/></svg>Pr\u00E9cision du GPS</div>\n<div style=\"margin-top:4px;color:#bbb\">Hybride : noms des localit\u00E9s, fronti\u00E8res et routes sur le satellite (bouton Noms).</div></div>\n<div id=\"hp\"><div id=\"hp1\" class=\"hpan\"></div><div id=\"hp2\" class=\"hpan\"></div><div id=\"hp3\" class=\"hpan\"></div></div>\n<button id=\"hx\" onclick=\"cartePlein(false)\">\u2715</button>\n<div id=\"hpop\"></div>\n<div id=\"hctx\"></div>\n<div id=\"htb\"><button onclick=\"hudMenu('menu')\" title=\"Menu\" aria-label=\"Menu\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 18 9 7l4 7 3-4 5 8z\"/></svg></button><button onclick=\"hudMenu('fond')\" title=\"Fonds\" aria-label=\"Choisir le fond de carte\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z\"/><path d=\"M9 4v14M15 6v14\"/></svg></button><button onclick=\"hudMenu('pts')\" title=\"Points\" aria-label=\"Points et balises\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 21V4M5 4h13l-3 4 3 4H5\"/></svg></button><button data-hsuivre onclick=\"carteSuivre()\" title=\"Suivre\" aria-label=\"Suivre ma position\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"7\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\"/><path d=\"M12 1v4M12 19v4M1 12h4M19 12h4\"/></svg></button><button data-hcap onclick=\"carteCapMode()\" title=\"Cap\" aria-label=\"Orientation de la carte\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m15.5 8.5-2 5-5 2 2-5z\"/></svg></button></div>\n<div id=\"czoom\"><button onclick=\"carteZoom(1)\" aria-label=\"Zoom avant\">+</button><button onclick=\"carteZoom(-1)\" aria-label=\"Zoom arri\u00E8re\">\u2212</button><button id=\"cmoi\" onclick=\"carteMoi()\" title=\"Revenir \u00E0 ma position\" aria-label=\"Revenir \u00E0 ma position\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"3.2\"/><circle cx=\"12\" cy=\"12\" r=\"7.5\"/><path d=\"M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4\"/></svg></button></div>\n<div id=\"chudt\"><div class=\"seg\"><button data-m=\"sat\" class=\"on\" onclick=\"carteMode('sat')\">Satellite</button><button data-m=\"plan\" onclick=\"carteMode('plan')\">Plan</button><button data-m=\"hyb\" onclick=\"carteMode('hyb')\">Hybride</button><button data-m=\"goo\" onclick=\"carteMode('goo')\">Google</button><button data-m=\"topo\" onclick=\"carteMode('topo')\">Topo</button><button data-m=\"img\" onclick=\"carteMode('img')\">Import\u00E9e</button></div><button class=\"mini\" onclick=\"cartePlein(false)\">\u2715 Fermer</button></div>\n<div id=\"chudb\">\n<div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div><div id=\"ccur2\" class=\"ccur\"></div><div id=\"cinfo2\"></div>\n<div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"curVers('p')\">\u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">\u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">\u2192 Balise</button></div>\n<div class=\"row\"><button class=\"mini\" onclick=\"posManuelle()\">Moi = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">\u2715 Objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">\u2715 Pi\u00E8ce</button></div>\n<div class=\"row\"><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button><button class=\"mini\" onclick=\"baliseSuivante()\">Balise \u25B8</button></div></div></div>\n<p id=\"cinfo\" class=\"note\" style=\"font-size:14px;color:var(--fg)\"></p>\n<div style=\"margin-top:8px\"><div class=\"seg\" data-kseg><button data-k=\"utm\" onclick=\"carteCoord('utm')\">Coord. UTM</button><button data-k=\"geo\" onclick=\"carteCoord('geo')\">G\u00E9ographique</button><button data-k=\"off\" onclick=\"carteCoord('off')\">Aucune</button></div></div><div id=\"ccur\" class=\"ccur\"></div>\n<details class=\"sect\"><summary>Outils de la carte</summary><div style=\"padding:0 14px 14px\"><div class=\"seg\"><button data-p=\"c\" class=\"on\" onclick=\"cartePlace('c')\">Curseur</button><button data-p=\"p\" onclick=\"cartePlace('p')\">Placer la pi\u00E8ce</button><button data-p=\"t\" onclick=\"cartePlace('t')\">Placer l'objectif</button><button data-p=\"b\" onclick=\"cartePlace('b')\">Placer une balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"gpsVers('p')\">Ma position GPS \u2192 Pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"curVers('p')\">Curseur \u2192 Pi\u00E8ce</button><button class=\"mini\" onclick=\"curVers('t')\">Curseur \u2192 Objectif</button><button class=\"mini\" onclick=\"curVers('b')\">Curseur \u2192 Balise</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"cartePlein(true)\">Plein \u00E9cran</button><button class=\"mini\" data-suivre onclick=\"carteSuivre()\">Suivre ma position</button><button class=\"mini\" data-cap onclick=\"carteCapMode()\">Nord \u2191</button><button class=\"mini\" onclick=\"carteCentrer()\">Centrer</button><button class=\"mini\" onclick=\"carteDetail(1)\">D\u00E9tail satellite +</button><button class=\"mini\" onclick=\"carteDetail(-1)\">D\u00E9tail satellite \u2212</button><button class=\"mini\" data-noms onclick=\"carteNoms()\">Noms des lieux</button><button class=\"mini\" onclick=\"carteLegende()\">L\u00E9gende</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"posManuelle()\">Ma position = curseur</button><button class=\"mini\" onclick=\"effacerPoint('t')\">Retirer l'objectif</button><button class=\"mini\" onclick=\"effacerPoint('p')\">Retirer la pi\u00E8ce</button></div>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"baliseSuivante()\">Balise suivante</button><button class=\"mini\" onclick=\"effacerBalises()\">Effacer les balises</button></div>\n</div></details>\n<button class=\"btn\" onclick=\"calcul(true)\">Calculer le tir</button>\n<p id=\"cattr\" class=\"note\"></p></div>\n<details class=\"sect\"><summary>Carte import\u00E9e (PDF, photos)</summary><div class=\"card\" style=\"border:0;box-shadow:none;margin:0\">\n<p class=\"note\" style=\"margin-top:0\">Importez un PDF, une photo ou un scan, puis calibrez avec 2 points connus (coordonn\u00E9es UTM). Elle fonctionne ensuite sans r\u00E9seau.</p>\n<input id=\"cfile\" aria-label=\"Importer une carte\" type=\"file\" multiple onchange=\"carteImporter(this)\">\n<p id=\"cnb\" class=\"note\"></p>\n<div class=\"rowb\"><button class=\"mini\" onclick=\"carteRenommer()\">Renommer la carte</button><button class=\"mini\" onclick=\"carteSupprimer()\">Supprimer la carte</button></div>\n<button class=\"btn alt\" onclick=\"calibrer()\">Calibrer (2 points)</button></div></details>";
 var SRC = {
 sat: { url: function (z, x, y) { return "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/" + z + "/" + y + "/" + x; }, max: 18, attr: "Imagerie satellite © Esri, Maxar, Earthstar Geographics. Connexion internet nécessaire." },
 topo: { url: function (z, x, y) { return "https://a.tile.opentopomap.org/" + z + "/" + x + "/" + y + ".png"; }, max: 17, attr: "Carte topographique © OpenTopoMap (CC-BY-SA), données © contributeurs OpenStreetMap. Connexion internet nécessaire (ou zone téléchargée)." },
@@ -2709,10 +3044,10 @@ $("hp1").innerHTML = h1;
 var h2 = "";
 if (C.mode !== "img") {
 var c = mercLl(C.cx, C.cy, C.z), mpp_1 = 156543.03392 * Math.cos(c.lat * Math.PI / 180) / Math.pow(2, C.z), N = Math.round(mpp_1 / 0.0002646), nice = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000];
-var L_1 = nice[0];
+var L_2 = nice[0];
 nice.forEach(function (x) { if (x / mpp_1 <= 110)
-L_1 = x; });
-h2 = '<div style="font-size:16px;font-weight:600"><svg viewBox="0 0 24 24" width="16" height="16" style="vertical-align:-3px;margin-right:6px;fill:none;stroke:#222;stroke-width:2;stroke-linejoin:round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>1:' + N.toLocaleString("fr-FR") + ' &nbsp; ' + C.z + '/' + SRC[C.mode].max + '</div><div style="width:' + Math.round(L_1 / mpp_1) + 'px;border:2px solid #111;border-top:0;height:6px;margin-top:3px"></div><div style="font-size:13px">' + (L_1 >= 1000 ? (L_1 / 1000) + " km" : L_1 + " m") + '</div>';
+L_2 = x; });
+h2 = '<div style="font-size:16px;font-weight:600"><svg viewBox="0 0 24 24" width="16" height="16" style="vertical-align:-3px;margin-right:6px;fill:none;stroke:#222;stroke-width:2;stroke-linejoin:round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>1:' + N.toLocaleString("fr-FR") + ' &nbsp; ' + C.z + '/' + SRC[C.mode].max + '</div><div style="width:' + Math.round(L_2 / mpp_1) + 'px;border:2px solid #111;border-top:0;height:6px;margin-top:3px"></div><div style="font-size:13px">' + (L_2 >= 1000 ? (L_2 / 1000) + " km" : L_2 + " m") + '</div>';
 }
 $("hp2").style.display = h2 ? "block" : "none";
 $("hp2").innerHTML = h2;
@@ -3368,11 +3703,14 @@ var s = {};
 ["p", "t"].forEach(function (id) { HK.forEach(function (k) { var el = $(id + k); if (el)
 s[id + k] = el.value; }); });
 s.azref = $("azref").value;
+s.mortier = MORTID;
 return s;
 }
 function remettre(s) {
 ["p", "t"].forEach(function (id) { HK.forEach(function (k) { var el = $(id + k); if (el && s[id + k] !== undefined)
 el.value = s[id + k]; }); setFmt(id, s[id + "m"] || "utm"); });
+if (s.mortier && s.mortier !== MORTID && MORT.some(function (m) { return m.id === s.mortier; }))
+mortierChoisir(s.mortier, true);
 if (s.azref !== undefined) {
 $("azref").value = s.azref;
 saveDer();
@@ -3397,6 +3735,7 @@ HIST.unshift(e);
 ficheId = e.id;
 histSauver();
 rendreHisto();
+dernierSauver();
 if (!silencieux)
 alert("Fiche enregistrée dans l'historique (onglet Tir, en bas).");
 return e;
@@ -3442,7 +3781,16 @@ if (!e || !e.corr.length) {
 box.innerHTML = "";
 return;
 }
-box.innerHTML = '<p class="note"><b>Corrections de ce tir</b></p>' + e.corr.map(function (c, k) { return '<div class="hc">' + (k + 1) + '. obs→obj ' + azu(c.a) + ' · ' + corrLib(c) + '<br>→ ' + lignEtat(c.apres) + '</div>'; }).join("") + '<button class="btn alt" onclick="annulerCorr()">Annuler la dernière correction</button>';
+var dl = function (x) { return x === 0 ? "inchangé" : sang(x); };
+box.innerHTML = '<div class="k" style="font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-top:16px">Corrections de ce tir</div>' + e.corr.map(function (c, k) {
+var pr = k ? e.corr[k - 1].apres : e.ini, ap = c.apres;
+var daz = diffSigne(ap.az - pr.az), dh = (ap.h === null || pr.h === null) ? null : ap.h - pr.h, dd = ap.d - pr.d;
+return '<div class="cc"><div class="cch"><b>Correction ' + (k + 1) + '</b><span>azimut obs→obj ' + azu(c.a) + '</span></div><div class="ccl">' + corrLib(c) + '</div>'
++ '<div class="ccg"><div><small>Azimut</small><b>' + azu(ap.az) + '</b><i>' + (Math.round(daz) === 0 ? "inchangé" : sang(daz)) + '</i></div>'
++ '<div><small>Hausse</small><b>' + (ap.h === null ? "–" : ang(ap.h)) + '</b><i>' + (dh === null ? "" : (Math.round(dh) === 0 ? "inchangée" : sang(dh))) + '</i></div>'
++ '<div><small>Distance</small><b>' + fmt(ap.d) + ' m</b><i>' + (Math.abs(dd) < 0.5 ? "inchangée" : (dd > 0 ? "+ " : "− ") + fmt(Math.abs(dd)) + " m") + '</i></div></div>'
++ (ap.c !== pr.c ? '<div class="ccl" style="margin:8px 0 0">Charge ' + ap.c + '</div>' : '') + '</div>';
+}).join("") + '<button class="btn alt" onclick="annulerCorr()">Annuler la dernière correction</button>';
 }
 function histNom(i, v) { if (HIST[i]) {
 HIST[i].nom = v.trim();
@@ -3650,6 +3998,108 @@ $("rp").value = r.p;
 }
 catch (e) { } })();
 function saveRef() { sto.set("meteoRef", JSON.stringify({ t: $("rt").value, p: $("rp").value })); }
+var ventHaut = { w80: null, d80: null, w120: null, d120: null }, meteoRaw = null, tpTs = Date.now(), meteoEtat = "";
+function rnoteMaj() {
+var n = $("rnote");
+if (!n)
+return;
+if (meteoEtat === "echec") {
+var dm = $("mmird");
+if (dm)
+dm.open = true;
+}
+n.textContent = meteoEtat === "cours" ? "Récupération automatique de la météo…" : meteoEtat === "ok" ? String($("mst").textContent).split(" Vent mesuré")[0] + " (valeurs modifiables)" : meteoEtat === "manuel" ? "Valeurs saisies à la main." : meteoEtat === "echec" ? "Météo automatique indisponible (réseau). Réessai au prochain calcul, ou saisissez la température et le vent." : "La météo se récupère automatiquement au calcul (réseau nécessaire). Vous n'avez rien à saisir.";
+}
+(function () { try {
+var r = JSON.parse(sto.get("meteo2"));
+if (r) {
+tpTs = r.ts || 0;
+$("tp").value = (r.tp && r.ts && Date.now() - r.ts < 216e5) ? r.tp : "";
+$("kair").value = r.ka || "0.30";
+$("kpo").value = r.kp || "0.20";
+$("mapp").checked = !!(r.app || r.mv);
+$("mvent").checked = $("mapp").checked;
+$("mvbal").checked = r.vb !== false;
+$("kvent").value = r.kv || "0.45";
+}
+}
+catch (e) { } })();
+function meteoSave() { sto.set("meteo2", JSON.stringify({ tp: $("tp").value, ts: tpTs, ka: $("kair").value, kp: $("kpo").value, app: $("mapp").checked, mv: $("mvent").checked, vb: $("mvbal").checked, kv: $("kvent").value })); }
+function meteoCorr() {
+var nb = function (id, d) { var v = parseFloat(String($(id).value).replace(",", ".")); return isNaN(v) ? d : v; };
+var rt = nb("rt", 15), rp = nb("rp", 1013.25), T = rt + nb("dt", 0), P = rp + nb("dp", 0), hu = Math.max(0, Math.min(100, nb("hu", 0)));
+var rho = function (tc, ph, h) { var es = 6.1078 * Math.exp(17.27 * tc / (tc + 237.3)), e = h / 100 * es; return (ph - e) * 100 / (287.05 * (tc + 273.15)) + e * 100 / (461.5 * (tc + 273.15)); };
+var r0 = rho(rt, rp, 0), r1 = rho(T, P, hu), ka = nb("kair", 0.3), fa = ka * (r0 - r1) / r0, fT = ka * (r0 - rho(T, rp, 0)) / r0, fPr = ka * (r0 - rho(rt, P, 0)) / r0;
+var tp = String($("tp").value).trim() === "" ? null : nb("tp", null), fp = tp === null ? 0 : nb("kpo", 0.2) * (tp - rt) / 100;
+return { r0: r0, r1: r1, hu: hu, tp: tp, fa: fa, fp: fp, T: T, P: P, fT: fT, fPr: fPr, fH: fa - fT - fPr, f: Math.max(-0.2, Math.min(0.2, fa + fp)) };
+}
+function meteoMaj() {
+var m = meteoCorr(), pc = function (x) { return (x >= 0 ? "+" : "−") + fmt(Math.abs(x) * 100, 1) + " %"; };
+$("mrho").textContent = "Densité de l'air : " + fmt(m.r1, 3) + " kg/m³ (" + pc(m.r1 / m.r0 - 1) + " par rapport à la table)";
+$("mhaut").textContent = ventHaut.w80 != null ? "Vent en altitude : 80 m " + fmt(ventHaut.w80, 1) + " m/s du " + Math.round(ventHaut.d80) + "° · 120 m " + fmt(ventHaut.w120, 1) + " m/s du " + Math.round(ventHaut.d120) + "° (utilisé pour le vent balistique)." : "Vent en altitude : non disponible.";
+$("mcor").textContent = "Air : " + pc(m.fa) + " de portée" + (m.tp !== null ? " · charge : " + pc(m.fp) : " · charge : non saisie") + " · total " + pc(m.f) + (derniereDist ? " ≈ " + (m.f >= 0 ? "+" : "−") + fmt(Math.abs(Math.round(derniereDist * m.f))) + " m" : "") + ($("mapp").checked ? " (appliqué)" : " (non appliqué)") + (meteoRaw && $("mapp").checked ? (function () { var a = Math.round((Date.now() - meteoRaw.ts) / 60000); return " · météo mesurée il y a " + (a < 90 ? a + " min" : Math.round(a / 60) + " h") + (a > 90 ? " ⚠ ancienne : actualisez" : ""); })() : "");
+}
+
+function meteoChange() { meteoSave(); meteoMaj(); if (derniere)
+calcul(false); }
+function taVersDt() {
+var v = parseFloat(String($("tair").value).replace(",", ".")), rt = parseFloat($("rt").value);
+if ($("tair").value.trim() === "")
+return false;
+if (!isNaN(v) && !isNaN(rt))
+$("dt").value = (v - rt).toFixed(1);
+return true;
+}
+function miroirMaj() {
+[["rtair", "tair"], ["rwv", "wv"], ["rwd", "wd"]].forEach(function (p) { var m = $(p[0]), o = $(p[1]); if (m && o && document.activeElement !== m)
+m.value = o.value; });
+}
+document.addEventListener("input", function (e) {
+var id = e.target.id;
+if (id === "rtair" || id === "rwv" || id === "rwd") {
+var o = $({ rtair: "tair", rwv: "wv", rwd: "wd" }[id]);
+o.value = e.target.value;
+if (e.isTrusted) {
+meteoEtat = "manuel";
+rnoteMaj();
+}
+o.dispatchEvent(new Event("input", { bubbles: true }));
+return;
+}
+if (e.isTrusted && (id === "tair" || id === "wv" || id === "wd")) {
+meteoEtat = "manuel";
+try {
+rnoteMaj();
+}
+catch (x) { }
+}
+if (id === "tp")
+tpTs = Date.now();
+if (id === "tair") {
+if ($("tair").value.trim() === "")
+$("dt").value = "0";
+else
+taVersDt();
+}
+if (id === "dt" && e.isTrusted)
+$("tair").value = "";
+if ((id === "rt" || id === "rp") && (meteoRaw || $("tair").value.trim() !== "")) {
+var rt = parseFloat($("rt").value), rp = parseFloat($("rp").value);
+if (!taVersDt() && meteoRaw && !isNaN(rt))
+$("dt").value = (meteoRaw.t - rt).toFixed(1);
+if (meteoRaw && !isNaN(rp) && meteoRaw.p != null)
+$("dp").value = (meteoRaw.p - rp).toFixed(1);
+}
+if (["hu", "tp", "kair", "kpo", "kvent", "dt", "dp", "rt", "rp", "wv", "wd", "tair"].indexOf(id) >= 0)
+meteoChange();
+});
+document.addEventListener("change", function (e) { if (e.target.id === "mapp")
+$("mvent").checked = $("mapp").checked; if (e.target.id === "mapp" || e.target.id === "mvent" || e.target.id === "mvbal")
+meteoChange(); });
+try {
+meteoMaj();
+}
+catch (e) { }
 function pieceLl() {
 var P = lire("p");
 if (!P)
@@ -3675,6 +4125,11 @@ $("mst").textContent = "Renseignez la position de la pièce (onglet Saisie) ou a
 return;
 }
 $("mst").textContent = "Récupération de la météo…";
+meteoEtat = "cours";
+try {
+rnoteMaj();
+}
+catch (e) { }
 var P = lire("p"), alt = P && P.alt ? P.alt : 0;
 function jget(url) {
 var ct = new AbortController(), t = setTimeout(function () { ct.abort(); }, 12000);
@@ -3682,11 +4137,29 @@ return fetch(url, { signal: ct.signal }).then(function (r) { clearTimeout(t); if
 throw new Error("HTTP " + r.status); return r.json(); }, function (e) { clearTimeout(t); throw new Error(e && e.name === "AbortError" ? "délai dépassé" : "réseau"); });
 }
 function src1() {
-return jget("https://api.open-meteo.com/v1/forecast?latitude=" + ll.lat.toFixed(4) + "&longitude=" + ll.lon.toFixed(4) + "&current=temperature_2m,surface_pressure,wind_speed_10m,wind_direction_10m&wind_speed_unit=ms").then(function (j) {
+var base = "https://api.open-meteo.com/v1/forecast?latitude=" + ll.lat.toFixed(4) + "&longitude=" + ll.lon.toFixed(4) + "&wind_speed_unit=ms&current=temperature_2m,surface_pressure,wind_speed_10m,wind_direction_10m";
+var haut = "&forecast_days=1&hourly=wind_speed_80m,wind_speed_120m,wind_direction_80m,wind_direction_120m";
+return jget(base + ",relative_humidity_2m" + haut).catch(function () { return jget(base + ",relative_humidity_2m"); }).catch(function () { return jget(base); }).then(function (j) {
 var c = j.current;
 if (!c || c.wind_speed_10m == null)
 throw new Error("réponse vide");
-return { t: c.temperature_2m, p: c.surface_pressure, v: c.wind_speed_10m, d: c.wind_direction_10m, h: c.time.replace("T", " "), src: "Open-Meteo" };
+var o = { t: c.temperature_2m, p: c.surface_pressure, v: c.wind_speed_10m, d: c.wind_direction_10m, h: c.time.replace("T", " "), src: "Open-Meteo", hu: c.relative_humidity_2m };
+try {
+var H = j.hourly;
+if (H && H.time && H.wind_speed_80m) {
+var i = H.time.indexOf(c.time.slice(0, 13) + ":00");
+if (i >= 0 && parseInt(c.time.slice(14, 16), 10) >= 30 && i + 1 < H.time.length)
+i++;
+if (i >= 0 && H.wind_speed_80m[i] != null && H.wind_speed_120m[i] != null && H.wind_direction_80m[i] != null && H.wind_direction_120m[i] != null) {
+o.w80 = H.wind_speed_80m[i];
+o.d80 = H.wind_direction_80m[i];
+o.w120 = H.wind_speed_120m[i];
+o.d120 = H.wind_direction_120m[i];
+}
+}
+}
+catch (e) { }
+return o;
 });
 }
 function src2() {
@@ -3695,22 +4168,38 @@ var e = j.properties.timeseries[0], d = e.data.instant.details;
 if (d.wind_speed == null)
 throw new Error("réponse vide");
 var ps = d.air_pressure_at_sea_level != null ? d.air_pressure_at_sea_level * Math.pow(1 - 2.25577e-5 * alt, 5.25588) : null;
-return { t: d.air_temperature, p: ps, v: d.wind_speed, d: d.wind_from_direction, h: String(e.time).replace("T", " ").slice(0, 16), src: "MET Norway" };
+return { t: d.air_temperature, p: ps, v: d.wind_speed, d: d.wind_from_direction, h: String(e.time).replace("T", " ").slice(0, 16), src: "MET Norway", hu: d.relative_humidity };
 });
 }
 src1().catch(function (e1) { return src2().catch(function (e2) { throw new Error("Open-Meteo : " + e1.message + " · MET Norway : " + e2.message); }); }).then(function (c) {
 var rt = parseFloat($("rt").value) || 15, rp = parseFloat($("rp").value) || 1013.25;
 $("wv").value = c.v.toFixed(1);
 $("wd").value = azOut(c.d * MIL / 360);
+$("tair").value = String(Math.round(c.t * 10) / 10);
 $("dt").value = (c.t - rt).toFixed(1);
 if (c.p != null)
 $("dp").value = (c.p - rp).toFixed(1);
+if (c.hu != null)
+$("hu").value = Math.round(c.hu);
+meteoRaw = { t: c.t, p: c.p, ts: Date.now(), ll: { lat: ll.lat, lon: ll.lon } };
+ventHaut = (c.w80 != null && c.w120 != null && c.d80 != null && c.d120 != null) ? { w80: c.w80, d80: c.d80, w120: c.w120, d120: c.d120 } : { w80: null, d80: null, w120: null, d120: null };
+meteoMaj();
 $("mst").textContent = "Données " + c.h + " (" + c.src + ") : " + c.t + " °C, " + (c.p != null ? c.p.toFixed(1) : "?") + " hPa, vent " + c.v.toFixed(1) + " m/s du " + Math.round(c.d) + "°. Vent mesuré à 10 m du sol : à confirmer sur le terrain.";
 $("wv").dispatchEvent(new Event("input", { bubbles: true }));
+meteoEnCours = false;
 setChip("cM", true);
+meteoEtat = "ok";
 if (derniere)
 calcul(false);
-}).catch(function (e) { $("mst").textContent = "Météo indisponible (" + e.message + "). Vérifiez le réseau, ou saisissez les valeurs à la main."; setChip("cM", false); });
+rnoteMaj();
+}).catch(function (e) { $("mst").textContent = "Météo indisponible (" + e.message + "). Vérifiez le réseau, ou saisissez les valeurs à la main."; meteoEnCours = false; setChip("cM", false); meteoEtat = "echec"; try {
+rnoteMaj();
+}
+catch (x) { } try {
+if (derniere)
+calcul(false);
+}
+catch (x) { } });
 }
 var timerMeteo = null;
 function toggleAuto() {
@@ -3721,7 +4210,155 @@ meteoAuto();
 timerMeteo = setInterval(meteoAuto, 600000);
 }
 }
-
+var ESS = [], essaiProp = null;
+try {
+ESS = JSON.parse(sto.get("essais")) || [];
+if (!Array.isArray(ESS))
+ESS = [];
+}
+catch (e) {
+ESS = [];
+}
+function essaiMsg(t, err) { var m = $("esMsg"); if (m) {
+m.textContent = t;
+m.style.color = err ? "var(--err)" : "";
+} }
+function essaiSave() { while (ESS.length > 200)
+ESS.shift(); sto.set("essais", JSON.stringify(ESS)); }
+function essaiListe() {
+var L = ESS.filter(function (x) { return x.m === MORTID; }), b = $("esListe");
+if (!b)
+return;
+$("esN").textContent = String(L.length) + " (" + mortNom() + ")";
+b.innerHTML = L.length ? L.map(function (x, i) { return (i + 1) + ". " + fmt(x.d, 0) + " m · charge " + x.ch + " · " + fmt(x.ta, 0) + " °C · vent " + fmt(Math.abs(x.face), 1) + " m/s de " + (x.face >= 0 ? "face" : "dos") + " · <b>" + (x.e === 0 ? "sur l'objectif" : (x.e > 0 ? "trop long " : "trop court ") + fmt(Math.abs(x.e), 0) + " m") + '</b> <button class="mini" onclick="essaiSuppr(' + x.id + ')">×</button>'; }).join("<br>") : "Aucun tir noté pour ce mortier.";
+var ci = essaiCalc, inf = $("esInfo");
+if (inf)
+inf.textContent = ci && ci.ok ? "Dernier tir calculé : " + fmt(ci.dist, 0) + " m, charge " + ci.ch + ", " + fmt(ci.ta, 1) + " °C. L'écart noté sera rattaché à ce calcul." : "Calculez un tir (avec la météo disponible), tirez, puis notez ici où l'obus est tombé.";
+}
+function essaiAjouter() {
+var ci = essaiCalc;
+if (!ci || !derniere) {
+essaiMsg("Calculez d'abord un tir.", true);
+return;
+}
+if (!ci.ok) {
+essaiMsg("Pas de météo pour ce calcul : attendez la météo automatique (ou saisissez température et vent), puis recalculez.", true);
+return;
+}
+var sens = parseInt($("esSens").value, 10), v = parseFloat(String($("esEcart").value).replace(",", "."));
+var e = sens === 0 ? 0 : sens * Math.abs(v);
+if (isNaN(e) || Math.abs(e) > 2000) {
+essaiMsg("Entrez l'écart en mètres (nombre inférieur à 2000).", true);
+return;
+}
+ESS.push({ id: Date.now(), m: MORTID, d: ci.dist, dEff: ci.dEff, ch: ci.ch, rho: ci.rho, face: ci.face, tof: ci.tof, fp: ci.fp, e: e, ta: ci.ta });
+essaiSave();
+$("esEcart").value = "";
+essaiMsg("Tir enregistré.");
+essaiProp = null;
+$("esRes").textContent = "";
+$("esAct").style.display = "none";
+essaiListe();
+}
+function essaiSuppr(id) { ESS = ESS.filter(function (x) { return x.id !== id; }); essaiSave(); essaiProp = null; $("esRes").textContent = ""; $("esAct").style.display = "none"; essaiListe(); }
+function essaiEffacer() {
+var n = ESS.filter(function (x) { return x.m === MORTID; }).length;
+if (!n || !confirm("Effacer les " + n + " tir(s) d'essai du " + mortNom() + " ?"))
+return;
+ESS = ESS.filter(function (x) { return x.m !== MORTID; });
+essaiSave();
+essaiProp = null;
+$("esRes").textContent = "";
+$("esAct").style.display = "none";
+essaiListe();
+}
+function essaiCalage() {
+var L = ESS.filter(function (x) { return x.m === MORTID; }), res = $("esRes");
+essaiProp = null;
+$("esAct").style.display = "none";
+if (L.length < 3) {
+res.textContent = "Il faut au moins 3 tirs (" + L.length + " noté" + (L.length > 1 ? "s" : "") + ").";
+return;
+}
+var nb = function (id, d) { var v = parseFloat(String($(id).value).replace(",", ".")); return isNaN(v) ? d : v; };
+var ka0 = nb("kair", 0.3), kv0 = nb("kvent", 0.45);
+var R = L.map(function (x) { return { y: x.d + x.e - x.dEff - x.d * x.fp, x1: x.d * x.rho, x2: -x.face * x.tof }; });
+var S11 = 0, S12 = 0, S22 = 0, b1 = 0, b2 = 0, m1 = 0, m2 = 0;
+R.forEach(function (r) { S11 += r.x1 * r.x1; S12 += r.x1 * r.x2; S22 += r.x2 * r.x2; b1 += r.x1 * r.y; b2 += r.x2 * r.y; m1 = Math.max(m1, Math.abs(r.x1)); m2 = Math.max(m2, Math.abs(r.x2)); });
+var a = ka0, b = kv0, note = "";
+var det = S11 * S22 - S12 * S12;
+if (m1 < 10 && m2 < 10) {
+res.textContent = "Les conditions de ces tirs sont trop proches de la référence (air normal, pas de vent) : on ne peut rien en tirer. Variez température et vent.";
+return;
+}
+if (m2 < 10) {
+a = (b1 - kv0 * S12) / S11;
+note = "Vent trop faible pendant ces tirs : seul le coefficient de l'air est recalculé (vent inchangé).";
+}
+else if (m1 < 10) {
+b = (b2 - ka0 * S12) / S22;
+note = "Air trop proche de la référence : seul le coefficient du vent est recalculé (air inchangé).";
+}
+else if (det < 0.02 * S11 * S22) {
+res.textContent = "Air et vent évoluent ensemble dans ces tirs (conditions trop semblables) : impossible de les séparer. Refaites des tirs avec des températures et des vents différents.";
+return;
+}
+else {
+a = (b1 * S22 - b2 * S12) / det;
+b = (S11 * b2 - S12 * b1) / det;
+}
+var borne = false;
+if (a < 0) {
+a = 0;
+borne = true;
+}
+if (b < 0) {
+b = 0;
+borne = true;
+}
+if (a > 1.5) {
+a = 1.5;
+borne = true;
+}
+if (b > 1.5) {
+b = 1.5;
+borne = true;
+}
+var rms = function (ka, kv) { return Math.sqrt(R.reduce(function (s, r) { var e = r.y - (ka * r.x1 + kv * r.x2); return s + e * e; }, 0) / R.length); };
+var r0 = rms(ka0, kv0), r1 = rms(a, b);
+if (r1 >= r0 * 0.98) {
+res.textContent = "Les nouveaux coefficients n'amélioreraient pas l'accord avec vos tirs (erreur moyenne " + fmt(r0, 0) + " m) : les coefficients actuels restent aussi bons. Les écarts viennent probablement d'autre chose que la météo.";
+return;
+}
+essaiProp = { a: Math.round(a * 100) / 100, b: Math.round(b * 100) / 100 };
+var t = "Air : " + fmt(ka0, 2) + " → " + fmt(essaiProp.a, 2) + "\nVent : " + fmt(kv0, 2) + " → " + fmt(essaiProp.b, 2) + "\nErreur moyenne sur ces tirs : " + fmt(r0, 0) + " m → " + fmt(r1, 0) + " m (" + L.length + " tirs)";
+if (note)
+t += "\n" + note;
+if (borne)
+t += "\n⚠ Une valeur sortait des limites raisonnables (0 à 1,5) : elle a été bornée, les tirs sont peut-être contradictoires.";
+if (L.length < 5)
+t += "\n⚠ Moins de 5 tirs : valeurs indicatives.";
+if (r1 > 25)
+t += "\n⚠ Écarts encore mal expliqués : autre cause possible (position, pointage, munitions, mesure de l'écart).";
+res.textContent = t;
+$("esAct").style.display = "flex";
+}
+function essaiAppliquer() {
+if (!essaiProp)
+return;
+$("kair").value = essaiProp.a.toFixed(2);
+$("kvent").value = essaiProp.b.toFixed(2);
+meteoChange();
+$("esRes").textContent += "\n✓ Coefficients appliqués (Météo → Coefficients).";
+}
+function essaiOrigine() { $("kair").value = "0.30"; $("kvent").value = "0.45"; meteoChange(); $("esRes").textContent = "Valeurs d'origine rétablies (air 0,30 · vent 0,45)."; $("esAct").style.display = "none"; essaiProp = null; }
+try {
+var es_1 = $("essSect");
+if (es_1)
+es_1.addEventListener("toggle", function () { if (es_1.open)
+essaiListe(); });
+}
+catch (e) { }
 var capSin = 0, capCos = 0, capOk = false, cpActif = false;
 (function () {
 var d = sto.get("decl");
@@ -3868,6 +4505,7 @@ return r;
 }
 return null;
 }
+
 function lireCoord1(T) {
 var m = T.match(/^\s*(?:UTM\s*:?\s*)?(\d{1,2})\s*([C-HJ-NP-X])[\s,;:\/]*(?:E\s*)?(\d+(?:[.,]\d+)?)\s*(?:M?E)?[\s,;:\/]*(?:N\s*)?(\d+(?:[.,]\d+)?)\s*(?:M?N)?\s*$/);
 if (m && +m[1] >= 1 && +m[1] <= 60)
@@ -4109,7 +4747,7 @@ maj("t");
 } }, 900);
 })();
 function sauvContenu() {
-var o = { app: "mortier", version: 93, date: new Date().toISOString(), donnees: {} };
+var o = { app: "mortier", version: 119, date: new Date().toISOString(), donnees: {} };
 try {
 for (var i = 0; i < localStorage.length; i++) {
 var k = localStorage.key(i);
@@ -4163,12 +4801,32 @@ var n = Object.keys(o.donnees).length;
 if (!confirm("Restaurer " + n + " élément(s) sauvegardé(s) le " + String(o.date || "").slice(0, 10) + " ? Les données actuelles de même nom seront remplacées."))
 return;
 try {
-Object.keys(o.donnees).forEach(function (k) { localStorage.setItem(k, o.donnees[k]); });
+Object.keys(o.donnees).forEach(function (k) { if (k === "ui78" || (k === "theme" && o.donnees[k] === "auto"))
+return; localStorage.setItem(k, o.donnees[k]); });
 }
 catch (e) {
 sauvMsg("Restauration incomplète (mémoire pleine).", true);
 return;
 }
+try {
+if (!("mortiers" in o.donnees)) {
+var M = JSON.parse(localStorage.getItem("mortiers") || "null");
+if (M && M.length) {
+var t = null;
+try {
+t = JSON.parse(o.donnees.tirTable || "null");
+}
+catch (e) { }
+if (!t)
+t = M[0].table;
+M[0].table = t;
+localStorage.setItem("mortiers", JSON.stringify(M));
+localStorage.setItem("mortierActif", M[0].id);
+localStorage.setItem("tirTable", JSON.stringify(t));
+}
+}
+}
+catch (e) { }
 sauvMsg("Restauré. Rechargement…");
 setTimeout(function () { location.reload(); }, 900);
 }
@@ -4198,8 +4856,19 @@ caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { r
 .then(function () { return navigator.serviceWorker && navigator.serviceWorker.getRegistration ? navigator.serviceWorker.getRegistration() : null; })
 .then(function (r) { return r ? r.update().catch(function () { }) : null; }).then(fin, fin);
 }
-
 var OAU = sto.get("uniteOa") || "mil";
+function oaAuto(force) {
+if (azTir === null || !derniere)
+return;
+var f = $("oa");
+if (!force && f.dataset.man === "1" && f.value.trim() !== "")
+return;
+f.dataset.man = "";
+f.value = OAU === "deg" ? (((azTir % MIL) + MIL) % MIL * 360 / MIL).toFixed(1) : String(Math.round(((azTir % MIL) + MIL) % MIL));
+f.dispatchEvent(new Event("input", { bubbles: true }));
+}
+document.addEventListener("input", function (e) { if (e.isTrusted && e.target && e.target.id === "oa")
+e.target.dataset.man = "1"; });
 function oaMil() { var v = parseFloat(String($("oa").value).replace(",", ".")); return isNaN(v) ? NaN : (OAU === "deg" ? v * MIL / 360 : v); }
 function oaUnite(u, sansConv) {
 if (u !== OAU && !sansConv) {
@@ -4278,6 +4947,7 @@ i.setSelectionRange(n, n);
 catch (e) { }
 corrResume();
 }
+
 function corrResume() {
 var e = $("corrres");
 if (!e)
@@ -4559,7 +5229,25 @@ swipeNav(dx > 0 ? 1 : -1);
 }, { passive: true });
 })();
 jalMode(NBJ);
+(function () {
+try {
+var d_3 = JSON.parse(sto.get("dernierTir") || "null");
+if (d_3 && d_3.snap) {
+remettre(d_3.snap);
+calcul(false);
+if (derniere) {
+if (d_3.f && HIST.some(function (x) { return x.id === d_3.f; }))
+ficheId = d_3.f;
+go("tir");
+stir("r");
+meteoAuSite();
+return;
+}
+}
+}
+catch (e) { }
 go("accueil");
+})();
 
 
 </script>
